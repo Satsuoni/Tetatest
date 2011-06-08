@@ -14,6 +14,16 @@
 		C6C23590139FAB92000D2212 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C2358F139FAB92000D2212 /* main.m */; };
 		C6C23593139FAB92000D2212 /* TetatestAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C23592139FAB92000D2212 /* TetatestAppDelegate.m */; };
 		C6C23596139FAB92000D2212 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C6C23594139FAB92000D2212 /* MainWindow.xib */; };
+		C6C2359E139FABF6000D2212 /* OpenGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C2359D139FABF6000D2212 /* OpenGLView.m */; };
+		C6C235A0139FAC30000D2212 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C2359F139FAC30000D2212 /* OpenGLES.framework */; };
+		C6C235A2139FAC35000D2212 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C235A1139FAC35000D2212 /* QuartzCore.framework */; };
+		C6C235A4139FB090000D2212 /* Svertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = C6C235A3139FB090000D2212 /* Svertex.glsl */; };
+		C6C235A6139FB131000D2212 /* Sfragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = C6C235A5139FB131000D2212 /* Sfragment.glsl */; };
+		C6C235B2139FB9AD000D2212 /* CC3Foundation.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C235A9139FB9AD000D2212 /* CC3Foundation.m */; };
+		C6C235B3139FB9AD000D2212 /* CC3GLMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C235AB139FB9AD000D2212 /* CC3GLMatrix.m */; };
+		C6C235B4139FB9AD000D2212 /* CC3Kazmath.c in Sources */ = {isa = PBXBuildFile; fileRef = C6C235AC139FB9AD000D2212 /* CC3Kazmath.c */; };
+		C6C235B5139FB9AD000D2212 /* CC3Math.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C235B0139FB9AD000D2212 /* CC3Math.m */; };
+		C6C235C8139FC7F1000D2212 /* tex.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C235C7139FC7F1000D2212 /* tex.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,13 +31,30 @@
 		C6C23582139FAB92000D2212 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C6C23584139FAB92000D2212 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C6C23586139FAB92000D2212 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		C6C2358A139FAB92000D2212 /* Tetatest-Info.plist */ = {isa = PBXFileReference; path = "Tetatest-Info.plist"; sourceTree = "<group>"; };
+		C6C2358A139FAB92000D2212 /* Tetatest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tetatest-Info.plist"; sourceTree = "<group>"; };
 		C6C2358C139FAB92000D2212 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		C6C2358E139FAB92000D2212 /* Tetatest-Prefix.pch */ = {isa = PBXFileReference; path = "Tetatest-Prefix.pch"; sourceTree = "<group>"; };
+		C6C2358E139FAB92000D2212 /* Tetatest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tetatest-Prefix.pch"; sourceTree = "<group>"; };
 		C6C2358F139FAB92000D2212 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		C6C23591139FAB92000D2212 /* TetatestAppDelegate.h */ = {isa = PBXFileReference; path = TetatestAppDelegate.h; sourceTree = "<group>"; };
+		C6C23591139FAB92000D2212 /* TetatestAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TetatestAppDelegate.h; sourceTree = "<group>"; };
 		C6C23592139FAB92000D2212 /* TetatestAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TetatestAppDelegate.m; sourceTree = "<group>"; };
 		C6C23595139FAB92000D2212 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		C6C2359C139FABF6000D2212 /* OpenGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLView.h; sourceTree = "<group>"; };
+		C6C2359D139FABF6000D2212 /* OpenGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenGLView.m; sourceTree = "<group>"; };
+		C6C2359F139FAC30000D2212 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		C6C235A1139FAC35000D2212 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		C6C235A3139FB090000D2212 /* Svertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Svertex.glsl; sourceTree = "<group>"; };
+		C6C235A5139FB131000D2212 /* Sfragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Sfragment.glsl; sourceTree = "<group>"; };
+		C6C235A8139FB9AD000D2212 /* CC3Foundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CC3Foundation.h; sourceTree = "<group>"; };
+		C6C235A9139FB9AD000D2212 /* CC3Foundation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CC3Foundation.m; sourceTree = "<group>"; };
+		C6C235AA139FB9AD000D2212 /* CC3GLMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CC3GLMatrix.h; path = Cocos3DMathLib/CC3GLMatrix.h; sourceTree = "<group>"; };
+		C6C235AB139FB9AD000D2212 /* CC3GLMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CC3GLMatrix.m; sourceTree = "<group>"; };
+		C6C235AC139FB9AD000D2212 /* CC3Kazmath.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = CC3Kazmath.c; sourceTree = "<group>"; };
+		C6C235AD139FB9AD000D2212 /* CC3Kazmath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CC3Kazmath.h; sourceTree = "<group>"; };
+		C6C235AE139FB9AD000D2212 /* CC3Logging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CC3Logging.h; sourceTree = "<group>"; };
+		C6C235AF139FB9AD000D2212 /* CC3Math.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CC3Math.h; sourceTree = "<group>"; };
+		C6C235B0139FB9AD000D2212 /* CC3Math.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CC3Math.m; sourceTree = "<group>"; };
+		C6C235B1139FB9AD000D2212 /* ccTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ccTypes.h; sourceTree = "<group>"; };
+		C6C235C7139FC7F1000D2212 /* tex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tex.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +62,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C6C235A2139FAC35000D2212 /* QuartzCore.framework in Frameworks */,
+				C6C235A0139FAC30000D2212 /* OpenGLES.framework in Frameworks */,
 				C6C23583139FAB92000D2212 /* UIKit.framework in Frameworks */,
 				C6C23585139FAB92000D2212 /* Foundation.framework in Frameworks */,
 				C6C23587139FAB92000D2212 /* CoreGraphics.framework in Frameworks */,
@@ -47,6 +76,8 @@
 		C6C23573139FAB92000D2212 = {
 			isa = PBXGroup;
 			children = (
+				C6C235A1139FAC35000D2212 /* QuartzCore.framework */,
+				C6C2359F139FAC30000D2212 /* OpenGLES.framework */,
 				C6C23588139FAB92000D2212 /* Tetatest */,
 				C6C23581139FAB92000D2212 /* Frameworks */,
 				C6C2357F139FAB92000D2212 /* Products */,
@@ -74,10 +105,17 @@
 		C6C23588139FAB92000D2212 /* Tetatest */ = {
 			isa = PBXGroup;
 			children = (
+				C6C235C7139FC7F1000D2212 /* tex.png */,
+				C6C235AA139FB9AD000D2212 /* CC3GLMatrix.h */,
+				C6C235A7139FB9AD000D2212 /* Cocos3DMathLib */,
 				C6C23591139FAB92000D2212 /* TetatestAppDelegate.h */,
 				C6C23592139FAB92000D2212 /* TetatestAppDelegate.m */,
 				C6C23594139FAB92000D2212 /* MainWindow.xib */,
 				C6C23589139FAB92000D2212 /* Supporting Files */,
+				C6C2359C139FABF6000D2212 /* OpenGLView.h */,
+				C6C2359D139FABF6000D2212 /* OpenGLView.m */,
+				C6C235A3139FB090000D2212 /* Svertex.glsl */,
+				C6C235A5139FB131000D2212 /* Sfragment.glsl */,
 			);
 			path = Tetatest;
 			sourceTree = "<group>";
@@ -91,6 +129,22 @@
 				C6C2358F139FAB92000D2212 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C6C235A7139FB9AD000D2212 /* Cocos3DMathLib */ = {
+			isa = PBXGroup;
+			children = (
+				C6C235A8139FB9AD000D2212 /* CC3Foundation.h */,
+				C6C235A9139FB9AD000D2212 /* CC3Foundation.m */,
+				C6C235AB139FB9AD000D2212 /* CC3GLMatrix.m */,
+				C6C235AC139FB9AD000D2212 /* CC3Kazmath.c */,
+				C6C235AD139FB9AD000D2212 /* CC3Kazmath.h */,
+				C6C235AE139FB9AD000D2212 /* CC3Logging.h */,
+				C6C235AF139FB9AD000D2212 /* CC3Math.h */,
+				C6C235B0139FB9AD000D2212 /* CC3Math.m */,
+				C6C235B1139FB9AD000D2212 /* ccTypes.h */,
+			);
+			path = Cocos3DMathLib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,6 +196,9 @@
 			files = (
 				C6C2358D139FAB92000D2212 /* InfoPlist.strings in Resources */,
 				C6C23596139FAB92000D2212 /* MainWindow.xib in Resources */,
+				C6C235A4139FB090000D2212 /* Svertex.glsl in Resources */,
+				C6C235A6139FB131000D2212 /* Sfragment.glsl in Resources */,
+				C6C235C8139FC7F1000D2212 /* tex.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +211,11 @@
 			files = (
 				C6C23590139FAB92000D2212 /* main.m in Sources */,
 				C6C23593139FAB92000D2212 /* TetatestAppDelegate.m in Sources */,
+				C6C2359E139FABF6000D2212 /* OpenGLView.m in Sources */,
+				C6C235B2139FB9AD000D2212 /* CC3Foundation.m in Sources */,
+				C6C235B3139FB9AD000D2212 /* CC3GLMatrix.m in Sources */,
+				C6C235B4139FB9AD000D2212 /* CC3Kazmath.c in Sources */,
+				C6C235B5139FB9AD000D2212 /* CC3Math.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
