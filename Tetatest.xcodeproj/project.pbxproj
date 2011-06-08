@@ -1,0 +1,267 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C6C23583139FAB92000D2212 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C23582139FAB92000D2212 /* UIKit.framework */; };
+		C6C23585139FAB92000D2212 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C23584139FAB92000D2212 /* Foundation.framework */; };
+		C6C23587139FAB92000D2212 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C23586139FAB92000D2212 /* CoreGraphics.framework */; };
+		C6C2358D139FAB92000D2212 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C6C2358B139FAB92000D2212 /* InfoPlist.strings */; };
+		C6C23590139FAB92000D2212 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C2358F139FAB92000D2212 /* main.m */; };
+		C6C23593139FAB92000D2212 /* TetatestAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C23592139FAB92000D2212 /* TetatestAppDelegate.m */; };
+		C6C23596139FAB92000D2212 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = C6C23594139FAB92000D2212 /* MainWindow.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C6C2357E139FAB92000D2212 /* Tetatest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tetatest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6C23582139FAB92000D2212 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		C6C23584139FAB92000D2212 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		C6C23586139FAB92000D2212 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		C6C2358A139FAB92000D2212 /* Tetatest-Info.plist */ = {isa = PBXFileReference; path = "Tetatest-Info.plist"; sourceTree = "<group>"; };
+		C6C2358C139FAB92000D2212 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C6C2358E139FAB92000D2212 /* Tetatest-Prefix.pch */ = {isa = PBXFileReference; path = "Tetatest-Prefix.pch"; sourceTree = "<group>"; };
+		C6C2358F139FAB92000D2212 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C6C23591139FAB92000D2212 /* TetatestAppDelegate.h */ = {isa = PBXFileReference; path = TetatestAppDelegate.h; sourceTree = "<group>"; };
+		C6C23592139FAB92000D2212 /* TetatestAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TetatestAppDelegate.m; sourceTree = "<group>"; };
+		C6C23595139FAB92000D2212 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C6C2357B139FAB92000D2212 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6C23583139FAB92000D2212 /* UIKit.framework in Frameworks */,
+				C6C23585139FAB92000D2212 /* Foundation.framework in Frameworks */,
+				C6C23587139FAB92000D2212 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C6C23573139FAB92000D2212 = {
+			isa = PBXGroup;
+			children = (
+				C6C23588139FAB92000D2212 /* Tetatest */,
+				C6C23581139FAB92000D2212 /* Frameworks */,
+				C6C2357F139FAB92000D2212 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C6C2357F139FAB92000D2212 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C6C2357E139FAB92000D2212 /* Tetatest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C6C23581139FAB92000D2212 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C6C23582139FAB92000D2212 /* UIKit.framework */,
+				C6C23584139FAB92000D2212 /* Foundation.framework */,
+				C6C23586139FAB92000D2212 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C6C23588139FAB92000D2212 /* Tetatest */ = {
+			isa = PBXGroup;
+			children = (
+				C6C23591139FAB92000D2212 /* TetatestAppDelegate.h */,
+				C6C23592139FAB92000D2212 /* TetatestAppDelegate.m */,
+				C6C23594139FAB92000D2212 /* MainWindow.xib */,
+				C6C23589139FAB92000D2212 /* Supporting Files */,
+			);
+			path = Tetatest;
+			sourceTree = "<group>";
+		};
+		C6C23589139FAB92000D2212 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C6C2358A139FAB92000D2212 /* Tetatest-Info.plist */,
+				C6C2358B139FAB92000D2212 /* InfoPlist.strings */,
+				C6C2358E139FAB92000D2212 /* Tetatest-Prefix.pch */,
+				C6C2358F139FAB92000D2212 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C6C2357D139FAB92000D2212 /* Tetatest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C6C23599139FAB92000D2212 /* Build configuration list for PBXNativeTarget "Tetatest" */;
+			buildPhases = (
+				C6C2357A139FAB92000D2212 /* Sources */,
+				C6C2357B139FAB92000D2212 /* Frameworks */,
+				C6C2357C139FAB92000D2212 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Tetatest;
+			productName = Tetatest;
+			productReference = C6C2357E139FAB92000D2212 /* Tetatest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C6C23575139FAB92000D2212 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C6C23578139FAB92000D2212 /* Build configuration list for PBXProject "Tetatest" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = C6C23573139FAB92000D2212;
+			productRefGroup = C6C2357F139FAB92000D2212 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C6C2357D139FAB92000D2212 /* Tetatest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C6C2357C139FAB92000D2212 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6C2358D139FAB92000D2212 /* InfoPlist.strings in Resources */,
+				C6C23596139FAB92000D2212 /* MainWindow.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C6C2357A139FAB92000D2212 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6C23590139FAB92000D2212 /* main.m in Sources */,
+				C6C23593139FAB92000D2212 /* TetatestAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		C6C2358B139FAB92000D2212 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C6C2358C139FAB92000D2212 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C6C23594139FAB92000D2212 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C6C23595139FAB92000D2212 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C6C23597139FAB92000D2212 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		C6C23598139FAB92000D2212 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+		C6C2359A139FAB92000D2212 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Tetatest/Tetatest-Prefix.pch";
+				INFOPLIST_FILE = "Tetatest/Tetatest-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C6C2359B139FAB92000D2212 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Tetatest/Tetatest-Prefix.pch";
+				INFOPLIST_FILE = "Tetatest/Tetatest-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C6C23578139FAB92000D2212 /* Build configuration list for PBXProject "Tetatest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6C23597139FAB92000D2212 /* Debug */,
+				C6C23598139FAB92000D2212 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C6C23599139FAB92000D2212 /* Build configuration list for PBXNativeTarget "Tetatest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C6C2359A139FAB92000D2212 /* Debug */,
+				C6C2359B139FAB92000D2212 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C6C23575139FAB92000D2212 /* Project object */;
+}
