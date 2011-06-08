@@ -14,27 +14,16 @@
 @interface OpenGLView : UIView {
     CAEAGLLayer* _eaglLayer;
     EAGLContext* _context;
-    GLuint _colorRenderBuffer;  
+    GLuint _colorRenderBuffer;
     GLuint _positionSlot;
     GLuint _colorSlot;
     GLuint _projectionUniform;
     GLuint _modelViewUniform;
     float _currentRotation;
     GLuint _depthRenderBuffer;
-    GLuint _texture; 
     GLuint _texpos;
-    GLuint _texhandle;
-    unsigned char* textureData;
+    GLuint _sampler;
+    GLuint _texture;
 }
-+ (Class)layerClass;
-- (void)setupLayer;
-- (void)setupContext;
-- (void)setupRenderBuffer;
-- (void)setupFrameBuffer;
-- (void)render:(CADisplayLink*)displayLink;
-- (GLuint)compileShader:(NSString*)shaderName withType:(GLenum)shaderType;
-- (void)compileShaders;
-- (void)setupVBOs;
-- (void)setupDisplayLink;
-- (void)setupDepthBuffer;
+
 @end
