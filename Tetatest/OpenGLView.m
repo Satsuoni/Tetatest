@@ -11,7 +11,118 @@
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 #import "CC3GLMatrix.h"
-
+@implementation SVTexture
+@synthesize texture=_texture;
+@synthesize width=_width;
+@synthesize height=_height;
+-(id) init
+{
+    if((self=[super init]))
+    {
+        isDone=NO;
+        _tempdata=NULL;
+    }
+    return self;
+}
+- (void) startCreatingTexturewithWidth:(int)width andHeight:(int)height
+{
+    if(!isDone&&_tempdata==NULL)
+    {
+    _width=width;
+    _height=height;
+      //  UIImage* image = [UIImage imageNamed:@"tex.png"];
+       _tempdata = (unsigned char* ) malloc(_width * _height * 4);
+      textureContext = CGBitmapContextCreate(_tempdata, _width, _height, 8, _width * 4,
+                                             CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedLast);
+    }
+}
+- (UIImage*)imageByCropping:(UIImage *)imageToCrop toRect:(CGRect)rect
+{
+    //create a context to do our clipping in
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef currentContext = UIGraphicsGetCurrentContext();
+    
+    //create a rect with the size we want to crop the image to
+    //the X and Y here are zero so we start at the beginning of our
+    //newly created context
+    CGRect clippedRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
+    CGContextClipToRect( currentContext, clippedRect);
+    
+    //create a rect equivalent to the full size of the image
+    //offset the rect by the X and Y we want to start the crop
+    //from in order to cut off anything before them
+    CGRect drawRect = CGRectMake(rect.origin.x * -1,
+                                 rect.origin.y * -1,
+                                 imageToCrop.size.width,
+                                 imageToCrop.size.height);
+    
+    //draw the image to our clipped context using our offset rect
+    CGContextDrawImage(currentContext, drawRect, imageToCrop.CGImage);
+    
+    //pull the image from our cropped context
+    UIImage *cropped = UIGraphicsGetImageFromCurrentImageContext();
+    
+    //pop the context to get back to the default
+    UIGraphicsEndImageContext();
+    
+    //Note: this is autoreleased
+    return cropped;
+}
+- (void) drawImageOnTexture:(UIImage *)image fromrect:(CGRect)from withrect:(CGRect)to
+{
+    if(!isDone&&_tempdata!=NULL)
+    {
+    UIImage * cimage=[self imageByCropping:image toRect:from];
+    CGContextDrawImage(textureContext, to, cimage.CGImage);
+    }
+}
+- (void) finishTextureCreation
+{
+    CGContextRelease(textureContext);
+    glGenTextures(1, &_texture);
+    glBindTexture(GL_TEXTURE_2D, _texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _tempdata);
+    glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+    glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    free(_tempdata); 
+    _tempdata=NULL;
+    isDone=YES;
+}
+- (void) dealloc
+{
+    glDeleteTextures(1, &_texture);
+    if(_tempdata!=NULL)
+    {
+        free(_tempdata);
+        _tempdata=NULL;
+         CGContextRelease(textureContext);
+    }
+    [super dealloc];
+}
+-  (void)getTextureFromImage:(NSString *)imname width:(int)wd height:(int)hd andFinish:(BOOL)fin
+{
+    UIImage * im=[UIImage imageNamed:imname];
+    if(im==nil) return;
+    [self startCreatingTexturewithWidth:wd andHeight:hd];
+    [self drawImageOnTexture:im fromrect:CGRectMake(0,0,im.size.width,im.size.height) withrect:CGRectMake(0,0,im.size.width,im.size.height)];
+     if(fin)
+    [self finishTextureCreation];
+}
+- (void) deleteTexture
+{
+    if(isDone)
+    {
+    glDeleteTextures(1, &_texture);
+    }
+    if(_tempdata!=NULL)
+    {
+        free(_tempdata);
+        _tempdata=NULL;
+        CGContextRelease(textureContext);
+    }
+    isDone=NO;
+}
+@end
 @implementation OpenGLView
 
 typedef struct {
@@ -21,10 +132,10 @@ typedef struct {
 } Vertex;
 
 const Vertex Vertices[] = {
-    {{1, -1, 0}, {1, 0, 0, 1},{0,0}},
-    {{1, 1, 0}, {0, 1, 0, 1},{0,1}},
-    {{-1, 1, 0}, {0, 0, 1, 1},{1,1}},
-    {{-1, -1, 0}, {0, 0, 0, 1},{1,0}}
+    {{1, -1, 0}, {0.5, 0.5, 0.5, 1},{0,0}},
+    {{1, 1, 0}, {0, 0, 0, 1},{0,1}},
+    {{-1, 1, 0}, {0, 0, 0, 1},{1,1}},
+    {{-1, -1, 0}, {0.5, 0.5, 0.5, 1},{1,0}}
 };
 
 const GLubyte Indices[] = {
@@ -181,19 +292,9 @@ const GLubyte Indices[] = {
     _modelViewUniform = glGetUniformLocation(programHandle, "Modelview");
     _sampler =glGetUniformLocation(programHandle, "s_texture");
     ////////////////
-    int m_width=256;
-    int m_height=256;
-    UIImage* image = [UIImage imageNamed:@"tex.png"];
-    unsigned char* textureData = (unsigned char* ) malloc(m_width * m_height * 4);
-    CGContextRef textureContext = CGBitmapContextCreate(textureData, m_width, m_height, 8, m_width * 4,
-                                                      CGImageGetColorSpace(image.CGImage), kCGImageAlphaPremultipliedLast);
-    CGContextDrawImage(textureContext, CGRectMake(0.0, 0.0, (CGFloat)m_width, (CGFloat)m_height), image.CGImage);
-    CGContextRelease(textureContext);
-    glGenTextures(1, &_texture);
-    glBindTexture(GL_TEXTURE_2D, _texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
-    glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
-    glTexParameteri ( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+    tex=[[[SVTexture alloc] init] retain];
+    [tex getTextureFromImage:@"tex.png" width:256 height:256 andFinish:YES];
+    _texture=tex.texture;
 }
 
 - (void)setupVBOs {
@@ -223,7 +324,7 @@ const GLubyte Indices[] = {
     CC3GLMatrix *modelView = [CC3GLMatrix matrix];
     [modelView populateFromTranslation:CC3VectorMake(sin(CACurrentMediaTime()), 0, -7)];
     _currentRotation += displayLink.duration * 90;
-    [modelView rotateBy:CC3VectorMake(_currentRotation, _currentRotation, 0)];
+    [modelView rotateBy:CC3VectorMake(0, 0, _currentRotation)];
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
     
     // 1
@@ -268,6 +369,7 @@ const GLubyte Indices[] = {
 
 - (void)dealloc
 {
+    [tex release];
     [_context release];
     _context = nil;
     [super dealloc];
