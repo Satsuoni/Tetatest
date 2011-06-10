@@ -84,19 +84,26 @@ typedef struct
     int currentFrame;
     SVSquareWrapper *wrap;
     SpriteVertex *position_v;// vertex position ul, ur lr ll
-    float cv_x;//x conversion float
-    float sh_x;// x conversion shift
-    float cv_y;
-    float sh_y;
     BOOL isDrawn;
 }
 @property (nonatomic,assign) CC3GLMatrix * transform;
 @property (nonatomic,assign) CGSize virt_frame;
 @property (nonatomic,assign) CGPoint center_position;
 @property (nonatomic,assign) float layoutPos;
+@property (nonatomic,readwrite) CGPoint ul_position;
 -(id) initWithTexture: (SVTexture *) tex andFrame: (CGRect) texFrame;
 -(void) setTextureFrame: (CGRect) frame;
 -(void) Draw;
+- (void) resetTransform;
+-(void) setFrame : (int) frame;
+@end
+
+@interface SVAnimatedSprite : SVSprite {
+@private
+    NSArray * frameset;
+}
+-(void) setFrame : (int) frame;
+- (id) initWithTexture: (SVTexture *)tex andFrames: (NSArray *) frames;
 @end
 @interface OpenGLView : UIView {
     CAEAGLLayer* _eaglLayer;
@@ -114,8 +121,15 @@ typedef struct
     CGSize actualResolution;
     CGSize virtualResolution;
     NSMutableDictionary * textures;
-    SVTexture * tex;
-    SVSprite *sprite;
+    NSMutableArray * drawList;
+   // SVTexture * tex;
+   SVSprite *sprite;
 }
-
+- (SVTexture *) createTextureNamed:(NSString*)name ; 
+- (SVTexture *) getTextureNamed: (NSString *) name;
+- (void) deleteTextureNamed: (NSString * )name;
+- (SVSprite *) getSpriteWithTexture: (NSString *) texName andFrame: (CGRect) frame;
+- (SVSprite *) getSpriteWithTexture: (NSString *) texName andFrame: (CGRect) frame andDrawFrame :(CGSize) dframe;
+- (void) addSpriteToDrawList: (SVSprite *) sprite;
+- (void) clearDrawList;
 @end

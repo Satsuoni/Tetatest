@@ -136,6 +136,7 @@ GLenum en=glGetError();
     glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_SHORT, 0);
     en=glGetError();
 }
+
 @end
 
 @implementation SVTexture
@@ -291,11 +292,18 @@ GLenum en=glGetError();
     isDone=NO;
 }
 @end
+
+
+
 @implementation SVSprite
 @synthesize virt_frame;
 @synthesize center_position;
 @synthesize transform;
 @synthesize layoutPos;
+- (void) setFrame: (int) frame
+{
+    
+}
 - (id) initWithTexture:(SVTexture *)tex andFrame:(CGRect)texFrame
 {
  if((self=[super init]))
@@ -303,6 +311,9 @@ GLenum en=glGetError();
      texture=[tex retain];
      frame=[texture getTextureRect:texFrame];
      wrap=[[[SVSquareWrapper alloc] init] retain];
+     transform=[[CC3GLMatrix matrix] retain];
+     [transform populateIdentity];
+     [transform rotateBy:CC3VectorMake(180, 0, 0)];
  }
     return self;
 }
@@ -353,13 +364,54 @@ GLenum en=glGetError();
 
     [texture addDrawnSquare:wrap];
 }
+- (CGPoint) ul_position
+{
+    return CGPointMake(center_position.x-virt_frame.width/2, center_position.y-virt_frame.height/2);
+}
+- (void) setUl_position:(CGPoint)ul_position
+{
+    center_position=CGPointMake(ul_position.x+virt_frame.width/2, ul_position.y+virt_frame.height/2);
+}
+- (void) resetTransform
+{
+    [transform populateIdentity];
+    [transform rotateBy:CC3VectorMake(180, 0, 0)];  
+}
 - (void) dealloc
 {
     [wrap release];
+    [transform release];
     [texture release];
     [super dealloc];
 }
 @end
+
+@implementation SVAnimatedSprite
+
+-(void) setFrame:(int)frameNum
+{
+    currentFrame=frameNum;
+    NSValue *value=[frameset objectAtIndex:currentFrame];
+    frame=[texture getTextureRect:[value CGRectValue]];
+}
+- (id) initWithTexture:(SVTexture *)tex andFrames:(NSArray *)frames
+{
+    if((self=[super initWithTexture:tex andFrame:[[frames objectAtIndex:0] CGRectValue]]))
+    {
+        
+        frameset=[[[NSArray alloc] initWithArray:frames] retain];
+  
+    }
+    return self;
+}
+- (void) dealloc
+{
+ [frameset release];
+ [super dealloc];
+}
+@end
+
+
 @implementation OpenGLView
 
 typedef struct {
@@ -367,49 +419,6 @@ typedef struct {
     float Color[4];
     float Pos[2];
 } Vertex;
-
-const Vertex Vertices[] = {
-    {{1, -1, 0}, {0.5, 0.5, 0.5, 1},{0,0}},
-    {{1, 1, 0}, {0, 0, 0, 1},{0,1}},
-    {{-1, 1, 0}, {0, 0, 0, 1},{1,1}},
-    {{-1, -1, 0}, {0.5, 0.5, 0.5, 1},{1,0}}
-};
-
-const GLushort Indices[] = {
-    0, 1, 2,
-    2, 3, 0
-};
-/*const Vertex Vertices[] = {
- {{1, -1, 0}, {1, 0, 0, 1}},
- {{1, 1, 0}, {1, 0, 0, 1}},
- {{-1, 1, 0}, {0, 1, 0, 1}},
- {{-1, -1, 0}, {0, 1, 0, 1}},
- {{1, -1, -1}, {1, 0, 0, 1}},
- {{1, 1, -1}, {1, 0, 0, 1}},
- {{-1, 1, -1}, {0, 1, 0, 1}},
- {{-1, -1, -1}, {0, 1, 0, 1}}
- };
- 
- const GLubyte Indices[] = {
- // Front
- 0, 1, 2,
- 2, 3, 0,
- // Back
- 4, 6, 5,
- 4, 7, 6,
- // Left
- 2, 7, 3,
- 7, 6, 2,
- // Right
- 0, 4, 1,
- 4, 1, 5,
- // Top
- 6, 2, 1, 
- 1, 6, 5,
- // Bottom
- 0, 3, 7,
- 0, 7, 4    
- };*/
 
 + (Class)layerClass {
     return [CAEAGLLayer class];
@@ -529,15 +538,50 @@ const GLushort Indices[] = {
     _modelViewUniform = glGetUniformLocation(programHandle, "Modelview");
     _sampler =glGetUniformLocation(programHandle, "s_texture");
     ////////////////
-    tex=[[[SVTexture alloc] init] retain];
-    [tex getTextureFromImage:@"tex.png" width:256 height:256 andFinish:YES];
-    _texture=tex.texture;
-    sprite=[[[SVSprite alloc] initWithTexture:tex andFrame:CGRectMake(0,0,256,256)] retain];
+    [[self createTextureNamed:@"NewTexture"] getTextureFromImage:@"tex.png" width:256 height:256 andFinish:YES];
+    
+    sprite=[[self getSpriteWithTexture:@"NewTexture" andFrame:CGRectMake(0,0,256,256)] retain];
+    //sprite.center_position=CGPointMake(400, 300);
+    sprite.ul_position=CGPointMake(0, 100);
+    [self addSpriteToDrawList:sprite];
+    //    sprite=[[[SVSprite alloc] initWithTexture:tex andFrame:CGRectMake(0,0,256,256)] retain];
+}
+-(SVTexture *) getTextureNamed:(NSString *)name
+{
+    return [[textures valueForKey:name] autorelease];
+}
+- (void) deleteTextureNamed:(NSString *)name
+{
+    [textures removeObjectForKey:name];
+}
+- (SVTexture *) createTextureNamed:(NSString *)name 
+{
+    if([textures valueForKey:name]!=nil)
+        return [[textures valueForKey:name] autorelease];
+    SVTexture *textr=[[SVTexture alloc] init];
+    [textures setValue:textr forKey:name];
+    return [[textures valueForKey:name] autorelease];
+}
+- (SVSprite *) getSpriteWithTexture:(NSString *)texName andFrame:(CGRect)frame
+{
+    SVTexture * tx=[self getTextureNamed:texName];
+    SVSprite * newSprite=[[SVSprite alloc] initWithTexture:tx andFrame:frame];
+  
+    newSprite.virt_frame=frame.size;
+    return [newSprite autorelease];
 }
 
+- (SVSprite *) getSpriteWithTexture:(NSString *)texName andFrame:(CGRect)frame andDrawFrame:(CGSize)dframe
+{
+    SVTexture * tx=[self getTextureNamed:texName];
+    SVSprite * newSprite=[[SVSprite alloc] initWithTexture:tx andFrame:frame];
+   
+    newSprite.virt_frame=dframe;
+    return [newSprite autorelease]; 
+}
 - (void)setupVBOs {
     
-    GLuint vertexBuffer;
+   /* GLuint vertexBuffer;
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
   glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
@@ -545,7 +589,7 @@ const GLushort Indices[] = {
     GLuint indexBuffer;
    glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);*/
     
 }
 
@@ -580,40 +624,21 @@ const GLushort Indices[] = {
     //_currentRotation += displayLink.duration * 90;
     //[modelView rotateBy:CC3VectorMake(0, 0, _currentRotation)];
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
-    sprite.transform=[CC3GLMatrix matrix] ;
-    [sprite.transform populateIdentity];
-    
-    [sprite.transform rotateBy:CC3VectorMake(180, 0, 0)];
-    // 1
-    [tex clearDrawQueue];
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
-    sprite.center_position=CGPointMake(400,300);
-    sprite.virt_frame=CGSizeMake(800,600);
-    [sprite Draw];
-     // sprite.center_position=CGPointMake(1, 1);
-    //[sprite Draw];
-    [tex Draw:_sampler];
-    GLenum glerr=glGetError();
-    
-   //glActiveTexture ( GL_TEXTURE0 );
- // glBindTexture ( GL_TEXTURE_2D, _texture );
-    
-    // Set the sampler texture unit to 0
-    
-    [[VertexManager getSharedVM]  registerIndexBuffer:0];
-     glerr=glGetError();
-   [[VertexManager getSharedVM] registerVertexBuffer:_positionSlot andTexels:_texpos];
-     glerr=glGetError();
+    for (SVSprite * spr in drawList)
+    {
+        [spr Draw]; 
+    }
+    for(NSString *key in textures)
+    {
+        SVTexture *texture=[textures valueForKey:key];
+        [texture Draw:_sampler];
+        [[VertexManager getSharedVM]  registerIndexBuffer:0];
+        [[VertexManager getSharedVM] registerVertexBuffer:_positionSlot andTexels:_texpos];
+        [[VertexManager getSharedVM] Draw];
+        [texture clearDrawQueue];
+    }
    
-    [[VertexManager getSharedVM] Draw];
- 
-    // 2
-   // glVertexAttribPointer(_positionSlot, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-    //glVertexAttribPointer(_colorSlot, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 3));
-    // glVertexAttribPointer(_texpos,2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*) (sizeof(float) * 7));
-    // 3
-   // glDrawElements(GL_TRIANGLES, sizeof(Indices)/sizeof(Indices[0]), GL_UNSIGNED_SHORT, 0);
-    glerr=glGetError();
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }
 
@@ -622,11 +647,22 @@ const GLushort Indices[] = {
     [displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];    
 }
 
+-(void) clearDrawList
+{
+    [drawList removeAllObjects];
+}
 
+- (void) addSpriteToDrawList:(SVSprite *)sprites
+{
+    if(![drawList containsObject:sprites])
+        [drawList addObject:sprites];
+}
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {        
+    if (self) {   
+        textures=[[[NSMutableDictionary alloc] init] retain];
+        drawList=[[[NSMutableArray alloc]init]retain];
         [self setupLayer];        
         [self setupContext];    
         [self setupDepthBuffer];
@@ -641,8 +677,10 @@ const GLushort Indices[] = {
 
 - (void)dealloc
 {
+    [drawList release];
+    [textures release];
     [sprite release];
-    [tex release];
+   // [tex release];
     [_context release];
     _context = nil;
     [super dealloc];
