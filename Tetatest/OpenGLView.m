@@ -12,6 +12,11 @@
 #include <OpenGLES/ES2/glext.h>
 #import "CC3GLMatrix.h"
 static VertexManager * _sharedVM=nil;
+GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
+{
+    GL_RGBA_Color ret={r,g,b,a};
+    return ret;
+}
 @implementation SVSquareWrapper
 - (SpriteVertex *) vertices
 {
@@ -144,6 +149,19 @@ GLenum en=glGetError();
 @synthesize width=_width;
 @synthesize height=_height;
 @synthesize name;
+-(void) ReplaceTextureBlock:(CGRect)block withData:(void *)data
+{
+    glBindTexture(GL_TEXTURE_2D, _texture);
+    glTexSubImage2D(	GL_TEXTURE_2D, 
+                    0, 
+                    block.origin.x, 
+                    block.origin.y, 
+                    block.size.width, 
+                    block.size.height, 
+                    GL_RGBA, 
+                   GL_UNSIGNED_BYTE, 
+                   data);
+}
 - (void) addDrawnSquare:(SVSquareWrapper *)wrap
 {
     [drawnSquares addObject:[wrap copyAutoreleased]];
@@ -231,13 +249,13 @@ GLenum en=glGetError();
     if(point.x<0) point.x=0;
     if(point.y>_height) point.y=_height;
     if(point.y<0) point.y=0;
-    return CGPointMake(point.x/_width, point.y/_width);
+    return CGPointMake(point.x/_width, (_height-point.y)/_height);
 }
 - (CGRect) getTextureRect:(CGRect)rect
 {
     CGRect tex=CGRectMake(0, 0, _width, _height);
     CGRect ret=CGRectIntersection(tex, rect);
-    return CGRectMake(ret.origin.x/_width, ret.origin.y/_width, ret.size.width/_width, ret.size.height/_height);
+    return CGRectMake(ret.origin.x/_width, (_height-ret.origin.y-ret.size.height)/_height, ret.size.width/_width, ret.size.height/_height);
 }
 - (void) finishTextureCreation
 {
@@ -300,6 +318,25 @@ GLenum en=glGetError();
 @synthesize center_position;
 @synthesize transform;
 @synthesize layoutPos;
+-(void) renderText:(NSString *)text withFont:(UIFont *) font intoBox:(CGRect)texturebox withColor:(GL_RGBA_Color)color andlineBreakMode:(UILineBreakMode)lineBreakMode alignment:(UITextAlignment)alignment
+{
+    int sizeInBytes = texturebox.size.width*texturebox.size.height*4;
+    void* data = malloc(sizeInBytes);
+    memset(data, 0, sizeInBytes);
+    CGContextRef context = CGBitmapContextCreate(data,  texturebox.size.width, texturebox.size.height, 8, texturebox.size.width * 4,
+                                                 CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedLast);
+  
+    CGContextSetFillColor(context, color.clr);
+   // CGContextTranslateCTM(context, 0.0, texturebox.size.height);
+   // CGContextScaleCTM(context, 1.0, -1.0);
+    UIGraphicsPushContext(context);
+    [text drawInRect:CGRectMake(0, 0, texturebox.size.width, texturebox.size.height) withFont:font
+       lineBreakMode:lineBreakMode alignment:alignment];
+    UIGraphicsPopContext();
+    [texture ReplaceTextureBlock:texturebox withData:data];
+    [self setTextureFrame:texturebox];
+    free(data);
+}
 - (void) setFrame: (int) frame
 {
     
@@ -525,7 +562,8 @@ typedef struct {
     
     // 4
     glUseProgram(programHandle);
-    
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     // 5
     _positionSlot = glGetAttribLocation(programHandle, "Position");
     _texpos =glGetAttribLocation(programHandle, "TexPos");
@@ -538,9 +576,15 @@ typedef struct {
     _modelViewUniform = glGetUniformLocation(programHandle, "Modelview");
     _sampler =glGetUniformLocation(programHandle, "s_texture");
     ////////////////
-    [[self createTextureNamed:@"NewTexture"] getTextureFromImage:@"tex.png" width:256 height:256 andFinish:YES];
+    [[self createTextureNamed:@"NewTexture"] getTextureFromImage:@"bad.png" width:256 height:256 andFinish:YES];
+    [[self createTextureNamed:@"Text"] startCreatingTexturewithWidth:512 andHeight:512];
+    [[self getTextureNamed:@"Text"] finishTextureCreation];
+    sprite=[[self getSpriteWithTexture:@"NewTexture" andFrame:CGRectMake(0,0,30,30)] retain];
+    SVSprite * text=[self getSpriteWithTexture:@"Text" andFrame:CGRectMake(0, 0, 512, 512)];
+    [text renderText:@"Test djd text" withFont:[UIFont boldSystemFontOfSize:26] intoBox:CGRectMake(0, 0, 512, 512) withColor:RGBAColorMake(0.5, 0.7, 0.14, 0.5) andlineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentLeft];
+    text.center_position=CGPointMake(300,300);
+    [self addSpriteToDrawList:text];
     
-    sprite=[[self getSpriteWithTexture:@"NewTexture" andFrame:CGRectMake(0,0,256,256)] retain];
     //sprite.center_position=CGPointMake(400, 300);
     sprite.ul_position=CGPointMake(0, 100);
     [self addSpriteToDrawList:sprite];
@@ -548,7 +592,7 @@ typedef struct {
 }
 -(SVTexture *) getTextureNamed:(NSString *)name
 {
-    return [[textures valueForKey:name] autorelease];
+    return [textures valueForKey:name];
 }
 - (void) deleteTextureNamed:(NSString *)name
 {

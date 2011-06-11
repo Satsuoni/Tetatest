@@ -71,7 +71,13 @@ typedef struct
 - (void) addDrawnSquare: (SVSquareWrapper *) wrap;
 - (void) clearDrawQueue;
 - (void) Draw:(GLuint) sampler;
+- (void) ReplaceTextureBlock: (CGRect) block withData: (void *) data;
 @end
+typedef struct
+{
+    GLfloat clr[4];
+    // GL_RGBA_Color(GLfloat r,GLfloat g,GLfloat b,GLfloat a);
+} GL_RGBA_Color;
 
 @interface SVSprite :NSObject
 {
@@ -96,6 +102,7 @@ typedef struct
 -(void) Draw;
 - (void) resetTransform;
 -(void) setFrame : (int) frame;
+- (void) renderText:(NSString *) text withFont:(UIFont *) font intoBox:(CGRect) textureBox withColor: (GL_RGBA_Color) color andlineBreakMode:(UILineBreakMode)lineBreakMode alignment:(UITextAlignment)alignment;
 @end
 
 @interface SVAnimatedSprite : SVSprite {
@@ -105,6 +112,9 @@ typedef struct
 -(void) setFrame : (int) frame;
 - (id) initWithTexture: (SVTexture *)tex andFrames: (NSArray *) frames;
 @end
+
+
+
 @interface OpenGLView : UIView {
     CAEAGLLayer* _eaglLayer;
     EAGLContext* _context;
@@ -125,7 +135,7 @@ typedef struct
    // SVTexture * tex;
    SVSprite *sprite;
 }
-- (SVTexture *) createTextureNamed:(NSString*)name ; 
+- (SVTexture *) createTextureNamed:(NSString*)name; 
 - (SVTexture *) getTextureNamed: (NSString *) name;
 - (void) deleteTextureNamed: (NSString * )name;
 - (SVSprite *) getSpriteWithTexture: (NSString *) texName andFrame: (CGRect) frame;
