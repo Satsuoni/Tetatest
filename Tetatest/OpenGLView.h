@@ -11,6 +11,7 @@
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 #include "CC3GLMatrix.h"
+@class SVScene;
 #define VER_NUM_STEP 400
 typedef struct
 {
@@ -114,7 +115,6 @@ typedef struct
 @end
 
 
-
 @interface OpenGLView : UIView {
     CAEAGLLayer* _eaglLayer;
     EAGLContext* _context;
@@ -132,12 +132,15 @@ typedef struct
     CGSize virtualResolution;
     NSMutableDictionary * textures;
     NSMutableArray * drawList;
+    SVScene * currentScene;
    // SVTexture * tex;
    SVSprite *sprite;
 }
 - (SVTexture *) createTextureNamed:(NSString*)name; 
 - (SVTexture *) getTextureNamed: (NSString *) name;
 - (void) deleteTextureNamed: (NSString * )name;
+- (SVAnimatedSprite *) getAnimatedSpriteWithTexture :(NSString *) texName andFrames: (NSArray *) frames;
+
 - (SVSprite *) getSpriteWithTexture: (NSString *) texName andFrame: (CGRect) frame;
 - (SVSprite *) getSpriteWithTexture: (NSString *) texName andFrame: (CGRect) frame andDrawFrame :(CGSize) dframe;
 - (void) addSpriteToDrawList: (SVSprite *) sprite;

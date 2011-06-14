@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C6BA170A13A780250060ECF9 /* SVScene.m in Sources */ = {isa = PBXBuildFile; fileRef = C6BA170913A780250060ECF9 /* SVScene.m */; };
+		C6BA170E13A792280060ECF9 /* SVTetris.m in Sources */ = {isa = PBXBuildFile; fileRef = C6BA170D13A792280060ECF9 /* SVTetris.m */; };
 		C6C23583139FAB92000D2212 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C23582139FAB92000D2212 /* UIKit.framework */; };
 		C6C23585139FAB92000D2212 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C23584139FAB92000D2212 /* Foundation.framework */; };
 		C6C23587139FAB92000D2212 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C23586139FAB92000D2212 /* CoreGraphics.framework */; };
@@ -42,6 +44,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C6BA170813A780250060ECF9 /* SVScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVScene.h; sourceTree = "<group>"; };
+		C6BA170913A780250060ECF9 /* SVScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVScene.m; sourceTree = "<group>"; };
+		C6BA170C13A792280060ECF9 /* SVTetris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVTetris.h; sourceTree = "<group>"; };
+		C6BA170D13A792280060ECF9 /* SVTetris.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVTetris.m; sourceTree = "<group>"; };
 		C6C2357E139FAB92000D2212 /* Tetatest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tetatest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6C23582139FAB92000D2212 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C6C23584139FAB92000D2212 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -145,6 +151,10 @@
 				C6C23589139FAB92000D2212 /* Supporting Files */,
 				C6C2359C139FABF6000D2212 /* OpenGLView.h */,
 				C6C2359D139FABF6000D2212 /* OpenGLView.m */,
+				C6BA170813A780250060ECF9 /* SVScene.h */,
+				C6BA170913A780250060ECF9 /* SVScene.m */,
+				C6BA170C13A792280060ECF9 /* SVTetris.h */,
+				C6BA170D13A792280060ECF9 /* SVTetris.m */,
 				C6C235A3139FB090000D2212 /* Svertex.glsl */,
 				C6C235A5139FB131000D2212 /* Sfragment.glsl */,
 			);
@@ -284,6 +294,8 @@
 				C6C235B3139FB9AD000D2212 /* CC3GLMatrix.m in Sources */,
 				C6C235B4139FB9AD000D2212 /* CC3Kazmath.c in Sources */,
 				C6C235B5139FB9AD000D2212 /* CC3Math.m in Sources */,
+				C6BA170A13A780250060ECF9 /* SVScene.m in Sources */,
+				C6BA170E13A792280060ECF9 /* SVTetris.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

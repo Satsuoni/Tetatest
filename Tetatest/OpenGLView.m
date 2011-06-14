@@ -11,6 +11,8 @@
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 #import "CC3GLMatrix.h"
+#import "SVScene.h"
+#import "SVTetris.h"
 static VertexManager * _sharedVM=nil;
 GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
 {
@@ -125,9 +127,9 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
     
     
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)* num_indices, index_buffer, GL_DYNAMIC_DRAW);
-GLenum en=glGetError();
+
      glBufferData(GL_ARRAY_BUFFER, sizeof(SpriteVertex)*num_vertices, vertex_buffer, GL_DYNAMIC_DRAW);
-   en=glGetError();
+
 }
 - (void) registerVertexBuffer:(GLuint)v_attrId andTexels:(GLuint)t_attrid
 {
@@ -137,9 +139,8 @@ GLenum en=glGetError();
 }
 - (void) Draw
 {
-    GLenum en=glGetError();
+ 
     glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_SHORT, 0);
-    en=glGetError();
 }
 
 @end
@@ -193,6 +194,16 @@ GLenum en=glGetError();
 }
 - (void) startCreatingTexturewithWidth:(int)width andHeight:(int)height
 {
+    if(isDone)
+    {
+        glDeleteTextures(1,&_texture);
+        if(_tempdata!=NULL)
+        {
+            free(_tempdata);
+            _tempdata=NULL;
+        }
+        isDone=NO;
+    }
     if(!isDone&&_tempdata==NULL)
     {
     _width=width;
@@ -576,7 +587,7 @@ typedef struct {
     _modelViewUniform = glGetUniformLocation(programHandle, "Modelview");
     _sampler =glGetUniformLocation(programHandle, "s_texture");
     ////////////////
-    [[self createTextureNamed:@"NewTexture"] getTextureFromImage:@"bad.png" width:256 height:256 andFinish:YES];
+   /* [[self createTextureNamed:@"NewTexture"] getTextureFromImage:@"bad.png" width:256 height:256 andFinish:YES];
     [[self createTextureNamed:@"Text"] startCreatingTexturewithWidth:512 andHeight:512];
     [[self getTextureNamed:@"Text"] finishTextureCreation];
     sprite=[[self getSpriteWithTexture:@"NewTexture" andFrame:CGRectMake(0,0,30,30)] retain];
@@ -588,7 +599,9 @@ typedef struct {
     //sprite.center_position=CGPointMake(400, 300);
     sprite.ul_position=CGPointMake(0, 100);
     [self addSpriteToDrawList:sprite];
-    //    sprite=[[[SVSprite alloc] initWithTexture:tex andFrame:CGRectMake(0,0,256,256)] retain];
+    //    sprite=[[[SVSprite alloc] initWithTexture:tex andFrame:CGRectMake(0,0,256,256)] retain];*/
+    SVTetris * svt=[[SVTetris alloc] initWithParent:self andBackdrop:@"tetr.bmp"];
+    currentScene=svt;
 }
 -(SVTexture *) getTextureNamed:(NSString *)name
 {
@@ -601,10 +614,19 @@ typedef struct {
 - (SVTexture *) createTextureNamed:(NSString *)name 
 {
     if([textures valueForKey:name]!=nil)
-        return [[textures valueForKey:name] autorelease];
+        return [textures valueForKey:name] ;
     SVTexture *textr=[[SVTexture alloc] init];
     [textures setValue:textr forKey:name];
-    return [[textures valueForKey:name] autorelease];
+    [textr release];
+    return [textures valueForKey:name] ;
+}
+- (SVAnimatedSprite *) getAnimatedSpriteWithTexture:(NSString *)texName andFrames:(NSArray *)frames
+{
+    SVTexture * tx=[self getTextureNamed:texName];
+    SVAnimatedSprite * newSprite=[[SVAnimatedSprite alloc]initWithTexture:tx andFrames:frames];
+    NSValue * val=[frames objectAtIndex:0];
+    newSprite.virt_frame=[val CGRectValue].size;
+    return [newSprite autorelease];
 }
 - (SVSprite *) getSpriteWithTexture:(NSString *)texName andFrame:(CGRect)frame
 {
@@ -669,6 +691,7 @@ typedef struct {
     //[modelView rotateBy:CC3VectorMake(0, 0, _currentRotation)];
     glUniformMatrix4fv(_modelViewUniform, 1, 0, modelView.glMatrix);
     glViewport(0, 0, self.frame.size.width, self.frame.size.height);
+    [currentScene Render];
     for (SVSprite * spr in drawList)
     {
         [spr Draw]; 
@@ -705,6 +728,7 @@ typedef struct {
 {
     self = [super initWithFrame:frame];
     if (self) {   
+        self.userInteractionEnabled=YES;
         textures=[[[NSMutableDictionary alloc] init] retain];
         drawList=[[[NSMutableArray alloc]init]retain];
         [self setupLayer];        
@@ -721,6 +745,7 @@ typedef struct {
 
 - (void)dealloc
 {
+    [currentScene release];
     [drawList release];
     [textures release];
     [sprite release];
