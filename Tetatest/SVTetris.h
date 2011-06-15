@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SVScene.h"
 #import "OpenGLView.h"
+#import "Box2D.h"
 #define T_ROW 10
 #define T_HEIGHT 19
 @interface TGrid : NSObject {
@@ -45,6 +46,7 @@
     TFigure * cFigure;
     NSTimeInterval fullTime;
     float step;
+    b2World * world;
 }
 - (void) step;
 - (void) Render;
