@@ -13,10 +13,16 @@
 #include "CC3GLMatrix.h"
 @class SVScene;
 #define VER_NUM_STEP 400
+#define EFFECT_NONE 0
+#define EFFECT_ALPHABLEND 1
 typedef struct
 {
     GLfloat pos[3];
     GLfloat texpos[2];
+    GLfloat efpos[2];
+    GLfloat fragmentcolors[16];
+    GLfloat params[2];
+    GLfloat etype;
 } SpriteVertex;
 
 @interface VertexManager:NSObject
@@ -26,17 +32,17 @@ typedef struct
     int cur_max_v;
     int cur_max_i;
     int cur_index;
-     GLuint vertexBuffer;
+    GLuint vertexBuffer;
     GLuint indexBuffer;
     BOOL ibc;
-    GLfloat *vertex_buffer;
+    char *vertex_buffer;
     GLushort * index_buffer;
 }
 -(id) init;
 + (id)getSharedVM;
 -(void) clear;
 -(void) processSquare: (SpriteVertex *) vertices;
--(void) registerVertexBuffer: (GLuint) v_attrId andTexels:(GLuint) t_attrid;
+-(void) registerVertexBuffer: (GLuint) v_attrId andTexels:(GLuint) t_attrid andVCoords:(GLuint) vc_attrId andFColors: (GLuint*) fc_attrID andParams:(GLuint) par_attr andEtype:(GLuint) et_attrID;
 -(void) registerIndexBuffer :(GLuint) attrId;
 -(void) Draw;
 @end
@@ -91,8 +97,14 @@ typedef struct
     int currentFrame;
     SVSquareWrapper *wrap;
     SpriteVertex *position_v;// vertex position ul, ur lr ll
+    GLfloat effect;
+    GL_RGBA_Color ecolors[4];// 4 colors to play with
+    GLfloat efparams[2];
     BOOL isDrawn;
 }
+-(void) setEffectParameter:(int)n toValue:(GLfloat) param;
+- (void) setEColorR:(GLfloat) r G:(GLfloat) g B:(GLfloat) b A:(GLfloat) a N:(int) n;
+@property (nonatomic,readwrite) GLfloat effect;
 @property (nonatomic,assign) CC3GLMatrix * transform;
 @property (nonatomic,assign) CGSize virt_frame;
 @property (nonatomic,assign) CGPoint center_position;
@@ -127,6 +139,10 @@ typedef struct
     GLuint _depthRenderBuffer;
     GLuint _texpos;
     GLuint _sampler;
+     GLuint _effect_pos;
+     GLuint _effect_colors[4];
+     GLuint _effect_type;
+    GLuint _effect_params;
     GLuint _texture;
     CGSize actualResolution;
     CGSize virtualResolution;

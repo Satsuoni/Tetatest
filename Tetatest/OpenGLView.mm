@@ -64,7 +64,7 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
         cur_max_i=VER_NUM_STEP*3;
         cur_index=0;
         ibc=NO;
-        vertex_buffer=(GLfloat *)malloc(VER_NUM_STEP*sizeof(SpriteVertex));
+        vertex_buffer=(char *)malloc(VER_NUM_STEP*sizeof(SpriteVertex));
         index_buffer=(GLushort *)malloc(sizeof(GLushort)*3*VER_NUM_STEP);
     }
     return self;
@@ -88,12 +88,12 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
     if(num_vertices+4>cur_max_v)
     {
         cur_max_v+=VER_NUM_STEP;
-        float * nv_buffer=(float *) malloc(cur_max_v*sizeof(SpriteVertex));
+        char * nv_buffer=(char *) malloc(cur_max_v*sizeof(SpriteVertex));
         memcpy(nv_buffer, vertex_buffer, sizeof(SpriteVertex)*num_vertices);
         free(vertex_buffer);
         vertex_buffer=nv_buffer;
     }
-    memcpy(&vertex_buffer[num_vertices*sizeof(SpriteVertex)/sizeof(float)], vertices, sizeof(SpriteVertex)*4);
+    memcpy(&vertex_buffer[num_vertices*sizeof(SpriteVertex)], vertices, sizeof(SpriteVertex)*4);
     
     if(num_indices+6>cur_max_i)
     {
@@ -126,16 +126,24 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
    }
     
     
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)* num_indices, index_buffer, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort)* num_indices, index_buffer, GL_DYNAMIC_DRAW);
 
      glBufferData(GL_ARRAY_BUFFER, sizeof(SpriteVertex)*num_vertices, vertex_buffer, GL_DYNAMIC_DRAW);
 
 }
-- (void) registerVertexBuffer:(GLuint)v_attrId andTexels:(GLuint)t_attrid
+-(void) registerVertexBuffer: (GLuint) v_attrId andTexels:(GLuint) t_attrid andVCoords:(GLuint) vc_attrId andFColors: (GLuint*) fc_attrID andParams:(GLuint) tpar andEtype:(GLuint) et_attrID
 {
+    GLenum gl=glGetError();
     glVertexAttribPointer(v_attrId, 3, GL_FLOAT, GL_FALSE, sizeof(SpriteVertex), 0);
     glVertexAttribPointer(t_attrid, 2, GL_FLOAT, GL_FALSE, sizeof(SpriteVertex), (GLvoid*) (sizeof(float)*3));
-      
+        glVertexAttribPointer(vc_attrId, 2, GL_FLOAT, GL_FALSE, sizeof(SpriteVertex), (GLvoid*) (sizeof(float)*5));
+        glVertexAttribPointer(fc_attrID[0], 4, GL_FLOAT, GL_FALSE, sizeof(SpriteVertex), (GLvoid*) (sizeof(float)*7)); 
+            glVertexAttribPointer(fc_attrID[1], 4, GL_FLOAT, GL_FALSE, sizeof(SpriteVertex), (GLvoid*) (sizeof(float)*11)); 
+            glVertexAttribPointer(fc_attrID[2], 4, GL_FLOAT, GL_FALSE, sizeof(SpriteVertex), (GLvoid*) (sizeof(float)*15)); 
+            glVertexAttribPointer(fc_attrID[3], 4, GL_FLOAT, GL_FALSE, sizeof(SpriteVertex), (GLvoid*) (sizeof(float)*19)); 
+        glVertexAttribPointer(tpar, 2, GL_FLOAT, GL_FALSE, sizeof(SpriteVertex), (GLvoid*) (sizeof(float)*23)); 
+       glVertexAttribPointer(et_attrID, 1, GL_FLOAT, GL_FALSE, sizeof(SpriteVertex), (GLvoid*) (sizeof(float)*25));
+    gl=glGetError();
 }
 - (void) Draw
 {
@@ -329,6 +337,18 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
 @synthesize center_position;
 @synthesize transform;
 @synthesize layoutPos;
+@synthesize effect;
+- (void) setEffectParameter:(int)n toValue:(GLfloat)param
+{
+    efparams[n]=param;
+}
+- (void) setEColorR:(GLfloat)r G:(GLfloat)g B:(GLfloat)b A:(GLfloat)a N:(int)n
+{
+    ecolors[n].clr[0]=r;
+  ecolors[n].clr[1]=g;
+    ecolors[n].clr[2]=b;
+    ecolors[n].clr[3]=a;
+}
 -(void) renderText:(NSString *)text withFont:(UIFont *) font intoBox:(CGRect)texturebox withColor:(GL_RGBA_Color)color andlineBreakMode:(UILineBreakMode)lineBreakMode alignment:(UITextAlignment)alignment
 {
     int sizeInBytes = texturebox.size.width*texturebox.size.height*4;
@@ -356,6 +376,7 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
 {
  if((self=[super init]))
  {
+     effect=0;
      texture=[tex retain];
      frame=[texture getTextureRect:texFrame];
      wrap=[[[SVSquareWrapper alloc] init] retain];
@@ -371,7 +392,26 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
 }
 -(void) Draw
 {
+
+    
+    
     position_v=wrap.vertices;
+    for(int i=0;i<4;i++)
+    {
+        memcpy(position_v[i].fragmentcolors, ecolors, sizeof(ecolors));
+        position_v[i].etype=effect;
+        position_v[i].params[0]=efparams[0];
+         position_v[i].params[1]=efparams[1];
+    }
+    position_v[0].efpos[0]=0.f;
+    position_v[0].efpos[1]=0.f;
+    position_v[1].efpos[0]=1.f;
+    position_v[1].efpos[1]=0.f;
+    position_v[2].efpos[0]=1.f;
+    position_v[2].efpos[1]=1.f;
+    position_v[3].efpos[0]=0.f;
+    position_v[3].efpos[1]=1.f;
+
     CC3Vector pos;
     pos.x=center_position.x;
     pos.y=center_position.y;
@@ -385,6 +425,7 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
     memcpy(&position_v[0].pos[0],&p2, sizeof(float)*3);
     position_v[0].texpos[0]=frame.origin.x;
     position_v[0].texpos[1]=frame.origin.y;
+    
 //ur
     apos.x=virt_frame.width/2;
     apos.y=-virt_frame.height/2;
@@ -578,8 +619,22 @@ typedef struct {
     // 5
     _positionSlot = glGetAttribLocation(programHandle, "Position");
     _texpos =glGetAttribLocation(programHandle, "TexPos");
+    _effect_pos =glGetAttribLocation(programHandle, "VirtPos");
+    _effect_colors[0] =glGetAttribLocation(programHandle, "ef_color1");
+    _effect_colors[1] =glGetAttribLocation(programHandle, "ef_color2");
+    _effect_colors[2] =glGetAttribLocation(programHandle, "ef_color3");
+    _effect_colors[3] =glGetAttribLocation(programHandle, "ef_color4");
+    _effect_type=glGetAttribLocation(programHandle, "effect_type");
+    _effect_params=glGetAttribLocation(programHandle, "ef_params");
     //_colorSlot = glGetAttribLocation(programHandle, "SourceColor");
     glEnableVertexAttribArray(_positionSlot);
+    glEnableVertexAttribArray(_effect_pos);
+    glEnableVertexAttribArray(_effect_type);
+      glEnableVertexAttribArray(_effect_params);
+    glEnableVertexAttribArray(_effect_colors[0]);
+     glEnableVertexAttribArray(_effect_colors[1]);
+     glEnableVertexAttribArray(_effect_colors[2]);
+     glEnableVertexAttribArray(_effect_colors[3]);
    // glEnableVertexAttribArray(_colorSlot);
     glEnableVertexAttribArray(_texpos);
     
@@ -587,20 +642,7 @@ typedef struct {
     _modelViewUniform = glGetUniformLocation(programHandle, "Modelview");
     _sampler =glGetUniformLocation(programHandle, "s_texture");
     ////////////////
-   /* [[self createTextureNamed:@"NewTexture"] getTextureFromImage:@"bad.png" width:256 height:256 andFinish:YES];
-    [[self createTextureNamed:@"Text"] startCreatingTexturewithWidth:512 andHeight:512];
-    [[self getTextureNamed:@"Text"] finishTextureCreation];
-    sprite=[[self getSpriteWithTexture:@"NewTexture" andFrame:CGRectMake(0,0,30,30)] retain];
-    SVSprite * text=[self getSpriteWithTexture:@"Text" andFrame:CGRectMake(0, 0, 512, 512)];
-    [text renderText:@"Test djd text" withFont:[UIFont boldSystemFontOfSize:26] intoBox:CGRectMake(0, 0, 512, 512) withColor:RGBAColorMake(0.5, 0.7, 0.14, 0.5) andlineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentLeft];
-    text.center_position=CGPointMake(300,300);
-    [self addSpriteToDrawList:text];
-    
-    //sprite.center_position=CGPointMake(400, 300);
-    sprite.ul_position=CGPointMake(0, 100);
-    [self addSpriteToDrawList:sprite];
-    //    sprite=[[[SVSprite alloc] initWithTexture:tex andFrame:CGRectMake(0,0,256,256)] retain];*/
-    SVTetris * svt=[[SVTetris alloc] initWithParent:self andBackdrop:@"tetr.bmp"];
+   SVTetris * svt=[[SVTetris alloc] initWithParent:self andBackdrop:@"tetr.bmp"];
     currentScene=svt;
 }
 -(SVTexture *) getTextureNamed:(NSString *)name
@@ -701,7 +743,7 @@ typedef struct {
         SVTexture *texture=[textures valueForKey:key];
         [texture Draw:_sampler];
         [[VertexManager getSharedVM]  registerIndexBuffer:0];
-        [[VertexManager getSharedVM] registerVertexBuffer:_positionSlot andTexels:_texpos];
+        [[VertexManager getSharedVM] registerVertexBuffer:_positionSlot andTexels:_texpos andVCoords:_effect_pos andFColors:_effect_colors andParams:_effect_params  andEtype:_effect_type];
         [[VertexManager getSharedVM] Draw];
         [texture clearDrawQueue];
     }

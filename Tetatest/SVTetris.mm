@@ -54,8 +54,11 @@ int generateRandomFromMatrix (float * matr,int n)
             float tx=inside.origin.x+x*30;
             float ty=inside.origin.y+y*30;
             blocks.ul_position=CGPointMake(tx, ty);
+              //  blocks.effect=1;
+               // [blocks setEffectParameter:0 toValue:0.5];
                 [blocks setFrame:Grid[x][y]];
                 [blocks Draw];
+               // blocks.effect=0;
              }
         }
 }
@@ -217,7 +220,7 @@ int generateRandomFromMatrix (float * matr,int n)
         step=0.5;
         currentTime=0;
         fullTime=0;
-        CGSize screenSize = parent.bounds.size;
+      //  CGSize screenSize = parent.bounds.size;
         
         // Define the gravity vector.
         b2Vec2 gravity;
