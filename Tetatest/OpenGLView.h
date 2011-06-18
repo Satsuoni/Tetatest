@@ -161,4 +161,8 @@ typedef struct
 - (SVSprite *) getSpriteWithTexture: (NSString *) texName andFrame: (CGRect) frame andDrawFrame :(CGSize) dframe;
 - (void) addSpriteToDrawList: (SVSprite *) sprite;
 - (void) clearDrawList;
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
 @end

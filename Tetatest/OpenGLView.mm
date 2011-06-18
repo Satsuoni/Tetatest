@@ -760,7 +760,22 @@ typedef struct {
 {
     [drawList removeAllObjects];
 }
-
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [currentScene touchesBegan:touches withEvent:event];
+}
+- (void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [currentScene touchesCancelled:touches withEvent:event];
+}
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [currentScene touchesEnded:touches withEvent:event];
+}
+- (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [currentScene touchesMoved:touches withEvent:event];
+}
 - (void) addSpriteToDrawList:(SVSprite *)sprites
 {
     if(![drawList containsObject:sprites])

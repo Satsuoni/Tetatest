@@ -54,11 +54,14 @@ int generateRandomFromMatrix (float * matr,int n)
             float tx=inside.origin.x+x*30;
             float ty=inside.origin.y+y*30;
             blocks.ul_position=CGPointMake(tx, ty);
-              //  blocks.effect=1;
-               // [blocks setEffectParameter:0 toValue:0.5];
+                blocks.effect=2;
+               [blocks setEffectParameter:1 toValue:2.5];
+                
+                [blocks  setEColorR:1 G:1 B:0.3 A:0.7 N:0];
+                [blocks  setEColorR:1 G:0 B:0 A:1 N:1];
                 [blocks setFrame:Grid[x][y]];
                 [blocks Draw];
-               // blocks.effect=0;
+                blocks.effect=0;
              }
         }
 }

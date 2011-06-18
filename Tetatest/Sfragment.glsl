@@ -10,7 +10,7 @@ varying mediump vec4 ecolor4;
 varying mediump vec2 eparams;
 uniform sampler2D s_texture; 
 void main(void) { // 2
-const mediump vec4 color=vec4(0.,0.,0.,1.0);
+const mediump vec4 color=vec4(0.,0.,0.,0.0);
 // mix(texture2D (s_texture, v_texCoord),color,0.5)
 if(etype==0.0)
 {
@@ -23,6 +23,29 @@ else
 gl_FragColor =mix(texture2D (s_texture, v_texCoord),tclr,eparams.x); 
  }
   else
+ if(etype==2.0)
+{
+lowp float alx=1.0,aly=1.0;
+if(virt_coord.x<ecolor1.x)
+ {alx=ecolor2.x;}
+else
+ if (virt_coord.x>ecolor1.y)
+{alx=ecolor2.y;}
+ else
+  {alx=ecolor2.x+(virt_coord.x-ecolor1.x)*eparams.x;}
+if(virt_coord.y<ecolor1.z)
+{aly=ecolor2.z;}
+else
+if (virt_coord.y>ecolor1.w)
+{aly=ecolor2.w;}
+else
+{aly=ecolor2.z+(virt_coord.y-ecolor1.z)*eparams.y;}
+mediump vec4 tclr=texture2D(s_texture, v_texCoord);
+tclr.w=tclr.w*alx*aly;
+gl_FragColor=tclr;
+}
+else
+
 {
 gl_FragColor =texture2D (s_texture, v_texCoord);
 }
