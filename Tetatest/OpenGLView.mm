@@ -709,6 +709,12 @@ typedef struct {
     CC3GLMatrix *projection = [CC3GLMatrix matrix];
     float h = 4.0f * self.frame.size.height / self.frame.size.width;
     actualResolution=self.frame.size;
+    if(actualResolution.width<actualResolution.height)
+    {
+        float tmp=actualResolution.width;
+        actualResolution.width=actualResolution.height;
+        actualResolution.height=tmp;
+    }
     virtualResolution.width=800;
     virtualResolution.height=600;
     [projection populateOrthoFromFrustumLeft:2 andRight:-2 andBottom:-h/2 andTop:h/2 andNear:4 andFar:10];
@@ -759,6 +765,11 @@ typedef struct {
 -(void) clearDrawList
 {
     [drawList removeAllObjects];
+}
+- (CGPoint) transformPointToInnerResolution:(CGPoint)point
+{
+   CGPoint cp= CGPointMake(point.x*virtualResolution.width/actualResolution.width, point.y*virtualResolution.height/actualResolution.height) ;
+    return CGPointMake(cp.y, virtualResolution.height-cp.x);
 }
 - (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {

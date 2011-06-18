@@ -11,6 +11,7 @@
 
 #define ARC4RANDOM_MAX      4294967296.0f
 #define PTM_RATIO 16
+#define ERASE_TIME 1.0
 int generateRandomFromMatrix (float * matr,int n)
 {
     float sm1=0;
@@ -46,28 +47,75 @@ int generateRandomFromMatrix (float * matr,int n)
 -(void) Draw:(SVAnimatedSprite *)blocks inRect:(CGRect)inside
 {
     blocks.virt_frame=CGSizeMake(30, 30);
-    for(int x=0;x<T_ROW;x++)
+    NSTimeInterval now=[NSDate timeIntervalSinceReferenceDate];
         for(int y=0;y<T_HEIGHT;y++)
         {
-            if(Grid[x][y]!=-1)
+            if(erasing[y])
             {
+                double tm=now-erasetime[y];
+                if(tm>ERASE_TIME)//erase complete...
+                {
+                    for(int yy=y;yy>0;yy--)
+                    {
+                        for(int xx=0;xx<T_ROW;xx++)
+                            Grid[xx][yy]=Grid[xx][yy-1];
+                        erasing[yy]=erasing[yy-1];
+                        erasetime[yy]=erasetime[yy-1];
+                    }
+                    for(int xx=0;xx<T_ROW;xx++)
+                        Grid[xx][0]=-1;
+                    erasing[0]=NO;
+                    y--;
+                    continue;
+                }
+                else
+                {
+                    blocks.effect=2;
+                    double cf=tm/ERASE_TIME;
+                    [blocks setEffectParameter:1 toValue:5];
+                    
+                    [blocks  setEColorR:1 G:1 B:cf A:cf+0.2 N:0];
+                    [blocks  setEColorR:1 G:0 B:0 A:1 N:1]; 
+                }
+            }
+               for(int x=0;x<T_ROW;x++)
+               {
+            if(Grid[x][y]!=-1)
+                {
             float tx=inside.origin.x+x*30;
             float ty=inside.origin.y+y*30;
             blocks.ul_position=CGPointMake(tx, ty);
-                blocks.effect=2;
-               [blocks setEffectParameter:1 toValue:2.5];
+              //  blocks.effect=2;
+              // [blocks setEffectParameter:1 toValue:2.5];
                 
-                [blocks  setEColorR:1 G:1 B:0.3 A:0.7 N:0];
-                [blocks  setEColorR:1 G:0 B:0 A:1 N:1];
+             //   [blocks  setEColorR:1 G:1 B:0.3 A:0.7 N:0];
+              //  [blocks  setEColorR:1 G:0 B:0 A:1 N:1];
                 [blocks setFrame:Grid[x][y]];
                 [blocks Draw];
-                blocks.effect=0;
-             }
+             //   blocks.effect=0;
+                 }
+          
+              }
+              blocks.effect=0;
         }
 }
 -(void) fixBlockAtX:(int)x Y:(int)y withType:(int)type
 {
     Grid[x][y]=type;
+    BOOL filled_row=YES;
+    for(int xx=0;xx<T_ROW;xx++)
+    {
+       if(Grid[xx][y]==-1)
+       {
+           filled_row=NO;
+           break;
+       }
+    }
+    if(filled_row)
+    {
+        erasing[y]=YES;
+        erasetime[y]=[NSDate timeIntervalSinceReferenceDate];
+    }
 }
 @end
 @implementation TFigure
@@ -165,6 +213,14 @@ int generateRandomFromMatrix (float * matr,int n)
         ys[i]=nys[i];
     }
 }
+- (BOOL) isPresentonX:(int)x Y:(int)y
+{
+    for(int i=0;i<4;i++)
+    {
+        if(cx+xs[i]==x&&cy+ys[i]==y) return YES;
+    }
+    return NO;
+}
 - (void) Draw:(SVAnimatedSprite *)blocks inRect:(CGRect)inside
 {
     for(int i=0;i<4;i++)
@@ -226,6 +282,7 @@ int generateRandomFromMatrix (float * matr,int n)
       //  CGSize screenSize = parent.bounds.size;
         
         // Define the gravity vector.
+        gridrect=CGRectMake(250, 0,300, 570);
         b2Vec2 gravity;
         gravity.Set(0.0f, -9.81f);
         
@@ -245,10 +302,10 @@ int generateRandomFromMatrix (float * matr,int n)
 - (void) step
 {
     cFigure.cy=cFigure.cy+1;
-    [cFigure RotateLeft];
+    //[cFigure RotateLeft];
     if(![cFigure FitsOnGrid:Grid])
     {
-        [cFigure RotateRight];
+       // [cFigure RotateRight];
         
         cFigure.cy--;
         [cFigure fixOnGrid:Grid];
@@ -259,6 +316,65 @@ int generateRandomFromMatrix (float * matr,int n)
     cFigure.cx=5;
     cFigure.cy=1;  
     }
+}
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    CGPoint pt=[[touches  anyObject]locationInView:parent];
+    pt=[parent transformPointToInnerResolution:pt];
+    if(CGRectContainsPoint(gridrect, pt))
+    {
+        int ptx=(pt.x-gridrect.origin.x)/30;
+        int pty=(pt.y-gridrect.origin.y)/30;
+        if([cFigure isPresentonX:ptx Y:pty])
+        {
+        currentTouch=pt;
+        isDragging=YES;
+        }
+    }
+    else
+    {
+        [cFigure RotateLeft];
+        if(![cFigure FitsOnGrid:Grid])
+            [cFigure RotateRight];
+    }
+}
+
+-(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    isDragging=NO;
+}
+- (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    isDragging=NO;
+}
+-(void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
+{
+if(isDragging)
+{
+    CGPoint pt=[[touches  anyObject]locationInView:parent];
+    pt=[parent transformPointToInnerResolution:pt];
+ while(pt.x-currentTouch.x>30)
+ {
+     currentTouch.x+=30;
+     cFigure.cx++;
+     if(![cFigure FitsOnGrid:Grid])
+         cFigure.cx--;
+ }
+    while(currentTouch.x-pt.x>30)
+    {
+        currentTouch.x-=30;
+        cFigure.cx--;
+        if(![cFigure FitsOnGrid:Grid])
+            cFigure.cx++;
+    }
+    while(pt.y-currentTouch.y>30)
+    {
+        currentTouch.y+=30;
+        cFigure.cy++;
+        if(![cFigure FitsOnGrid:Grid])
+            cFigure.cy--;
+    }
+}
 }
 - (void) Render
 {
@@ -276,8 +392,8 @@ int generateRandomFromMatrix (float * matr,int n)
     else
        currentTime=[NSDate timeIntervalSinceReferenceDate]; 
     [backdrop Draw];
-    [Grid Draw:_blocks inRect:CGRectMake(250, 0, 570, 300)];
-    [cFigure Draw:_blocks inRect:CGRectMake(250, 0, 570, 300)];
+    [Grid Draw:_blocks inRect:gridrect];
+    [cFigure Draw:_blocks inRect:gridrect];
 }
 - (void)dealloc
 {

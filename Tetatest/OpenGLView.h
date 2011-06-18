@@ -165,4 +165,5 @@ typedef struct
 - (void) touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event;
 - (void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
+- (CGPoint) transformPointToInnerResolution: (CGPoint) point;
 @end

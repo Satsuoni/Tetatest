@@ -15,6 +15,9 @@
 @interface TGrid : NSObject {
 @private
     int Grid[T_ROW][T_HEIGHT];
+    BOOL erasing[T_HEIGHT];
+    double erasetime[T_HEIGHT];
+    NSTimeInterval prevtime;
 }
 - (BOOL) isGridFilledatX: (int) x andY:(int) y;
 - (void) fixBlockAtX: (int) x Y: (int) y withType: (int) type;
@@ -38,6 +41,7 @@
 - (id) initWithProbabilityMatrix: (float *) matr andTypeProbability: (float *) types;
 - (void) fixOnGrid: (TGrid *) grid;
 - (void) reInitWithProbabilityMatrix: (float *) matr andTypeProbability: (float *) types;
+- (BOOL) isPresentonX:(int) x Y:(int) y;
 @end
 
 @interface SVTetris : SVScene {
@@ -47,6 +51,9 @@
     NSTimeInterval fullTime;
     float step;
     b2World * world;
+    CGRect gridrect;
+    CGPoint currentTouch;
+    BOOL isDragging;
 }
 - (void) step;
 - (void) Render;
