@@ -64,6 +64,7 @@ typedef struct
 - (CGRect) getBoundingBox;
 - (BOOL) sleeps;
 - (void) applyDirectImpulse: (CGPoint) impulse;
+- (void) applyDirectVelocity: (CGPoint) vel;
 - (void) Draw;
 - (CGPoint) getVelocity;
 - (void) applyLinearDamping:(float) damp;
