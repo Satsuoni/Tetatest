@@ -10,6 +10,10 @@
 #import "SVScene.h"
 #import "OpenGLView.h"
 #import "Box2D.h"
+#import "SVTetrisBody.h"
+#define ARC4RANDOM_MAX      4294967296.0f
+#define PTM_RATIO 16
+#define ERASE_TIME 1.0
 #define T_ROW 10
 #define T_HEIGHT 19
 class ContactListener : public b2ContactListener
@@ -21,64 +25,88 @@ public:
     void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
     void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
 };
-typedef struct
-{
-    float restitution;
-    float density;
-    float friction;
-    BOOL isSensor;
-    b2BodyType type;
-    BOOL isBullet;
-    
-} b2Template;
 
-#define MREC_POS 7
-@interface SVTetrisBody :NSObject {
-@public
-    unsigned int contactMode;
-    NSMutableSet * touchingBodies;
-    NSString *name;
-    NSString *type;
-    b2Body *body;
-    b2World * world;
-     CGPoint impulse;
-    CGPoint recordedPositions[MREC_POS];
-    int crec;
-    int trec;
-}
-@property (nonatomic, readonly) NSMutableSet *touchingBodies;
-- (id) initWithRect: (CGRect) rect andTemplate:(b2Template) temp inWorld:(b2World *) world withName:(NSString *) name andType:(NSString * )type;
-- (BOOL) canContactMode:(unsigned int) mode;
-- (BOOL) canContact: (SVTetrisBody *) body;
-- (void) setContactMode: (unsigned int) mode;
-- (void) applyImpulse:(CGPoint) impulse;
-- (void) addTouchingBody:(SVTetrisBody *) body;
-- (BOOL) isSensor;
-- (void) Reset;
-- (NSString *) getName;
-- (NSString *) getType;
-- (void) setType: (NSString *) str;
-- (void) updatePosition:(CGPoint) pos;
-- (CGPoint) getPosition;
-- (BOOL) isPresentonX:(int) x Y:(int) y withRect: (CGRect) ret;
-- (CGRect) getBoundingBox;
-- (BOOL) sleeps;
-- (void) applyDirectImpulse: (CGPoint) impulse;
-- (void) applyDirectVelocity: (CGPoint) vel;
-- (void) Draw;
-- (CGPoint) getVelocity;
-- (void) applyLinearDamping:(float) damp;
-- (void) recordPosition;
-- (BOOL) checkOscillationatLevel:(float) level upToDiff:(float) diff;
-- (void) destroyBody;
-@end
-@interface SVTetrisFreeBlock : SVTetrisBody {
-@private
-    int btype;
-    SVAnimatedSprite * blocks;
-}
-- (void) Draw;
-@end
+class QueryCallbackDisplace : public b2QueryCallback
+{
+public:
+    NSInvocation * invokation;
+    CGPoint disp;
+    b2AABB aabb;
+    SVTetrisBody * bdy;
+    QueryCallbackDisplace(){invokation=nil;};
+    void setInvokation(NSObject * target, SEL selector, CGPoint displacement,b2AABB ab, SVTetrisBody * body)
+    {
+       invokation=[[NSInvocation invocationWithMethodSignature:[target methodSignatureForSelector:selector]] retain];
+        [invokation setTarget:target];
+        [invokation setSelector:selector];
+        disp=displacement;
+        aabb=ab;
+        bdy=body;
+    };
+    virtual ~QueryCallbackDisplace() {[invokation release];
+        invokation=nil;
+                               };
+    
+	/// Called for each fixture found in the query AABB.
+	/// @return false to terminate the query.
+	virtual bool ReportFixture(b2Fixture* fixture)
+    {
+        b2Body *b=fixture->GetBody();
+        if(b->GetType()!=b2_dynamicBody) return true;
+        SVTetrisBody * ud=(SVTetrisBody *)b->GetUserData();
+        if(ud==bdy) return true;
+        b2AABB nw=[ud getAABB];
+        b2AABB intr=aabb;
+        intr.Intersect(nw);
+        if(!intr.IsValid()) return true;
+        CGPoint ndisp=disp;
+        if(disp.x>0)// upperbound nw.x and lowerbound aabb.x 
+        {
+            if(aabb.upperBound.x>nw.lowerBound.x)
+                ndisp.x=(aabb.upperBound.x-nw.lowerBound.x)+0.01;
+            else
+                ndisp.x=0;
+            ndisp.y=0;
+        }
+        if(disp.x<0)// upperbound nw.x and lowerbound aabb.x 
+        {
+            if(aabb.lowerBound.x<nw.upperBound.x)
+                ndisp.x=(aabb.lowerBound.x-nw.upperBound.x)-0.01;
+            else
+                ndisp.x=0;
+            ndisp.y=0;
+        }
+        if(disp.y>0)// upperbound nw.x and lowerbound aabb.x 
+        {
+            if(aabb.upperBound.y>nw.lowerBound.y)
+                ndisp.y=(aabb.upperBound.y-nw.lowerBound.y)+0.01;
+            else
+                ndisp.y=0;
+            ndisp.x=0;
+        }
+        if(disp.y<0)// upperbound nw.x and lowerbound aabb.x 
+        {
+            if(aabb.lowerBound.y<nw.upperBound.x)
+                ndisp.y=(aabb.lowerBound.y-nw.upperBound.y)-0.01;
+            else
+                ndisp.y=0;
+            ndisp.x=0;
+        }
+        if(ndisp.x==0&&ndisp.y==0)
+            return true;
+        [invokation setArgument:&ud atIndex:2];
+         [invokation setArgument:&ndisp atIndex:3];
+        [invokation invoke];
+        BOOL retval;
+        [invokation getReturnValue:&retval];
+        if(retval)
+        return true;
+        else
+            return false;
+    };  
+};
+
+
 
 @interface TGrid : NSObject {
 @private
@@ -150,8 +178,13 @@ typedef struct
     NSMutableArray * movingBodies;
     SVTetrisBody * walls[4];
     NSSet * crushableTypes;
+    NSMutableArray * sDisp;// successfully displaced objects
+    NSMutableArray * sDispVals;// and displacement values
+    BOOL dispResult;
     BOOL reduce;
 }
+- (BOOL) attemptDisplacingBody:(SVTetrisBody *) body byVector: (CGPoint) disp;
+- (void) clearDisplacement;
 - (BOOL) attemptPlacingFigure;
 - (BOOL) attemptMovingFigureLeft;
 - (BOOL) attemptMovingFigureRight;

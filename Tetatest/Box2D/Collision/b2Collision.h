@@ -164,7 +164,12 @@ struct b2AABB
 	{
 		return 0.5f * (upperBound - lowerBound);
 	}
-
+    void Intersect(const b2AABB& aabb1)
+    {
+      	lowerBound = b2Max(aabb1.lowerBound, lowerBound);
+		upperBound = b2Min(aabb1.upperBound, upperBound);
+  
+    }
 	/// Combine two AABBs into this one.
 	void Combine(const b2AABB& aabb1, const b2AABB& aabb2)
 	{
