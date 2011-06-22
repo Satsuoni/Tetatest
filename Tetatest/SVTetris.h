@@ -13,7 +13,7 @@
 #import "SVTetrisBody.h"
 #define ARC4RANDOM_MAX      4294967296.0f
 #define PTM_RATIO 16
-#define ERASE_TIME 1.0
+
 #define T_ROW 10
 #define T_HEIGHT 19
 class ContactListener : public b2ContactListener
@@ -117,10 +117,11 @@ public:
     SVTetrisBody * bodyGrid[T_ROW][T_HEIGHT];
     b2World * world;
     CGRect gridrect;
-    
+    double  ERASE_TIME;
 }
 @property (nonatomic,assign) b2World* world;
 @property (nonatomic,assign) CGRect gridrect;
+@property (nonatomic,readwrite) double ERASE_TIME;
 - (BOOL) isGridFilledatX: (int) x andY:(int) y;
 - (void) fixBlockAtX: (int) x Y: (int) y withType: (int) type;
 - (void) Draw: (SVAnimatedSprite *) blocks inRect:(CGRect) inside;

@@ -10,36 +10,6 @@
 #import "Box2D.h"
 #import "SVTetrisBody.h"
 
-/* for consideration
- for(int i=0;i<4;i++)
- {
- int tpx=x+dir[i].x;
- int tpy=y+dir[i].y;
- if(tpx>=0&&tpx<T_ROW&&tpy>=0&&tpy<T_HEIGHT)
- {
- if(Grid[tpx][tpy]==-1)
- {
- SVTetrisBody * bd=bodyGrid[tpx][tpy];
- if(bd!=nil)
- {
- NSString *type=[bd getType];
- if([type rangeOfString:dirNames[i]].location==NSNotFound)
- [bd setType:[[bd getType] stringByAppendingString:dirNames[i]]];
- }
- else
- {
- CGRect nb=CGRectMake(gridrect.origin.x+tpx*30, gridrect.origin.y+tpy*30, 30, 30);
- b2Template temp;
- temp.density=0;
- temp.friction=0;
- temp.restitution=0;
- temp.isSensor=YES;
- bd=[[SVTetrisBody alloc] initWithRect:nb andTemplate:temp inWorld:world withName:@"GridBumper" andType:dirNames[i]];   
- }
- }
- }
- }
- */
 void ContactListener::BeginContact(b2Contact * contact)
 {
     const b2Fixture *fixA=contact->GetFixtureA();
@@ -106,6 +76,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 @implementation TGrid
 @synthesize world;
 @synthesize gridrect;
+@synthesize ERASE_TIME;
 - (id) init
 {
     if((self=[super init]))
@@ -529,6 +500,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         [cFigure createBodies];
         sDisp=[[NSMutableArray alloc] init];
         sDispVals=[[NSMutableArray alloc] init ];
+        Grid.ERASE_TIME=1.0;
        // [self AddSprite:_blocks];
     }
     
@@ -843,7 +815,7 @@ if(isDragging)
                 if(v2>50)
                     [body applyLinearDamping:0.2];
                 [body recordPosition];
-                if([body sleeps]||[body checkOscillationatLevel:0.5 upToDiff:0.1])
+                if([body sleeps]||[body checkOscillationatLevel:0.35 upToDiff:0.1])
                 {
                     CGPoint pos=[body getPosition];
                     int px=pos.x-gridrect.origin.x-1;
@@ -887,6 +859,11 @@ if(isDragging)
                 }
              
             }
+            else
+            {
+               if([[body getType] isEqualToString:@"Monster"] )
+                   [body Draw];
+            }
            }
             [movingBodies removeObjectsInArray:tD];
             [tD removeAllObjects];
@@ -894,7 +871,7 @@ if(isDragging)
         }
         if(reduce)
         {
-            if([self attemptPlacingFigure])
+            if([self attemptPlacingFigure]&&![cFigure isFigureMissing])
             {
             NSArray * temp=[cFigure reduceToFallingBlocks];
             [movingBodies addObjectsFromArray:temp];

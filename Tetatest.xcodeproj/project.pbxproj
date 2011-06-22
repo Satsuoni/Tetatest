@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C64DC82113B1E67B00B29129 /* SVTetrisBody.mm in Sources */ = {isa = PBXBuildFile; fileRef = C64DC82013B1E67B00B29129 /* SVTetrisBody.mm */; };
+		C64DC82513B227C500B29129 /* SvManaPool.mm in Sources */ = {isa = PBXBuildFile; fileRef = C64DC82413B227C500B29129 /* SvManaPool.mm */; };
 		C6BA170A13A780250060ECF9 /* SVScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = C6BA170913A780250060ECF9 /* SVScene.mm */; };
 		C6BA170E13A792280060ECF9 /* SVTetris.mm in Sources */ = {isa = PBXBuildFile; fileRef = C6BA170D13A792280060ECF9 /* SVTetris.mm */; };
 		C6C23583139FAB92000D2212 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C23582139FAB92000D2212 /* UIKit.framework */; };
@@ -82,6 +83,8 @@
 /* Begin PBXFileReference section */
 		C64DC81F13B1E67B00B29129 /* SVTetrisBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVTetrisBody.h; sourceTree = "<group>"; };
 		C64DC82013B1E67B00B29129 /* SVTetrisBody.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SVTetrisBody.mm; sourceTree = "<group>"; };
+		C64DC82313B227C400B29129 /* SvManaPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SvManaPool.h; sourceTree = "<group>"; };
+		C64DC82413B227C500B29129 /* SvManaPool.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SvManaPool.mm; sourceTree = "<group>"; };
 		C6BA170813A780250060ECF9 /* SVScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVScene.h; sourceTree = "<group>"; };
 		C6BA170913A780250060ECF9 /* SVScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SVScene.mm; sourceTree = "<group>"; };
 		C6BA170C13A792280060ECF9 /* SVTetris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVTetris.h; sourceTree = "<group>"; };
@@ -263,6 +266,8 @@
 				C6C2359D139FABF6000D2212 /* OpenGLView.mm */,
 				C6BA170813A780250060ECF9 /* SVScene.h */,
 				C6BA170913A780250060ECF9 /* SVScene.mm */,
+				C64DC82313B227C400B29129 /* SvManaPool.h */,
+				C64DC82413B227C500B29129 /* SvManaPool.mm */,
 				C6BA170C13A792280060ECF9 /* SVTetris.h */,
 				C6BA170D13A792280060ECF9 /* SVTetris.mm */,
 				C64DC81F13B1E67B00B29129 /* SVTetrisBody.h */,
@@ -570,6 +575,7 @@
 				C6D0EB7313A847BB008779FD /* b2RevoluteJoint.cpp in Sources */,
 				C6D0EB7413A847BB008779FD /* b2WeldJoint.cpp in Sources */,
 				C64DC82113B1E67B00B29129 /* SVTetrisBody.mm in Sources */,
+				C64DC82513B227C500B29129 /* SvManaPool.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

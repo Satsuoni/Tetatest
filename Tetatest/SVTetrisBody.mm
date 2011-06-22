@@ -117,7 +117,7 @@
     b2Shape* sh=f->GetShape();
     b2AABB box;
     sh->ComputeAABB(&box, body->GetTransform());
-    bool tr=box.IsValid();
+   // bool tr=box.IsValid();
     return CGRectMake(box.lowerBound.x*PTM_RATIO, box.lowerBound.y*PTM_RATIO, PTM_RATIO*fabs(box.lowerBound.x-box.upperBound.x), PTM_RATIO*fabs(box.lowerBound.y-box.upperBound.y));
 }
 - (BOOL) isPresentonX:(int)x Y:(int)y withRect:(CGRect) gridrect

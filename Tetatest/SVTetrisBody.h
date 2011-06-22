@@ -10,7 +10,7 @@
 #import "SVScene.h"
 #import "OpenGLView.h"
 #import "Box2D.h"
-#define MREC_POS 7
+#define MREC_POS 15
 typedef struct
 {
     float restitution;
