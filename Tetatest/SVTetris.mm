@@ -326,7 +326,8 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         SVTetrisBody * bd=[[SVTetrisBody alloc] initWithRect:pos andTemplate:temp inWorld:world withName:@"FreeBlock" andType:[NSString stringWithFormat: @"Falling Block%d",types[i]]];
         [bd setContactMode:1];
         [arr addObject:bd];
-        [bd applyDirectImpulse:CGPointMake(arc4random()%20-10, arc4random()%30-15)];           
+        unsigned int fx=(arc4random()%2000);
+        [bd applyDirectImpulse:CGPointMake((float)fx-1000., (float)(arc4random()%3000)-1500.)];           
         [bd release];
     } 
     isMissing=YES;
