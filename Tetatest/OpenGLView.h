@@ -52,6 +52,7 @@ typedef struct
 }
 @property (nonatomic,readonly) SpriteVertex * vertices;
 - (id) copyWithZone:(NSZone *)zone;
+- (NSComparisonResult) Compare: (SVSquareWrapper *) wrap;
 @end
 @interface SVTexture :NSObject
 {
@@ -62,11 +63,17 @@ typedef struct
     BOOL isDone;
     NSString *name;
     NSMutableArray * drawnSquares; 
+    NSMutableArray * removedSquares;
+    GLfloat lowestZ,highestZ;
+    BOOL empty;
 }
 @property (nonatomic,retain) NSString * name;
 @property (nonatomic, readonly) GLuint texture;
 @property (nonatomic, readonly) int width;
 @property (nonatomic, readonly) int height;
+@property (nonatomic,readonly) float _lowestZ;
+@property (nonatomic,readonly) float _highestZ;
+@property (nonatomic,readonly) BOOL empty;
 - (void) startCreatingTexturewithWidth: (int) width andHeight:(int) height;
 - (void) drawImageOnTexture: (UIImage *)image fromrect: (CGRect) from withrect:(CGRect) to;
 - (void) finishTextureCreation;
@@ -78,14 +85,17 @@ typedef struct
 - (void) addDrawnSquare: (SVSquareWrapper *) wrap;
 - (void) clearDrawQueue;
 - (void) Draw:(GLuint) sampler;
+- (void) Draw:(GLuint) sampler fromZ:(GLfloat) z_from uptoZ:(GLfloat) z_to andRemove:(BOOL) rem;
+- (void) Sort;
 - (void) ReplaceTextureBlock: (CGRect) block withData: (void *) data;
+- (NSComparisonResult) Compare: (SVTexture *) tex;
 @end
 typedef struct
 {
     GLfloat clr[4];
     // GL_RGBA_Color(GLfloat r,GLfloat g,GLfloat b,GLfloat a);
 } GL_RGBA_Color;
-
+extern GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a);
 @interface SVSprite :NSObject
 {
     SVTexture * texture;

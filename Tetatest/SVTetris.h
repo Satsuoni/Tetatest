@@ -11,11 +11,13 @@
 #import "OpenGLView.h"
 #import "Box2D.h"
 #import "SVTetrisBody.h"
+#import "SvManaPool.h"
 #define ARC4RANDOM_MAX      4294967296.0f
 #define PTM_RATIO 16
 
 #define T_ROW 10
 #define T_HEIGHT 19
+#define ERASE_INTERVAL 0.2
 class ContactListener : public b2ContactListener
 {
 public:
@@ -113,14 +115,20 @@ public:
     int Grid[T_ROW][T_HEIGHT];
     BOOL erasing[T_HEIGHT];
     double erasetime[T_HEIGHT];
+    double erasectime[T_HEIGHT];
     NSTimeInterval prevtime;
     SVTetrisBody * bodyGrid[T_ROW][T_HEIGHT];
     b2World * world;
     CGRect gridrect;
     double  ERASE_TIME;
+    SvManaPool * manaGain;
+    SvManaPool * manaPool;
+    
 }
 @property (nonatomic,assign) b2World* world;
 @property (nonatomic,assign) CGRect gridrect;
+@property (nonatomic,readonly) SvManaPool * manaGain;
+@property (nonatomic,readonly) SvManaPool * manaPool;
 @property (nonatomic,readwrite) double ERASE_TIME;
 - (BOOL) isGridFilledatX: (int) x andY:(int) y;
 - (void) fixBlockAtX: (int) x Y: (int) y withType: (int) type;
@@ -183,6 +191,8 @@ public:
     NSMutableArray * sDispVals;// and displacement values
     BOOL dispResult;
     BOOL reduce;
+    SvManaPool * manaPool;
+    SVSprite *text;
 }
 - (BOOL) attemptDisplacingBody:(SVTetrisBody *) body byVector: (CGPoint) disp;
 - (void) clearDisplacement;

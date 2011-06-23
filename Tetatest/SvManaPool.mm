@@ -123,4 +123,19 @@
     SvManaPool *ret=[[SvManaPool alloc] initWithPool:dt];
     return [ret autorelease];
 }
+-(void) Drain
+{
+    for(int i=0;i<MANA_TYPES;i++)
+    {
+        mana[i]=0;
+    }
+}
+-(void) DrainIntoPool: (SvManaPool *)pool
+{
+    for(int i=0;i<MANA_TYPES;i++)
+    {
+        [pool addMana:i amount: mana[i]];
+        mana[i]=0;
+    }
+}
 @end

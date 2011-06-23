@@ -1,3 +1,4 @@
+
 //
 //  OpenGLView.m
 //  Tetatest
@@ -20,6 +21,12 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
     return ret;
 }
 @implementation SVSquareWrapper
+- (NSComparisonResult) Compare: (SVSquareWrapper *) wrap
+{
+    if(wrap.vertices[0].pos[2]>_vertices[0].pos[2]) return NSOrderedAscending;
+    if(wrap.vertices[0].pos[2]<_vertices[0].pos[2]) return NSOrderedDescending;
+    return NSOrderedSame;
+}
 - (SpriteVertex *) vertices
 {
     return _vertices;
@@ -158,13 +165,17 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
 @synthesize width=_width;
 @synthesize height=_height;
 @synthesize name;
+@synthesize _highestZ=highestZ;
+@synthesize _lowestZ=lowestZ;
+@synthesize empty;
 -(void) ReplaceTextureBlock:(CGRect)block withData:(void *)data
 {
+      
     glBindTexture(GL_TEXTURE_2D, _texture);
     glTexSubImage2D(	GL_TEXTURE_2D, 
                     0, 
                     block.origin.x, 
-                    block.origin.y, 
+                 _height-block.origin.y-block.size.height, 
                     block.size.width, 
                     block.size.height, 
                     GL_RGBA, 
@@ -173,11 +184,21 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
 }
 - (void) addDrawnSquare:(SVSquareWrapper *)wrap
 {
+    empty=NO;
+    if(wrap.vertices[0].pos[2]>highestZ) highestZ=wrap.vertices[0].pos[2];
+    if(wrap.vertices[0].pos[2]<lowestZ) lowestZ=wrap.vertices[0].pos[2];    
     [drawnSquares addObject:[wrap copyAutoreleased]];
 }
 -(void) clearDrawQueue
 {
     [drawnSquares removeAllObjects];
+    empty=YES;
+}
+- (NSComparisonResult) Compare:(SVTexture *)tex
+{
+    if(tex._lowestZ>lowestZ) return NSOrderedAscending;
+      if(tex._lowestZ<lowestZ) return NSOrderedDescending;
+    return NSOrderedSame;
 }
 - (void) Draw: (GLuint) sampler
 {
@@ -190,13 +211,57 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
         [vm processSquare:wrap.vertices];
     }
 }
+- (void) Sort
+{
+    [drawnSquares sortUsingSelector:@selector(Compare:)];
+}
+- (void) Draw: (GLuint) sampler  fromZ:(GLfloat) z_from uptoZ:(GLfloat) z_to andRemove:(BOOL)rem
+{
+    [self bindAs:GL_TEXTURE0];
+    glUniform1i ( sampler, 0 );
+    VertexManager *vm= [VertexManager getSharedVM] ;
+    [vm clear];
+    if(rem)
+    {
+        highestZ=-100;
+        lowestZ=100;
+    }
+    for(SVSquareWrapper * wrap in drawnSquares)
+    {
+        if(wrap.vertices[0].pos[2]>=z_from&&wrap.vertices[0].pos[2]<=z_to)
+        [vm processSquare:wrap.vertices];
+        else
+        {
+            if(rem)
+            {
+                if(wrap.vertices[0].pos[2]>highestZ) highestZ=wrap.vertices[0].pos[2];
+                if(wrap.vertices[0].pos[2]<lowestZ) lowestZ=wrap.vertices[0].pos[2];      
+            }
+        }
+        if(rem) [removedSquares addObject:wrap];
+        if(wrap.vertices[0].pos[2]>z_to) break;
+    }
+    if(rem)
+    {
+        
+        [drawnSquares removeObjectsInArray:removedSquares];
+        [removedSquares removeAllObjects];
+        if([drawnSquares count]==0) empty=YES;
+        else
+            empty=NO;
+    }
+}
+
 -(id) init
 {
     if((self=[super init]))
     {
         isDone=NO;
         _tempdata=NULL;
-        drawnSquares=[[[NSMutableArray alloc] init] retain];
+        drawnSquares=[[NSMutableArray alloc] init] ;
+         removedSquares=[[NSMutableArray alloc] init] ;
+        highestZ=-100;
+        lowestZ=100;
     }
     return self;
 }
@@ -218,8 +283,13 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
     _height=height;
       //  UIImage* image = [UIImage imageNamed:@"tex.png"];
        _tempdata = (unsigned char* ) malloc(_width * _height * 4);
+       
       textureContext = CGBitmapContextCreate(_tempdata, _width, _height, 8, _width * 4,
                                              CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedLast);
+         memset(_tempdata, 0, _width * _height * 4);
+        GL_RGBA_Color clr=RGBAColorMake(0, 0, 0, 0);
+         CGContextSetFillColor(textureContext, clr.clr);
+        CGContextFillRect(textureContext, CGRectMake(0, 0, _width, _height));
     }
 }
 - (UIImage*)imageByCropping:(UIImage *)imageToCrop toRect:(CGRect)rect
@@ -279,6 +349,7 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
 - (void) finishTextureCreation
 {
     CGContextRelease(textureContext);
+       // memset(_tempdata, 0, _width * _height * 4);
     glGenTextures(1, &_texture);
     glBindTexture(GL_TEXTURE_2D, _texture);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, _tempdata);
@@ -296,6 +367,7 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
 - (void) dealloc
 {
     [drawnSquares release];
+    [removedSquares release];
     glDeleteTextures(1, &_texture);
     if(_tempdata!=NULL)
     {
@@ -358,8 +430,8 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
                                                  CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedLast);
   
     CGContextSetFillColor(context, color.clr);
-   // CGContextTranslateCTM(context, 0.0, texturebox.size.height);
-   // CGContextScaleCTM(context, 1.0, -1.0);
+// CGContextTranslateCTM(context, 0.0, texturebox.size.height);
+//  CGContextScaleCTM(context, 1.0, -1.0);
     UIGraphicsPushContext(context);
     [text drawInRect:CGRectMake(0, 0, texturebox.size.width, texturebox.size.height) withFont:font
        lineBreakMode:lineBreakMode alignment:alignment];
@@ -688,7 +760,7 @@ typedef struct {
     return [newSprite autorelease]; 
 }
 - (void)setupVBOs {
-    
+
    /* GLuint vertexBuffer;
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -702,10 +774,12 @@ typedef struct {
 }
 
 - (void)render:(CADisplayLink*)displayLink {
-    glClearColor(0, 104.0/255.0, 55.0/255.0, 1.0);
+    glClearColor(0, 0.0/255.0, 55.0/255.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
-    
+   glDepthFunc(GL_ALWAYS);
+    //glEnable (GL_BLEND);
+    //glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     CC3GLMatrix *projection = [CC3GLMatrix matrix];
     float h = 4.0f * self.frame.size.height / self.frame.size.width;
     actualResolution=self.frame.size;
@@ -744,15 +818,42 @@ typedef struct {
     {
         [spr Draw]; 
     }
-    for(NSString *key in textures)
+   
+   NSMutableArray *sorted=[[NSMutableArray alloc] initWithArray:[[textures allValues] sortedArrayUsingSelector:@selector(Compare:)]];
+    /* for(NSString *key in textures)
     {
         SVTexture *texture=[textures valueForKey:key];
-        [texture Draw:_sampler];
-        [[VertexManager getSharedVM]  registerIndexBuffer:0];
-        [[VertexManager getSharedVM] registerVertexBuffer:_positionSlot andTexels:_texpos andVCoords:_effect_pos andFColors:_effect_colors andParams:_effect_params  andEtype:_effect_type];
-        [[VertexManager getSharedVM] Draw];
-        [texture clearDrawQueue];
+     [texture Draw:_sampler];
+     [[VertexManager getSharedVM]  registerIndexBuffer:0];
+     [[VertexManager getSharedVM] registerVertexBuffer:_positionSlot andTexels:_texpos andVCoords:_effect_pos andFColors:_effect_colors andParams:_effect_params  andEtype:_effect_type];
+     [[VertexManager getSharedVM] Draw];
+     [texture clearDrawQueue];
+    }*/
+    while([sorted count]>0)
+    {
+        SVTexture * texture=[sorted objectAtIndex:0];
+        if([sorted count]==1)
+        {
+            [texture Draw:_sampler];
+            [[VertexManager getSharedVM]  registerIndexBuffer:0];
+            [[VertexManager getSharedVM] registerVertexBuffer:_positionSlot andTexels:_texpos andVCoords:_effect_pos andFColors:_effect_colors andParams:_effect_params  andEtype:_effect_type];
+            [[VertexManager getSharedVM] Draw];
+            [texture clearDrawQueue];
+            [sorted removeObject:texture];
+        }
+        else
+        {
+            SVTexture * next=[sorted objectAtIndex:1];
+            [texture Draw:_sampler fromZ:texture._lowestZ uptoZ:next._lowestZ andRemove:YES];
+            [[VertexManager getSharedVM]  registerIndexBuffer:0];
+            [[VertexManager getSharedVM] registerVertexBuffer:_positionSlot andTexels:_texpos andVCoords:_effect_pos andFColors:_effect_colors andParams:_effect_params  andEtype:_effect_type];
+            [[VertexManager getSharedVM] Draw];
+            if(texture.empty)
+                [sorted removeObject:texture];
+        }
+        [sorted sortUsingSelector:@selector(Compare:)];
     }
+    [sorted release];
    
     [_context presentRenderbuffer:GL_RENDERBUFFER];
 }

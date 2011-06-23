@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C64DC82113B1E67B00B29129 /* SVTetrisBody.mm in Sources */ = {isa = PBXBuildFile; fileRef = C64DC82013B1E67B00B29129 /* SVTetrisBody.mm */; };
 		C64DC82513B227C500B29129 /* SvManaPool.mm in Sources */ = {isa = PBXBuildFile; fileRef = C64DC82413B227C500B29129 /* SvManaPool.mm */; };
+		C6B5F7B713B2534A005F4A3E /* empty256.png in Resources */ = {isa = PBXBuildFile; fileRef = C6B5F7B613B2534A005F4A3E /* empty256.png */; };
 		C6BA170A13A780250060ECF9 /* SVScene.mm in Sources */ = {isa = PBXBuildFile; fileRef = C6BA170913A780250060ECF9 /* SVScene.mm */; };
 		C6BA170E13A792280060ECF9 /* SVTetris.mm in Sources */ = {isa = PBXBuildFile; fileRef = C6BA170D13A792280060ECF9 /* SVTetris.mm */; };
 		C6C23583139FAB92000D2212 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6C23582139FAB92000D2212 /* UIKit.framework */; };
@@ -85,6 +86,7 @@
 		C64DC82013B1E67B00B29129 /* SVTetrisBody.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SVTetrisBody.mm; sourceTree = "<group>"; };
 		C64DC82313B227C400B29129 /* SvManaPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SvManaPool.h; sourceTree = "<group>"; };
 		C64DC82413B227C500B29129 /* SvManaPool.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SvManaPool.mm; sourceTree = "<group>"; };
+		C6B5F7B613B2534A005F4A3E /* empty256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = empty256.png; path = Cocos3DMathLib/empty256.png; sourceTree = "<group>"; };
 		C6BA170813A780250060ECF9 /* SVScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVScene.h; sourceTree = "<group>"; };
 		C6BA170913A780250060ECF9 /* SVScene.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SVScene.mm; sourceTree = "<group>"; };
 		C6BA170C13A792280060ECF9 /* SVTetris.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVTetris.h; sourceTree = "<group>"; };
@@ -308,6 +310,8 @@
 		C6C335CF13A1CD1400D7A202 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				C6C335D113A1CD2900D7A202 /* bad.png */,
+				C6C335D313A1CD3100D7A202 /* bad1.png */,
 				C6C335D513A1CD7800D7A202 /* bad2.png */,
 				C6C335D613A1CD7800D7A202 /* bad3.png */,
 				C6C335D713A1CD7800D7A202 /* blocks.bmp */,
@@ -320,9 +324,8 @@
 				C6C335DE13A1CD7800D7A202 /* tetr_FOREST.bmp */,
 				C6C335DF13A1CD7800D7A202 /* tetr.bmp */,
 				C6C335E013A1CD7800D7A202 /* wnd.png */,
-				C6C335D113A1CD2900D7A202 /* bad.png */,
-				C6C335D313A1CD3100D7A202 /* bad1.png */,
 				C6C335ED13A1CD8700D7A202 /* map.bmp */,
+				C6B5F7B613B2534A005F4A3E /* empty256.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -520,6 +523,7 @@
 				C6C335EB13A1CD7800D7A202 /* tetr.bmp in Resources */,
 				C6C335EC13A1CD7800D7A202 /* wnd.png in Resources */,
 				C6C335EE13A1CD8700D7A202 /* map.bmp in Resources */,
+				C6B5F7B713B2534A005F4A3E /* empty256.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

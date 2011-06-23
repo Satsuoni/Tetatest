@@ -77,18 +77,25 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 @synthesize world;
 @synthesize gridrect;
 @synthesize ERASE_TIME;
+@synthesize manaGain;
+@synthesize manaPool;
 - (id) init
 {
     if((self=[super init]))
     {
+        double manpool[MANA_TYPES]={0.2,0.2,0.2,0.2,0.2,0.2};
+        manaGain=[[SvManaPool alloc] initWithPool:manpool];
+        manaPool=[[SvManaPool alloc] init];
         for(int x=0;x<T_ROW;x++)
             for(int y=0;y<T_HEIGHT;y++)
                 Grid[x][y]=-1;
     }
     return self;
 }
+
 -(void) dealloc
 {
+    [manaGain release];
     for(int x=0;x<T_ROW;x++)
         for(int y=0;y<T_HEIGHT;y++)
         {
@@ -130,6 +137,19 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
             if(erasing[y])
             {
                 double tm=now-erasetime[y];
+                double rtm=now-erasectime[y];
+                
+                if(tm>ERASE_TIME)
+                    rtm-=(tm-ERASE_TIME);
+               while(rtm>ERASE_INTERVAL)
+               {
+                   erasectime[y]+=ERASE_INTERVAL;
+                   rtm-=ERASE_INTERVAL;
+                   for(int xx=0;xx<T_ROW;xx++)
+                       if(Grid[xx][y]!=-1)
+                           [manaPool addMana:Grid[xx][y] amount:[manaGain getMana:Grid[xx][y]]];
+               }
+                    
                 if(tm>ERASE_TIME)//erase complete...
                 {
                     for(int xx=0;xx<T_ROW;xx++)
@@ -200,6 +220,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
     {
         erasing[y]=YES;
         erasetime[y]=[NSDate timeIntervalSinceReferenceDate];
+        erasectime[y]=[NSDate timeIntervalSinceReferenceDate];
     }
 //////////Body install
     if(bodyGrid[x][y]!=nil)
@@ -364,8 +385,8 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         }; break;
     };
     for(int i=0;i<4;i++)
-        types[i]=generateRandomFromMatrix(typef, 5);
-    max_frame=5;  
+        types[i]=generateRandomFromMatrix(typef, MANA_TYPES);
+    max_frame=MANA_TYPES;  
 }
 - (id) initWithProbabilityMatrix:(float *)matr andTypeProbability:(float *)typef
 {
@@ -453,7 +474,8 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
             [NSValue valueWithCGRect:CGRectMake(30, im.size.height, 30, 30)],
             [NSValue valueWithCGRect:CGRectMake(60, im.size.height, 30, 30)],
             [NSValue valueWithCGRect:CGRectMake(90, im.size.height, 30, 30)],
-            [NSValue valueWithCGRect:CGRectMake(120, im.size.height, 30, 30)],nil]] retain];
+            [NSValue valueWithCGRect:CGRectMake(120, im.size.height, 30, 30)],
+            [NSValue valueWithCGRect:CGRectMake(150, im.size.height, 30, 30)], nil]] retain];
         Grid=[[TGrid alloc] init];
         cFigure=[[TFigure alloc] init];
         cFigure.cx=5;
@@ -501,6 +523,13 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         sDisp=[[NSMutableArray alloc] init];
         sDispVals=[[NSMutableArray alloc] init ];
         Grid.ERASE_TIME=1.0;
+        manaPool=[[SvManaPool alloc] init];
+        [parent createTextureNamed:@"Text"];
+        SVTexture *textex=[parent getTextureNamed:@"Text"];
+        [textex startCreatingTexturewithWidth:256 andHeight:256];
+           [textex finishTextureCreation];
+        text=[[parent getSpriteWithTexture:@"Text" andFrame:CGRectMake(0, 0, 256,256)] retain];
+        
        // [self AddSprite:_blocks];
     }
     
@@ -781,6 +810,10 @@ if(isDragging)
 }
 - (void) Render
 {
+    //////
+    [Grid.manaPool DrainIntoPool:manaPool];
+    /////////////
+    [backdrop Draw];
     if(currentTime!=0)
     {
     elapsedTime=[NSDate timeIntervalSinceReferenceDate]-currentTime;
@@ -880,7 +913,7 @@ if(isDragging)
     }
     else
        currentTime=[NSDate timeIntervalSinceReferenceDate]; 
-    [backdrop Draw];
+    
  /*  for(b2Body * b=world->GetBodyList();b;b=b->GetNext())
     {
         SVTetrisBody * bd=( SVTetrisBody *)b->GetUserData();
@@ -919,6 +952,20 @@ if(isDragging)
     }*/
    [Grid Draw:_blocks inRect:gridrect];
   if(![cFigure isFigureMissing]) [cFigure Draw:_blocks inRect:gridrect];
+
+    [text renderText:
+     [NSString  stringWithFormat:@"SUN: %d\rMNT: %d\rFRS: %d\rSEA: %d\rSWP: %d\rSPR: %d",
+      (int)[manaPool getMana:0],
+      (int)[manaPool getMana:1],
+      (int)[manaPool getMana:2],
+      (int)[manaPool getMana:3],
+      (int)[manaPool getMana:4],
+      (int)[manaPool getMana:5]
+      ] withFont:[UIFont fontWithName:@"Arial" size:18] intoBox:CGRectMake(0, 0, 110, 130) withColor:RGBAColorMake(0.9f, 1.0f, 0.9f, 1.0f) andlineBreakMode:UILineBreakModeWordWrap alignment:UITextAlignmentLeft];
+    text.layoutPos=1;
+    text.virt_frame=CGSizeMake(110, 130);
+    text.ul_position=CGPointMake(620, 30);
+    [text Draw];
     reduce=NO;
 }
 - (void) clearDisplacement
@@ -928,6 +975,8 @@ if(isDragging)
 }
 - (void)dealloc
 {
+    [text release];
+    [manaPool release];
     [sDispVals release];
     [sDisp release];
     [crushableTypes release];
