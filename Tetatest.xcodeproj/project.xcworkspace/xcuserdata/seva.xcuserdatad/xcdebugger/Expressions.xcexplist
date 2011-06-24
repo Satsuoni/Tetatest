@@ -45,10 +45,22 @@
          </expressions>
       </StackState>
       <StackState
-         stackFrameDescription = "-[SVSprite Draw]:OpenGLView.mm">
+         stackFrameDescription = "-[VertexManager registerVertexBuffer:andTexels:]:OpenGLView.m">
          <expressions>
             <expression
-               value = "effect">
+               value = "index_buffer[3]">
+            </expression>
+            <expression
+               value = "index_buffer[1]">
+            </expression>
+            <expression
+               value = "(SpriteVertex [8]) vertex_buffer">
+            </expression>
+            <expression
+               value = "(SpriteVertex *)(&amp;vertex_buffer[5])">
+            </expression>
+            <expression
+               value = "(GLushort [12])index_buffer">
             </expression>
          </expressions>
       </StackState>
@@ -114,10 +126,18 @@
          stackFrameDescription = "-[SVTetrisBody checkOscillationatLevel:upToDiff:]:SVTetris.mm">
          <expressions>
             <expression
-               value = "(maxy-miny)/tvy">
+               value = "recordedPositions">
             </expression>
             <expression
-               value = "recordedPositions">
+               value = "(maxy-miny)/tvy">
+            </expression>
+         </expressions>
+      </StackState>
+      <StackState
+         stackFrameDescription = "-[SvTetrisMonster Draw]:SvTetrisMonster.mm">
+         <expressions>
+            <expression
+               value = "ghostMode">
             </expression>
          </expressions>
       </StackState>
@@ -130,22 +150,10 @@
          </expressions>
       </StackState>
       <StackState
-         stackFrameDescription = "-[VertexManager registerVertexBuffer:andTexels:]:OpenGLView.m">
+         stackFrameDescription = "-[SVSprite Draw]:OpenGLView.mm">
          <expressions>
             <expression
-               value = "index_buffer[3]">
-            </expression>
-            <expression
-               value = "index_buffer[1]">
-            </expression>
-            <expression
-               value = "(SpriteVertex [8]) vertex_buffer">
-            </expression>
-            <expression
-               value = "(SpriteVertex *)(&amp;vertex_buffer[5])">
-            </expression>
-            <expression
-               value = "(GLushort [12])index_buffer">
+               value = "effect">
             </expression>
          </expressions>
       </StackState>

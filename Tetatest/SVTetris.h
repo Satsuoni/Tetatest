@@ -27,7 +27,7 @@ public:
     void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
     void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
 };
-
+extern float rndup(float);
 class QueryCallbackDisplace : public b2QueryCallback
 {
 public:

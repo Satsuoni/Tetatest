@@ -11,6 +11,7 @@
 #import "SVTetrisBody.h"
 @implementation SVTetrisBody
 @synthesize touchingBodies;
+@synthesize passingBodies;
 - (b2AABB) getAABB
 {
     b2AABB ret;
@@ -168,6 +169,7 @@
 {
     if((self=[super init]))
     {
+        passingBodies=[[NSMutableSet alloc] init];
         world=worldi;
         b2BodyDef def;
         def.type=temp.type;
@@ -241,6 +243,7 @@
 {
     [name release];
     [type release];
+    [passingBodies release];
     [touchingBodies removeAllObjects];
     [touchingBodies release];
     if(body!=NULL) 

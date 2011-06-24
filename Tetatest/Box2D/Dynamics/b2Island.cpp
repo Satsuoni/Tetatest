@@ -191,7 +191,11 @@ void b2Island::Solve(const b2TimeStep& step, const b2Vec2& gravity, bool allowSl
 		}
 
 		// Integrate velocities.
+        if(b->applyGravity)
 		b->m_linearVelocity += step.dt * (gravity + b->m_invMass * b->m_force);
+        else
+        b->m_linearVelocity += step.dt * ( b->m_invMass * b->m_force);
+           
 		b->m_angularVelocity += step.dt * b->m_invI * b->m_torque;
 
 		// Apply damping.

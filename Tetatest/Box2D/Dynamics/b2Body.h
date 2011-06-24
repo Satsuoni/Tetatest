@@ -130,6 +130,7 @@ public:
 	/// Contacts are not created until the next time step.
 	/// @param def the fixture definition.
 	/// @warning This function is locked during callbacks.
+    bool applyGravity;
 	b2Fixture* CreateFixture(const b2FixtureDef* def);
 
 	/// Creates a fixture from a shape and attach it to this body.

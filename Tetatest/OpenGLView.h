@@ -25,6 +25,17 @@ typedef struct
     GLfloat etype;
 } SpriteVertex;
 
+typedef struct
+{
+    GLfloat clr[4];
+    // GL_RGBA_Color(GLfloat r,GLfloat g,GLfloat b,GLfloat a);
+} GL_RGBA_Color;
+typedef struct
+{
+    GL_RGBA_Color  colors[4];
+    GLfloat par1,par2;
+    int type;
+} SpriteEffect;
 @interface VertexManager:NSObject
 {
     int num_vertices;
@@ -90,11 +101,7 @@ typedef struct
 - (void) ReplaceTextureBlock: (CGRect) block withData: (void *) data;
 - (NSComparisonResult) Compare: (SVTexture *) tex;
 @end
-typedef struct
-{
-    GLfloat clr[4];
-    // GL_RGBA_Color(GLfloat r,GLfloat g,GLfloat b,GLfloat a);
-} GL_RGBA_Color;
+
 extern GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a);
 @interface SVSprite :NSObject
 {
@@ -125,6 +132,7 @@ extern GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a);
 -(void) Draw;
 - (void) resetTransform;
 -(void) setFrame : (int) frame;
+- (void) setSpriteEffect: (SpriteEffect *) effect;
 - (void) renderText:(NSString *) text withFont:(UIFont *) font intoBox:(CGRect) textureBox withColor: (GL_RGBA_Color) color andlineBreakMode:(UILineBreakMode)lineBreakMode alignment:(UITextAlignment)alignment;
 @end
 

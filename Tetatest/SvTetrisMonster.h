@@ -19,9 +19,10 @@
     int orientation;
     BOOL canFly;
     NSMutableDictionary * abilities;
-    
+    int currentFrame;
+    SpriteEffect currentEffect;
 }
-- (void) initWithDictionary: (NSDictionary *) dict;
+- (id) initWithDictionary: (NSDictionary *) dict;
 - (void) Update: (double) time;
 - (void) Apply: (NSDictionary *) thing;
 - (NSDictionary *) getStatus;

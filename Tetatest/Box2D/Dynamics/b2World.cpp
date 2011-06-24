@@ -89,7 +89,7 @@ b2Body* b2World::CreateBody(const b2BodyDef* def)
 
 	void* mem = m_blockAllocator.Allocate(sizeof(b2Body));
 	b2Body* b = new (mem) b2Body(def, this);
-
+    b->applyGravity=true;
 	// Add to world doubly linked list.
 	b->m_prev = NULL;
 	b->m_next = m_bodyList;

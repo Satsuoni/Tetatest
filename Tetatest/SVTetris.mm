@@ -9,7 +9,7 @@
 #import "SVTetris.h"
 #import "Box2D.h"
 #import "SVTetrisBody.h"
-
+#import "SvTetrisMonster.h"
 void ContactListener::BeginContact(b2Contact * contact)
 {
     const b2Fixture *fixA=contact->GetFixtureA();
@@ -22,9 +22,9 @@ void ContactListener::BeginContact(b2Contact * contact)
         SVTetrisBody *bB=(SVTetrisBody*) bodyB->GetUserData();
         if([bA canContact:bB])
         {
-       
-            [bA addTouchingBody:bB];
-            [bB addTouchingBody:bA];
+            [bA.passingBodies addObject:bB];
+            [bB.passingBodies addObject:bA];
+         
         }
     }
 }
@@ -40,6 +40,8 @@ void ContactListener::PreSolve(b2Contact * contact, const b2Manifold *old )
     SVTetrisBody *bB=(SVTetrisBody*) bodyB->GetUserData();
     if(![bA canContact:bB])
     {
+        [bA.passingBodies addObject:bB];
+        [bB.passingBodies addObject:bA];
         contact->SetEnabled(false); 
     }
     else
@@ -56,6 +58,10 @@ void ContactListener::PostSolve(b2Contact * contact, const b2ContactImpulse *imp
     SVTetrisBody *bB=(SVTetrisBody*) bodyB->GetUserData();
     [bA applyImpulse:CGPointMake(impulse->tangentImpulses[0]+impulse->normalImpulses[0], impulse->tangentImpulses[1]+impulse->normalImpulses[1])];
        [bB applyImpulse:CGPointMake(-(impulse->tangentImpulses[0]+impulse->normalImpulses[0]),-( impulse->tangentImpulses[1]+impulse->normalImpulses[1]))];
+}
+float rndup(float up)
+{
+   return (((float)arc4random())/((float)ARC4RANDOM_MAX))*up; 
 }
 int generateRandomFromMatrix (float * matr,int n)
 {
@@ -470,6 +476,9 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         [tex drawImageOnTexture:im fromrect:CGRectMake(0,0,im.size.width,im.size.height) withrect:CGRectMake(0,0,im.size.width,im.size.height)];
         UIImage * blocks=[UIImage imageNamed:@"blocks.bmp"];
         [tex drawImageOnTexture:blocks fromrect:CGRectMake(0,0,blocks.size.width,blocks.size.height) withrect:CGRectMake(0,im.size.height,blocks.size.width,blocks.size.height)];
+        UIImage * mns=[UIImage imageNamed:@"good.png"];
+        [tex drawImageOnTexture:mns fromrect:CGRectMake(0,0,mns.size.width,mns.size.height) withrect:CGRectMake(0,im.size.height+blocks.size.height,mns.size.width,mns.size.height)];
+        
         [tex finishTextureCreation];
         backdrop=[[parent getSpriteWithTexture:@"Tetris" andFrame:CGRectMake(0,0,im.size.width,im.size.height)] retain];
         backdrop.layoutPos=-1;
@@ -480,6 +489,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
             [NSValue valueWithCGRect:CGRectMake(90, im.size.height, 30, 30)],
             [NSValue valueWithCGRect:CGRectMake(120, im.size.height, 30, 30)],
             [NSValue valueWithCGRect:CGRectMake(150, im.size.height, 30, 30)], nil]] retain];
+ 
         Grid=[[TGrid alloc] init];
         cFigure=[[TFigure alloc] init];
         cFigure.cx=5;
@@ -496,6 +506,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
             cFigure.gridrect=gridrect;
         b2Vec2 gravity;
       gravity.Set(0.0f, 9.81f);
+        
        // gravity.Set(0.0f, 0.0f);
         
         // Do we want to let bodies sleep?
@@ -534,7 +545,36 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         [textex startCreatingTexturewithWidth:256 andHeight:256];
            [textex finishTextureCreation];
         text=[[parent getSpriteWithTexture:@"Text" andFrame:CGRectMake(0, 0, 256,256)] retain];
+        /*
+         Sensor"] boolValue];
+         Restitution"] floatValue];
+         Density"] floatValue];
+         Friction"] floatValue];
+         Rect"];
+         World"] pointerValue] 
+         Name"] andType:@"Monster"]))
+         Sprite"]
+         
+         */
+        float gh=im.size.height+blocks.size.height;
+        SVAnimatedSprite *msprite=[parent getAnimatedSpriteWithTexture:@"Tetris" andFrames:[NSArray arrayWithObjects:[NSValue valueWithCGRect:CGRectMake(0, gh, 30, 30)],                                                                                              [NSValue valueWithCGRect:CGRectMake(30,gh, 30, 30)],                                                                                             [NSValue valueWithCGRect:CGRectMake(60, gh, 30, 30)],                                                                                             [NSValue valueWithCGRect:CGRectMake(90, gh, 30, 30)],                                                                                              nil]] ;
         
+        NSMutableDictionary *mdic=[[NSMutableDictionary alloc] initWithCapacity:8];
+        [mdic setValue:[NSNumber numberWithBool:NO] forKey:@"Sensor"];
+         [mdic setValue:[NSNumber numberWithFloat:0.4] forKey:@"Restitution"];
+        [mdic setValue:[NSNumber numberWithFloat:1] forKey:@"Density"];
+        [mdic setValue:[NSNumber numberWithFloat:0.5] forKey:@"Friction"];
+        NSArray * arrd=[[NSArray alloc] initWithObjects:[NSNumber numberWithFloat:gridrect.origin.x+21],[NSNumber numberWithFloat:500],[NSNumber numberWithFloat:28],[NSNumber numberWithFloat:30], nil];
+        [mdic setObject:arrd forKey:@"Rect"];
+        [mdic setObject:[NSValue valueWithPointer:world] forKey:@"World"];
+        [mdic setValue:@"Test" forKey:@"Name"];
+        [mdic setObject:msprite forKey:@"Sprite"];
+        SvTetrisMonster * mnst=[[SvTetrisMonster alloc] initWithDictionary:mdic];
+        [movingBodies addObject:mnst];
+        [mnst release];
+      
+        [arrd release];
+        [mdic release];
        // [self AddSprite:_blocks];
     }
     
@@ -847,12 +887,21 @@ if(isDragging)
 {
     //////
     [Grid.manaPool DrainIntoPool:manaPool];
+
     /////////////
     [backdrop Draw];
     if(currentTime!=0)
     {
     elapsedTime=[NSDate timeIntervalSinceReferenceDate]-currentTime;
+        for(SVTetrisBody * body in movingBodies)
+        {
+            [body.touchingBodies removeAllObjects];
+            [body.passingBodies removeAllObjects];
+        }
         world->Step(elapsedTime, 20, 10);
+      //  world->ClearForces();
+        for(SVTetrisBody * body in movingBodies)
+            [body Update:elapsedTime];
         [self updateFigurePosition];
         fullTime+=elapsedTime;
     currentTime=[NSDate timeIntervalSinceReferenceDate];

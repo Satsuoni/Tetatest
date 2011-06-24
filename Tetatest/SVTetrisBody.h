@@ -25,6 +25,7 @@ typedef struct
 @public
     unsigned int contactMode;
     NSMutableSet * touchingBodies;
+     NSMutableSet * passingBodies;
     NSString *name;
     NSString *type;
     b2Body *body;
@@ -35,6 +36,7 @@ typedef struct
     int trec;
 }
 @property (nonatomic, readonly) NSMutableSet *touchingBodies;
+@property (nonatomic, readonly) NSMutableSet *passingBodies;
 - (unsigned int) getContactMode;
 - (b2AABB) getAABB;
 - (id) initWithRect: (CGRect) rect andTemplate:(b2Template) temp inWorld:(b2World *) world withName:(NSString *) name andType:(NSString * )type;

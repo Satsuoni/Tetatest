@@ -410,6 +410,16 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
 @synthesize transform;
 @synthesize layoutPos;
 @synthesize effect;
+- (void) setSpriteEffect:(SpriteEffect *)effectr
+{
+    effect=effectr->type;
+    [self setEffectParameter:0 toValue:effectr->par1];
+     [self setEffectParameter:1 toValue:effectr->par2];
+    for(int i=0;i<4;i++)
+    {
+        [self setEColorR:effectr->colors[i].clr[0] G:effectr->colors[i].clr[1] B:effectr->colors[i].clr[2] A:effectr->colors[i].clr[3] N:i];
+    }
+}
 - (void) setEffectParameter:(int)n toValue:(GLfloat)param
 {
     efparams[n]=param;
@@ -829,6 +839,10 @@ typedef struct {
      [[VertexManager getSharedVM] Draw];
      [texture clearDrawQueue];
     }*/
+    for (SVTexture *tex in sorted)
+    {
+        [tex Sort];
+    }
     while([sorted count]>0)
     {
         SVTexture * texture=[sorted objectAtIndex:0];
