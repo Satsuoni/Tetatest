@@ -497,11 +497,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330451536.96778"
+         timestampString = "330614576.150273"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "341"
-         endingLineNumber = "341"
+         startingLineNumber = "345"
+         endingLineNumber = "345"
          landmarkName = "-touchesMoved:withEvent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -511,11 +511,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330451536.96778"
+         timestampString = "330614576.150273"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "344"
-         endingLineNumber = "344"
+         startingLineNumber = "348"
+         endingLineNumber = "348"
          landmarkName = "-touchesMoved:withEvent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -525,11 +525,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330451536.96778"
+         timestampString = "330614576.150273"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "351"
-         endingLineNumber = "351"
+         startingLineNumber = "355"
+         endingLineNumber = "355"
          landmarkName = "-touchesMoved:withEvent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -539,11 +539,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330451536.96778"
+         timestampString = "330614576.150273"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "359"
-         endingLineNumber = "359"
+         startingLineNumber = "363"
+         endingLineNumber = "363"
          landmarkName = "-touchesMoved:withEvent:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -609,11 +609,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "900"
-         endingLineNumber = "900"
+         startingLineNumber = "935"
+         endingLineNumber = "935"
          landmarkName = "-Render"
          landmarkType = "5">
       </FileBreakpoint>
@@ -623,11 +623,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "882"
-         endingLineNumber = "882"
+         startingLineNumber = "917"
+         endingLineNumber = "917"
          landmarkName = "-Render"
          landmarkType = "5">
       </FileBreakpoint>
@@ -637,11 +637,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "854"
-         endingLineNumber = "854"
+         startingLineNumber = "889"
+         endingLineNumber = "889"
          landmarkName = "-Render"
          landmarkType = "5">
       </FileBreakpoint>
@@ -651,11 +651,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "834"
-         endingLineNumber = "834"
+         startingLineNumber = "869"
+         endingLineNumber = "869"
          landmarkName = "-Render"
          landmarkType = "5">
       </FileBreakpoint>
@@ -665,11 +665,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "832"
-         endingLineNumber = "832"
+         startingLineNumber = "867"
+         endingLineNumber = "867"
          landmarkName = "-Render"
          landmarkType = "5">
       </FileBreakpoint>
@@ -679,11 +679,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330451536.96778"
+         timestampString = "330614576.150273"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "512"
-         endingLineNumber = "512"
+         startingLineNumber = "517"
+         endingLineNumber = "517"
          landmarkName = "-initWithParent:andBackdrop:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -693,11 +693,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "853"
-         endingLineNumber = "853"
+         startingLineNumber = "888"
+         endingLineNumber = "888"
          landmarkName = "-Render"
          landmarkType = "5">
       </FileBreakpoint>
@@ -707,11 +707,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "901"
-         endingLineNumber = "901"
+         startingLineNumber = "936"
+         endingLineNumber = "936"
          landmarkName = "-Render"
          landmarkType = "5">
       </FileBreakpoint>
@@ -721,11 +721,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "614"
-         endingLineNumber = "614"
+         startingLineNumber = "622"
+         endingLineNumber = "622"
          landmarkName = "-attemptMovingFigureDown"
          landmarkType = "5">
       </FileBreakpoint>
@@ -736,11 +736,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "612"
-         endingLineNumber = "612"
+         startingLineNumber = "620"
+         endingLineNumber = "620"
          landmarkName = "-attemptMovingFigureDown"
          landmarkType = "5">
       </FileBreakpoint>
@@ -778,11 +778,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "946"
-         endingLineNumber = "946"
+         startingLineNumber = "981"
+         endingLineNumber = "981"
          landmarkName = "-Render"
          landmarkType = "5">
       </FileBreakpoint>
@@ -807,11 +807,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetrisBody.mm"
-         timestampString = "330430630.23538"
+         timestampString = "330614576.150273"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "121"
-         endingLineNumber = "121"
+         startingLineNumber = "137"
+         endingLineNumber = "137"
          landmarkName = "-getBoundingBox"
          landmarkType = "5">
       </FileBreakpoint>
@@ -821,11 +821,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "749"
-         endingLineNumber = "749"
+         startingLineNumber = "784"
+         endingLineNumber = "784"
          landmarkName = "-attemptDisplacingBody:byVector:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -835,11 +835,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "738"
-         endingLineNumber = "738"
+         startingLineNumber = "773"
+         endingLineNumber = "773"
          landmarkName = "-tryMovingBody:ToPosition:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -849,11 +849,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330493448.724094"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "737"
-         endingLineNumber = "737"
+         startingLineNumber = "772"
+         endingLineNumber = "772"
          landmarkName = "-tryMovingBody:ToPosition:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -877,11 +877,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330451536.96778"
+         timestampString = "330614576.150273"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "322"
-         endingLineNumber = "322"
+         startingLineNumber = "326"
+         endingLineNumber = "326"
          landmarkName = "-reduceToFallingBlocks"
          landmarkType = "5">
       </FileBreakpoint>
@@ -891,11 +891,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SVTetris.mm"
-         timestampString = "330494124.700449"
+         timestampString = "330615352.475715"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "965"
-         endingLineNumber = "965"
+         startingLineNumber = "1000"
+         endingLineNumber = "1000"
          landmarkName = "-Render"
          landmarkType = "5">
       </FileBreakpoint>
@@ -911,6 +911,76 @@
          startingLineNumber = "427"
          endingLineNumber = "427"
          landmarkName = "-renderText:withFont:intoBox:withColor:andlineBreakMode:alignment:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Tetatest/SVTetris.mm"
+         timestampString = "330615352.475715"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "676"
+         endingLineNumber = "676"
+         landmarkName = "-attemptMovingFigureLeft"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Tetatest/SVTetris.mm"
+         timestampString = "330615352.475715"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "745"
+         endingLineNumber = "745"
+         landmarkName = "-tryMovingBody:ToPosition:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Tetatest/SVTetris.mm"
+         timestampString = "330615352.475715"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "761"
+         endingLineNumber = "761"
+         landmarkName = "-tryMovingBody:ToPosition:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Tetatest/SVTetris.mm"
+         timestampString = "330615352.475715"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "760"
+         endingLineNumber = "760"
+         landmarkName = "-tryMovingBody:ToPosition:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Tetatest/SVTetris.mm"
+         timestampString = "330615402.075011"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "790"
+         endingLineNumber = "790"
+         landmarkName = "-attemptDisplacingBody:byVector:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
