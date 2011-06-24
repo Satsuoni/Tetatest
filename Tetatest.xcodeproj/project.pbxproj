@@ -44,6 +44,7 @@
 		C6C335EB13A1CD7800D7A202 /* tetr.bmp in Resources */ = {isa = PBXBuildFile; fileRef = C6C335DF13A1CD7800D7A202 /* tetr.bmp */; };
 		C6C335EC13A1CD7800D7A202 /* wnd.png in Resources */ = {isa = PBXBuildFile; fileRef = C6C335E013A1CD7800D7A202 /* wnd.png */; };
 		C6C335EE13A1CD8700D7A202 /* map.bmp in Resources */ = {isa = PBXBuildFile; fileRef = C6C335ED13A1CD8700D7A202 /* map.bmp */; };
+		C6C564CB13B4BB3D0061DEC6 /* SvTetrisMonster.mm in Sources */ = {isa = PBXBuildFile; fileRef = C6C564CA13B4BB3D0061DEC6 /* SvTetrisMonster.mm */; };
 		C6D0EB5213A847BB008779FD /* b2BroadPhase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6D0EB0513A847BB008779FD /* b2BroadPhase.cpp */; };
 		C6D0EB5313A847BB008779FD /* b2CollideCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6D0EB0713A847BB008779FD /* b2CollideCircle.cpp */; };
 		C6D0EB5413A847BB008779FD /* b2CollidePolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6D0EB0813A847BB008779FD /* b2CollidePolygon.cpp */; };
@@ -134,6 +135,8 @@
 		C6C335DF13A1CD7800D7A202 /* tetr.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = tetr.bmp; sourceTree = "<group>"; };
 		C6C335E013A1CD7800D7A202 /* wnd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wnd.png; sourceTree = "<group>"; };
 		C6C335ED13A1CD8700D7A202 /* map.bmp */ = {isa = PBXFileReference; lastKnownFileType = image.bmp; path = map.bmp; sourceTree = "<group>"; };
+		C6C564C913B4BB3C0061DEC6 /* SvTetrisMonster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SvTetrisMonster.h; sourceTree = "<group>"; };
+		C6C564CA13B4BB3D0061DEC6 /* SvTetrisMonster.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SvTetrisMonster.mm; sourceTree = "<group>"; };
 		C6D0EB0113A847BB008779FD /* Box2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box2D.h; sourceTree = "<group>"; };
 		C6D0EB0513A847BB008779FD /* b2BroadPhase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2BroadPhase.cpp; sourceTree = "<group>"; };
 		C6D0EB0613A847BB008779FD /* b2BroadPhase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2BroadPhase.h; sourceTree = "<group>"; };
@@ -274,6 +277,8 @@
 				C6BA170D13A792280060ECF9 /* SVTetris.mm */,
 				C64DC81F13B1E67B00B29129 /* SVTetrisBody.h */,
 				C64DC82013B1E67B00B29129 /* SVTetrisBody.mm */,
+				C6C564C913B4BB3C0061DEC6 /* SvTetrisMonster.h */,
+				C6C564CA13B4BB3D0061DEC6 /* SvTetrisMonster.mm */,
 				C6C235A3139FB090000D2212 /* Svertex.glsl */,
 				C6C235A5139FB131000D2212 /* Sfragment.glsl */,
 			);
@@ -580,6 +585,7 @@
 				C6D0EB7413A847BB008779FD /* b2WeldJoint.cpp in Sources */,
 				C64DC82113B1E67B00B29129 /* SVTetrisBody.mm in Sources */,
 				C64DC82513B227C500B29129 /* SvManaPool.mm in Sources */,
+				C6C564CB13B4BB3D0061DEC6 /* SvTetrisMonster.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

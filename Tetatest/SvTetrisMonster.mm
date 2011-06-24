@@ -1,14 +1,14 @@
 //
-//  SVTetrisBody.m
+//  SvTetrisMonster.m
 //  Tetatest
 //
-//  Created by Seva on 6/22/11.
+//  Created by Seva on 6/24/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import "SvTetrisMonster.h"
 #import "SVTetrisBody.h"
 
-
-@implementation SVTetrisBody
+@implementation SvTetrisMonster
 
 @end

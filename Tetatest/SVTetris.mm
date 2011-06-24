@@ -288,6 +288,10 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 }
 - (BOOL) isBodyInFigure:(SVTetrisBody *)body
 {
+    if(([body getContactMode]&1)==0)
+        return NO;
+    if([body isSensor])
+        return NO;
     for(int i=0;i<4;i++)
     {
         if([body isPresentonX:cx+xs[i] Y:cy+ys[i] withRect:gridrect])
@@ -491,7 +495,8 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         gridrect=CGRectMake(250, 0,300, 570);
             cFigure.gridrect=gridrect;
         b2Vec2 gravity;
-        gravity.Set(0.0f, 9.81f);
+      gravity.Set(0.0f, 9.81f);
+       // gravity.Set(0.0f, 0.0f);
         
         // Do we want to let bodies sleep?
         // This will speed up the physics simulation
@@ -592,8 +597,11 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
             pos.y=(floorf(pos.y/30)+k)*30;
             if([self tryMovingBody:body ToPosition:pos])
             {
+                [sDisp removeAllObjects];
+                [sDispVals removeAllObjects];
                 return YES;
             }
+                
             }
             return NO;
         }
@@ -618,6 +626,11 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
                 cFigure.cy--;
                 return NO;
             }
+            else
+            {
+                [sDisp removeAllObjects];
+                [sDispVals removeAllObjects];
+            }
         }
     }   
     [cFigure updateBodies];
@@ -633,11 +646,16 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         if([cFigure isBodyInFigure:body])
         {
             CGPoint pos=[body getPosition];
-            pos.x=(floorf(pos.x/30)+1)*30+1;
+            pos.x=gridrect.origin.x+ (floorf((pos.x-gridrect.origin.x)/30)+1)*30+1;
             if(![self tryMovingBody:body ToPosition:pos])
             {
                 cFigure.cx--;
                 return NO;
+            }
+            else
+            {
+            [sDisp removeAllObjects];
+            [sDispVals removeAllObjects];
             }
         }
     }
@@ -655,11 +673,16 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         {
             CGRect box=[body getBoundingBox];
             CGPoint pos=box.origin;
-            pos.x=(floorf((pos.x+box.size.width)/30.0)-1)*30-box.size.width+1;
+            pos.x=gridrect.origin.x+(floorf((pos.x+box.size.width-gridrect.origin.x)/30.0)-1)*30-box.size.width+1;
             if(![self tryMovingBody:body ToPosition:pos])
             {
                 cFigure.cx++;
                 return NO;
+            }
+            else
+            {
+                [sDisp removeAllObjects];
+                [sDispVals removeAllObjects];
             }
         }
     }
@@ -695,7 +718,19 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 }
 - (BOOL) crushBody:(SVTetrisBody *)body
 {
-    return NO;//dummy
+    NSDictionary * crush=[[NSDictionary alloc] initWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"Crush",nil];
+    [body Apply:crush];
+    [crush release];
+    NSDictionary * ret=[body getStatus];
+    
+    if(ret!=nil)
+    {
+        NSNumber * val=[ret valueForKey:@"Crushed"];
+        if(val!=nil)
+            return [val boolValue];
+    }
+    
+    return NO;
 }
 - (BOOL) tryMovingBody:(SVTetrisBody *)body ToPosition:(CGPoint)position
 {
@@ -717,8 +752,8 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
     int sy=floorf((bounds.origin.y-gridrect.origin.y)/30.0);
     int lx=ceilf((bounds.origin.x+bounds.size.width-gridrect.origin.x)/30.0);
     int ly=ceilf((bounds.origin.y+bounds.size.height-gridrect.origin.y)/30.0);
-    for(int x=sx;x<=lx;x++)//grid collision
-        for(int y=sy;y<=ly;y++)
+    for(int x=sx;x<lx;x++)//grid collision
+        for(int y=sy;y<ly;y++)
         {
             if([Grid isGridFilledatX:x andY:y])
             {

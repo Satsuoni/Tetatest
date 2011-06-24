@@ -33,6 +33,22 @@
         body=NULL;
     }
 }
+- (void) Update:(double)time
+{
+    
+}
+- (void) Apply:(NSDictionary *)thing
+{
+    
+}
+- (unsigned int) getContactMode
+{
+    return contactMode;
+}
+- (NSDictionary *) getStatus
+{
+    return nil;
+}
 - (void) recordPosition
 {
     recordedPositions[crec]=[self getPosition];
