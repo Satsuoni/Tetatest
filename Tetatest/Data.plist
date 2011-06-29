@@ -35,8 +35,8 @@
 					<dict>
 						<key>Acceleration</key>
 						<array>
-							<integer>15</integer>
-							<integer>0</integer>
+							<integer>25</integer>
+							<integer>-3</integer>
 						</array>
 						<key>Force</key>
 						<array>
@@ -189,8 +189,8 @@
 						</array>
 						<key>Acceleration</key>
 						<array>
-							<integer>25</integer>
-							<integer>0</integer>
+							<integer>50</integer>
+							<integer>-3</integer>
 						</array>
 						<key>Frame</key>
 						<integer>3</integer>

@@ -1006,37 +1006,9 @@
          timestampString = "331037934.896914"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "68"
-         endingLineNumber = "68"
-         landmarkName = "-Update:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331037934.896914"
-         startingColumnNumber = "2147483647"
-         endingColumnNumber = "2147483647"
          startingLineNumber = "54"
          endingLineNumber = "54"
          landmarkName = "-Update:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331037934.896914"
-         startingColumnNumber = "2147483647"
-         endingColumnNumber = "2147483647"
-         startingLineNumber = "87"
-         endingLineNumber = "87"
-         landmarkName = "-Apply:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -1073,11 +1045,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331041940.102556"
+         timestampString = "331045391.864198"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "724"
-         endingLineNumber = "724"
+         startingLineNumber = "453"
+         endingLineNumber = "453"
          landmarkName = "-Update:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1088,11 +1060,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331041940.102556"
+         timestampString = "331045391.864198"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "790"
-         endingLineNumber = "790"
+         startingLineNumber = "519"
+         endingLineNumber = "519"
          landmarkName = "-applyEffect:withPool:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1102,11 +1074,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331041348.359835"
+         timestampString = "331045252.68803"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "405"
-         endingLineNumber = "405"
+         startingLineNumber = "129"
+         endingLineNumber = "129"
          landmarkName = "-Update:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1116,11 +1088,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331041940.102556"
+         timestampString = "331045252.68803"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "612"
-         endingLineNumber = "612"
+         startingLineNumber = "336"
+         endingLineNumber = "336"
          landmarkName = "-getValue:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1130,11 +1102,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331041940.102556"
+         timestampString = "331045252.68803"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "625"
-         endingLineNumber = "625"
+         startingLineNumber = "349"
+         endingLineNumber = "349"
          landmarkName = "-getValue:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1144,11 +1116,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331041940.102556"
+         timestampString = "331045252.68803"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "600"
-         endingLineNumber = "600"
+         startingLineNumber = "324"
+         endingLineNumber = "324"
          landmarkName = "-getValue:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1172,11 +1144,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331041940.102556"
+         timestampString = "331045391.864198"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "723"
-         endingLineNumber = "723"
+         startingLineNumber = "452"
+         endingLineNumber = "452"
          landmarkName = "-Update:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1186,11 +1158,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331041963.331998"
+         timestampString = "331045252.68803"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "623"
-         endingLineNumber = "623"
+         startingLineNumber = "347"
+         endingLineNumber = "347"
          landmarkName = "-getValue:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -1200,12 +1172,26 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Tetatest/SvTetrisMonster.mm"
-         timestampString = "331042170.990785"
+         timestampString = "331045391.864198"
          startingColumnNumber = "2147483647"
          endingColumnNumber = "2147483647"
-         startingLineNumber = "864"
-         endingLineNumber = "864"
+         startingLineNumber = "598"
+         endingLineNumber = "598"
          landmarkName = "-applyEffectStep:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Tetatest/SvStatusEffect.mm"
+         timestampString = "331046853.772089"
+         startingColumnNumber = "2147483647"
+         endingColumnNumber = "2147483647"
+         startingLineNumber = "211"
+         endingLineNumber = "211"
+         landmarkName = "-applyForceToBody:withOrientation:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
