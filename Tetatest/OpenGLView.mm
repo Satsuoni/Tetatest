@@ -446,6 +446,7 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
     [text drawInRect:CGRectMake(0, 0, texturebox.size.width, texturebox.size.height) withFont:font
        lineBreakMode:lineBreakMode alignment:alignment];
     UIGraphicsPopContext();
+    CGContextRelease(context);
     [texture ReplaceTextureBlock:texturebox withData:data];
     [self setTextureFrame:texturebox];
     free(data);

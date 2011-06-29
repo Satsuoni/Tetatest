@@ -20,6 +20,7 @@
 }
 - (double) getMana:(int) mtype;
 - (id) initWithPool: (double *) manapool;
+- (id) initWithArray: (NSArray *) manapool;
 - (void) addMana:(int) mana amount: (double) amount;
 - (BOOL) canDraw: (SvManaPool *) drawpool;
 - (BOOL) canDrawDouble: (double *) pool;
@@ -32,4 +33,7 @@
 - (SvManaPool *) Add: (SvManaPool *) pool;
 - (SvManaPool *) Multiply: (double) d;
 - (SvManaPool *) Subtract: (SvManaPool *) pool;
+- (double) Dot: (SvManaPool *)pool;
+- (SvManaPool *) MultiplyBy:(SvManaPool*)pool;
+- (int) poolFits: (SvManaPool *)pool;
 @end

@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Abilities</key>
+	<dict>
+		<key>Walk</key>
+		<dict>
+			<key>Target</key>
+			<string>Self</string>
+			<key>Steps</key>
+			<array>
+				<dict>
+					<key>Interrupt</key>
+					<integer>-1</integer>
+					<key>Reset</key>
+					<integer>3</integer>
+					<key>Loop</key>
+					<integer>0</integer>
+					<key>Next</key>
+					<integer>1</integer>
+					<key>Duration</key>
+					<real>0.1</real>
+					<key>Loops</key>
+					<integer>0</integer>
+					<key>Loopable</key>
+					<false/>
+					<key>Stoppable</key>
+					<true/>
+					<key>Suspendable</key>
+					<false/>
+					<key>Changes</key>
+					<dict>
+						<key>Frame</key>
+						<integer>1</integer>
+						<key>Linear Damping</key>
+						<real>0.1</real>
+						<key>Constant</key>
+						<false/>
+						<key>Type</key>
+						<string>Once</string>
+						<key>Parameters</key>
+						<dict>
+							<key>Overcharge</key>
+							<array>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+							</array>
+							<key>Apply Charge To Damage</key>
+							<false/>
+							<key>Apply Charge To Duration</key>
+							<false/>
+							<key>Orientation Apply Transform</key>
+							<false/>
+							<key>Orientation</key>
+							<true/>
+							<key>Orientation Frame Shift</key>
+							<integer>4</integer>
+						</dict>
+						<key>Duration</key>
+						<integer>0</integer>
+						<key>Step</key>
+						<integer>0</integer>
+						<key>Name</key>
+						<string>Step0</string>
+					</dict>
+					<key>Condition</key>
+					<array/>
+				</dict>
+				<dict>
+					<key>Interrupt</key>
+					<integer>-1</integer>
+					<key>Reset</key>
+					<integer>-1</integer>
+					<key>Loop</key>
+					<integer>0</integer>
+					<key>Next</key>
+					<integer>2</integer>
+					<key>Duration</key>
+					<real>0.1</real>
+					<key>Loops</key>
+					<integer>0</integer>
+					<key>Loopable</key>
+					<false/>
+					<key>Stoppable</key>
+					<true/>
+					<key>Suspendable</key>
+					<false/>
+					<key>Changes</key>
+					<dict>
+						<key>Frame</key>
+						<integer>2</integer>
+						<key>Linear Damping</key>
+						<real>0.1</real>
+						<key>Constant</key>
+						<false/>
+						<key>Type</key>
+						<string>Once</string>
+						<key>Parameters</key>
+						<dict>
+							<key>Overcharge</key>
+							<array>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+							</array>
+							<key>Apply Charge To Damage</key>
+							<false/>
+							<key>Apply Charge To Duration</key>
+							<false/>
+							<key>Orientation Apply Transform</key>
+							<false/>
+							<key>Orientation</key>
+							<true/>
+							<key>Orientation Frame Shift</key>
+							<integer>4</integer>
+						</dict>
+						<key>Duration</key>
+						<integer>0</integer>
+						<key>Step</key>
+						<integer>0</integer>
+						<key>Name</key>
+						<string>Step1</string>
+					</dict>
+					<key>Condition</key>
+					<array/>
+				</dict>
+				<dict>
+					<key>Interrupt</key>
+					<integer>-1</integer>
+					<key>Reset</key>
+					<integer>3</integer>
+					<key>Loop</key>
+					<integer>0</integer>
+					<key>Next</key>
+					<integer>3</integer>
+					<key>Duration</key>
+					<real>0.1</real>
+					<key>Loops</key>
+					<integer>0</integer>
+					<key>Loopable</key>
+					<false/>
+					<key>Stoppable</key>
+					<true/>
+					<key>Suspendable</key>
+					<false/>
+					<key>Changes</key>
+					<dict>
+						<key>Force</key>
+						<array>
+							<integer>0</integer>
+							<integer>0</integer>
+						</array>
+						<key>Acceleration</key>
+						<array>
+							<integer>25</integer>
+							<integer>0</integer>
+						</array>
+						<key>Frame</key>
+						<integer>3</integer>
+						<key>Linear Damping</key>
+						<real>0.1</real>
+						<key>Constant</key>
+						<false/>
+						<key>Type</key>
+						<string>Once</string>
+						<key>Parameters</key>
+						<dict>
+							<key>Overcharge</key>
+							<array>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+							</array>
+							<key>Apply Charge To Damage</key>
+							<false/>
+							<key>Apply Charge To Duration</key>
+							<false/>
+							<key>Orientation Apply Transform</key>
+							<false/>
+							<key>Orientation</key>
+							<true/>
+							<key>Orientation Frame Shift</key>
+							<integer>4</integer>
+						</dict>
+						<key>Duration</key>
+						<integer>0</integer>
+						<key>Step</key>
+						<integer>0</integer>
+						<key>Name</key>
+						<string>Step2</string>
+					</dict>
+					<key>Condition</key>
+					<array>
+						<dict>
+							<key>Comparison</key>
+							<string>Equal</string>
+							<key>CompareTo</key>
+							<integer>1</integer>
+							<key>Value</key>
+							<string>TouchingGround</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>Interrupt</key>
+					<integer>-1</integer>
+					<key>Reset</key>
+					<integer>-1</integer>
+					<key>Loop</key>
+					<integer>0</integer>
+					<key>Next</key>
+					<integer>-1</integer>
+					<key>Duration</key>
+					<real>0.1</real>
+					<key>Loops</key>
+					<integer>0</integer>
+					<key>Loopable</key>
+					<false/>
+					<key>Stoppable</key>
+					<true/>
+					<key>Suspendable</key>
+					<false/>
+					<key>Changes</key>
+					<dict>
+						<key>Frame</key>
+						<integer>0</integer>
+						<key>Linear Damping</key>
+						<real>0.1</real>
+						<key>Constant</key>
+						<false/>
+						<key>Type</key>
+						<string>Once</string>
+						<key>Parameters</key>
+						<dict>
+							<key>Overcharge</key>
+							<array>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+								<integer>0</integer>
+							</array>
+							<key>Apply Charge To Damage</key>
+							<false/>
+							<key>Apply Charge To Duration</key>
+							<false/>
+							<key>Orientation Apply Transform</key>
+							<false/>
+							<key>Orientation</key>
+							<true/>
+							<key>Orientation Frame Shift</key>
+							<integer>4</integer>
+						</dict>
+						<key>Duration</key>
+						<integer>0</integer>
+						<key>Step</key>
+						<integer>0</integer>
+						<key>Name</key>
+						<string>Step3</string>
+					</dict>
+					<key>Condition</key>
+					<array/>
+				</dict>
+			</array>
+			<key>Condition</key>
+			<array>
+				<dict>
+					<key>Comparison</key>
+					<string>Equal</string>
+					<key>CompareTo</key>
+					<integer>1</integer>
+					<key>Value</key>
+					<string>TouchingGround</string>
+				</dict>
+				<dict>
+					<key>Comparison</key>
+					<string>Equal</string>
+					<key>CompareTo</key>
+					<integer>0</integer>
+					<key>Value</key>
+					<string>Ghost</string>
+				</dict>
+			</array>
+			<key>Mask</key>
+			<integer>1</integer>
+			<key>Interruptions</key>
+			<dict>
+				<key>Action</key>
+				<string></string>
+				<key>Crushing</key>
+				<string></string>
+			</dict>
+		</dict>
+	</dict>
+	<key>TestMonster</key>
+	<dict>
+		<key>Name</key>
+		<string>TestMonster</string>
+		<key>Sensor</key>
+		<false/>
+		<key>Restitution</key>
+		<integer>0</integer>
+		<key>Density</key>
+		<integer>0</integer>
+		<key>Friction</key>
+		<integer>0</integer>
+		<key>Rect</key>
+		<array>
+			<integer>0</integer>
+			<integer>0</integer>
+			<integer>0</integer>
+			<integer>0</integer>
+		</array>
+	</dict>
+	<key>Templates</key>
+	<dict>
+		<key>Ability</key>
+		<dict>
+			<key>Target</key>
+			<string>Self Internal Block Touching Monster</string>
+			<key>Steps</key>
+			<array>
+				<dict>
+					<key>Interrupt</key>
+					<integer>0</integer>
+					<key>Reset</key>
+					<integer>0</integer>
+					<key>Loop</key>
+					<integer>0</integer>
+					<key>Next</key>
+					<integer>0</integer>
+					<key>Duration</key>
+					<integer>0</integer>
+					<key>Loops</key>
+					<integer>0</integer>
+					<key>Loopable</key>
+					<false/>
+					<key>Stoppable</key>
+					<false/>
+					<key>Suspendable</key>
+					<false/>
+					<key>Changes</key>
+					<dict>
+						<key>Frame</key>
+						<integer>0</integer>
+						<key>Removed Effect</key>
+						<string>Prefix</string>
+						<key>Spawned Body</key>
+						<string>Does not work yet;</string>
+						<key>Secondary Effect</key>
+						<string>Same as effect. don&apos;t make it recursive</string>
+						<key>Damage</key>
+						<array>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+						</array>
+						<key>Mana Damage</key>
+						<array>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+						</array>
+						<key>Direct Damage</key>
+						<integer>0</integer>
+						<key>Gravity</key>
+						<false/>
+						<key>Linear Damping</key>
+						<integer>0</integer>
+						<key>Acceleration</key>
+						<array>
+							<integer>0</integer>
+							<integer>0</integer>
+						</array>
+						<key>Force</key>
+						<array>
+							<integer>0</integer>
+							<integer>0</integer>
+						</array>
+						<key>Constant</key>
+						<false/>
+						<key>Type</key>
+						<string>Permanent Once Normal</string>
+						<key>Parameters</key>
+						<dict>
+							<key>Overcharge</key>
+							<array>
+								<string></string>
+								<string></string>
+								<string></string>
+								<string></string>
+								<string></string>
+								<string></string>
+							</array>
+							<key>Apply Charge To Damage</key>
+							<false/>
+							<key>Apply Charge To Duration</key>
+							<false/>
+							<key>Orientation Apply Transform</key>
+							<false/>
+							<key>Orientation</key>
+							<false/>
+							<key>Orientation Frame Shift</key>
+							<integer>0</integer>
+						</dict>
+						<key>Duration</key>
+						<integer>0</integer>
+						<key>Step</key>
+						<integer>0</integer>
+						<key>Name</key>
+						<string></string>
+					</dict>
+					<key>Condition</key>
+					<array>
+						<dict>
+							<key>Comparison</key>
+							<string>More, Less, Equal, MoreEqual, LessEqual</string>
+							<key>CompareTo</key>
+							<integer>0</integer>
+							<key>Value</key>
+							<string></string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+			<key>Condition</key>
+			<array>
+				<dict>
+					<key>Comparison</key>
+					<string>More, Less, Equal, MoreEqual, LessEqual</string>
+					<key>CompareTo</key>
+					<integer>0</integer>
+					<key>Value</key>
+					<string></string>
+				</dict>
+			</array>
+			<key>Mask</key>
+			<integer>0</integer>
+			<key>Interruptions</key>
+			<dict>
+				<key>Action</key>
+				<string></string>
+				<key>Damage</key>
+				<string></string>
+				<key>Crushing</key>
+				<string></string>
+			</dict>
+		</dict>
+		<key>AbilityStep</key>
+		<dict>
+			<key>Interrupt</key>
+			<integer>0</integer>
+			<key>Reset</key>
+			<integer>0</integer>
+			<key>Loop</key>
+			<integer>0</integer>
+			<key>Next</key>
+			<integer>0</integer>
+			<key>Duration</key>
+			<integer>0</integer>
+			<key>Loops</key>
+			<integer>0</integer>
+			<key>Loopable</key>
+			<false/>
+			<key>Stoppable</key>
+			<false/>
+			<key>Suspendable</key>
+			<false/>
+			<key>Changes</key>
+			<dict>
+				<key>Frame</key>
+				<integer>0</integer>
+				<key>Removed Effect</key>
+				<string>Prefix</string>
+				<key>Spawned Body</key>
+				<string>Does not work yet;</string>
+				<key>Secondary Effect</key>
+				<string>Same as effect. don&apos;t make it recursive</string>
+				<key>Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Mana Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Direct Damage</key>
+				<integer>0</integer>
+				<key>Gravity</key>
+				<false/>
+				<key>Linear Damping</key>
+				<integer>0</integer>
+				<key>Acceleration</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Force</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Constant</key>
+				<false/>
+				<key>Type</key>
+				<string>Permanent Once Normal</string>
+				<key>Parameters</key>
+				<dict>
+					<key>Overcharge</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Apply Charge To Damage</key>
+					<false/>
+					<key>Apply Charge To Duration</key>
+					<false/>
+					<key>Orientation Apply Transform</key>
+					<false/>
+					<key>Orientation</key>
+					<false/>
+					<key>Orientation Frame Shift</key>
+					<integer>0</integer>
+				</dict>
+				<key>Duration</key>
+				<integer>0</integer>
+				<key>Step</key>
+				<integer>0</integer>
+				<key>Name</key>
+				<string></string>
+			</dict>
+			<key>Condition</key>
+			<array>
+				<dict>
+					<key>Comparison</key>
+					<string>More, Less, Equal, MoreEqual, LessEqual</string>
+					<key>CompareTo</key>
+					<integer>0</integer>
+					<key>Value</key>
+					<string></string>
+				</dict>
+			</array>
+		</dict>
+		<key>StatusEffect</key>
+		<dict>
+			<key>Frame</key>
+			<integer>0</integer>
+			<key>Removed Effect</key>
+			<string>Prefix</string>
+			<key>Spawned Body</key>
+			<string>Does not work yet;</string>
+			<key>Secondary Effect</key>
+			<string>Same as effect. don&apos;t make it recursive</string>
+			<key>Damage</key>
+			<array>
+				<string></string>
+				<string></string>
+				<string></string>
+				<string></string>
+				<string></string>
+				<string></string>
+			</array>
+			<key>Mana Damage</key>
+			<array>
+				<string></string>
+				<string></string>
+				<string></string>
+				<string></string>
+				<string></string>
+				<string></string>
+			</array>
+			<key>Direct Damage</key>
+			<integer>0</integer>
+			<key>Gravity</key>
+			<false/>
+			<key>Linear Damping</key>
+			<integer>0</integer>
+			<key>Acceleration</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
+			<key>Force</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
+			<key>Constant</key>
+			<false/>
+			<key>Type</key>
+			<string>Permanent Once Normal</string>
+			<key>Parameters</key>
+			<dict>
+				<key>Overcharge</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Apply Charge To Damage</key>
+				<false/>
+				<key>Apply Charge To Duration</key>
+				<false/>
+				<key>Orientation Apply Transform</key>
+				<false/>
+				<key>Orientation</key>
+				<false/>
+				<key>Orientation Frame Shift</key>
+				<integer>0</integer>
+			</dict>
+			<key>Duration</key>
+			<integer>0</integer>
+			<key>Step</key>
+			<integer>0</integer>
+			<key>Name</key>
+			<string></string>
+		</dict>
+		<key>EffectParameters</key>
+		<dict>
+			<key>Overcharge</key>
+			<array>
+				<string></string>
+				<string></string>
+				<string></string>
+				<string></string>
+				<string></string>
+				<string></string>
+			</array>
+			<key>Apply Charge To Damage</key>
+			<false/>
+			<key>Apply Charge To Duration</key>
+			<false/>
+			<key>Orientation Apply Transform</key>
+			<false/>
+			<key>Orientation</key>
+			<false/>
+			<key>Orientation Frame Shift</key>
+			<integer>0</integer>
+		</dict>
+		<key>ConditionItem</key>
+		<dict>
+			<key>Comparison</key>
+			<string>More, Less, Equal, MoreEqual, LessEqual</string>
+			<key>CompareTo</key>
+			<integer>0</integer>
+			<key>Value</key>
+			<string></string>
+		</dict>
+	</dict>
+</dict>
+</plist>

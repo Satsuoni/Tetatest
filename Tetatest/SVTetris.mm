@@ -557,11 +557,15 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
          
          */
         float gh=im.size.height+blocks.size.height;
-        SVAnimatedSprite *msprite=[parent getAnimatedSpriteWithTexture:@"Tetris" andFrames:[NSArray arrayWithObjects:[NSValue valueWithCGRect:CGRectMake(0, gh, 30, 30)],                                                                                              [NSValue valueWithCGRect:CGRectMake(30,gh, 30, 30)],                                                                                             [NSValue valueWithCGRect:CGRectMake(60, gh, 30, 30)],                                                                                             [NSValue valueWithCGRect:CGRectMake(90, gh, 30, 30)],                                                                                              nil]] ;
+        SVAnimatedSprite *msprite=[parent getAnimatedSpriteWithTexture:@"Tetris" andFrames:[NSArray arrayWithObjects:[NSValue valueWithCGRect:CGRectMake(0, gh, 30, 30)],                                                                                              [NSValue valueWithCGRect:CGRectMake(30,gh, 30, 30)],                                                                                             [NSValue valueWithCGRect:CGRectMake(60, gh, 30, 30)],                                                                                             [NSValue valueWithCGRect:CGRectMake(90, gh, 30, 30)], 
+            [NSValue valueWithCGRect:CGRectMake(120, gh, 30, 30)], 
+            [NSValue valueWithCGRect:CGRectMake(150, gh, 30, 30)], 
+            [NSValue valueWithCGRect:CGRectMake(180, gh, 30, 30)],
+            [NSValue valueWithCGRect:CGRectMake(210, gh, 30, 30)], nil]] ;
         
         NSMutableDictionary *mdic=[[NSMutableDictionary alloc] initWithCapacity:8];
         [mdic setValue:[NSNumber numberWithBool:NO] forKey:@"Sensor"];
-         [mdic setValue:[NSNumber numberWithFloat:0.4] forKey:@"Restitution"];
+         [mdic setValue:[NSNumber numberWithFloat:0.3] forKey:@"Restitution"];
         [mdic setValue:[NSNumber numberWithFloat:1] forKey:@"Density"];
         [mdic setValue:[NSNumber numberWithFloat:0.5] forKey:@"Friction"];
         NSArray * arrd=[[NSArray alloc] initWithObjects:[NSNumber numberWithFloat:gridrect.origin.x+21],[NSNumber numberWithFloat:500],[NSNumber numberWithFloat:28],[NSNumber numberWithFloat:30], nil];
@@ -569,6 +573,15 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         [mdic setObject:[NSValue valueWithPointer:world] forKey:@"World"];
         [mdic setValue:@"Test" forKey:@"Name"];
         [mdic setObject:msprite forKey:@"Sprite"];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Data" ofType:@"plist"];
+        NSDictionary *rd=[NSDictionary dictionaryWithContentsOfFile:path];
+        NSDictionary *adi=[rd valueForKey:@"Abilities"];
+        SvAbility * abil=[[SvAbility alloc]initWithDictionary:[adi valueForKey:@"Walk"]];
+        NSArray * tmpa=[[NSArray alloc ]initWithObjects:abil, nil];//abil,
+        [mdic setObject:tmpa forKey:@"Abilities"];
+        [abil release];
+        [tmpa release];
+       // [rd release];
         SvTetrisMonster * mnst=[[SvTetrisMonster alloc] initWithDictionary:mdic];
         [movingBodies addObject:mnst];
         [mnst release];

@@ -10,6 +10,31 @@
 
 
 @implementation SvManaPool
+
+- (int) poolFits:(SvManaPool *)pool
+{
+    int mn=-1;
+    for(int i=0;i<MANA_TYPES;i++)
+    {
+        if([pool getMana:i]!=0)
+        {
+            int dtmn=floor(mana[i]/[pool getMana:i]);
+            if(dtmn<10000&&dtmn>0)
+                if(dtmn<mn||mn==-1) mn=dtmn;
+        }
+    }
+    if(mn==-1) return 0;
+    return mn;
+}
+-(double) Dot:(SvManaPool *)pool
+{
+    double sm=0;
+    for(int i=0;i<MANA_TYPES;i++)
+    {
+        sm+=mana[i]*[pool getMana:i];
+    }
+    return sm;
+}
 - (id) initWithPool: (double *) manapool
 {
     if((self=[super init]))
@@ -17,6 +42,18 @@
         for(int i=0;i<MANA_TYPES;i++)
         {
             mana[i]=manapool[i];
+        }
+    }
+    return self;
+}
+-(id) initWithArray:(NSArray *)manapool
+{
+    if((self=[super init]))
+    {
+        if(manapool==nil) return self;
+        for(int i=0;i<MANA_TYPES;i++)
+        {
+            mana[i]=[[manapool objectAtIndex:i] doubleValue];
         }
     }
     return self;
@@ -109,6 +146,16 @@
     for(int i=0;i<MANA_TYPES;i++)
     {
         dt[i]=d*mana[i];
+    }
+    SvManaPool *ret=[[SvManaPool alloc] initWithPool:dt];
+    return [ret autorelease];
+}
+- (SvManaPool *) MultiplyBy:(SvManaPool *)pool
+{
+    double dt[MANA_TYPES];
+    for(int i=0;i<MANA_TYPES;i++)
+    {
+        dt[i]=[pool getMana:i]*mana[i];
     }
     SvManaPool *ret=[[SvManaPool alloc] initWithPool:dt];
     return [ret autorelease];
