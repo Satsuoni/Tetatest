@@ -6,6 +6,8 @@
 	<dict>
 		<key>Walk</key>
 		<dict>
+			<key>AbilityID</key>
+			<string>BasicWalking</string>
 			<key>Target</key>
 			<string>Self</string>
 			<key>Steps</key>
@@ -31,6 +33,16 @@
 					<false/>
 					<key>Changes</key>
 					<dict>
+						<key>Acceleration</key>
+						<array>
+							<integer>15</integer>
+							<integer>0</integer>
+						</array>
+						<key>Force</key>
+						<array>
+							<integer>0</integer>
+							<integer>0</integer>
+						</array>
 						<key>Frame</key>
 						<integer>1</integer>
 						<key>Linear Damping</key>
@@ -69,7 +81,24 @@
 						<string>Step0</string>
 					</dict>
 					<key>Condition</key>
-					<array/>
+					<array>
+						<dict>
+							<key>Comparison</key>
+							<string>Equal</string>
+							<key>CompareTo</key>
+							<integer>1</integer>
+							<key>Value</key>
+							<string>TouchingGround</string>
+						</dict>
+						<dict>
+							<key>Comparison</key>
+							<string>Less</string>
+							<key>CompareTo</key>
+							<integer>30</integer>
+							<key>Value</key>
+							<string>VelocityMagnitude</string>
+						</dict>
+					</array>
 				</dict>
 				<dict>
 					<key>Interrupt</key>

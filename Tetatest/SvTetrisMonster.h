@@ -82,7 +82,12 @@
     /////
     BOOL hasGravityEffect;
     BOOL gravityEnabled;
+    //////
+    BOOL hasSpriteEffect;
+    SpriteEffect spriteEffect;
 }
+@property (nonatomic, readonly) SpriteEffect spriteEffect;
+@property (nonatomic, readonly) BOOL hasSpriteEffect;
 @property (nonatomic, readonly)  NSString *name;
 @property (nonatomic, readonly) BOOL constant;
 @property (nonatomic, readonly) BOOL hasGravityEffect;
@@ -191,7 +196,7 @@ SVAbilityTargets;
     NSMutableDictionary * application;
     SVTetrisBody * selectedTarget;//unless internal
      SvTetrisMonster * owner;
-  
+    NSString* abilityID;
 }
 @property (nonatomic,readonly) BOOL interruptedByCrushing;
 @property (nonatomic,readonly)BOOL interruptedByDamage;

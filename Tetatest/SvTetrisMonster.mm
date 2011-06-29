@@ -106,6 +106,8 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
 @synthesize name;
 @synthesize hasGravityEffect;
 @synthesize gravityEnabled;
+@synthesize hasSpriteEffect;
+@synthesize spriteEffect;
 - (id) initWithDictionary :(NSDictionary *) dic
 {
    if((self = [super init]))
@@ -139,6 +141,37 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
        }
        else
            hasGravityEffect=NO;
+       if([dic valueForKey:@"SpriteEffect"]!=nil)
+       {
+           NSDictionary *tmp=[dic valueForKey:@"SpriteEffect"];
+           spriteEffect.type=[[tmp valueForKey:@"Type"] intValue];
+           spriteEffect.par1=[[tmp valueForKey:@"Parameter1"] intValue];
+           spriteEffect.par2=[[tmp valueForKey:@"Parameter2"] intValue];
+           NSArray *cl=[dic valueForKey:@"Color0"];
+           for(int i=0;i<4;i++)
+           {
+               spriteEffect.colors[0].clr[i]=[[cl objectAtIndex:i] floatValue];
+           }
+          cl=[dic valueForKey:@"Color1"];
+           for(int i=0;i<4;i++)
+           {
+               spriteEffect.colors[1].clr[i]=[[cl objectAtIndex:i] floatValue];
+           }
+       cl=[dic valueForKey:@"Color2"];
+           for(int i=0;i<4;i++)
+           {
+               spriteEffect.colors[2].clr[i]=[[cl objectAtIndex:i] floatValue];
+           }
+         cl=[dic valueForKey:@"Color3"];
+           for(int i=0;i<4;i++)
+           {
+               spriteEffect.colors[3].clr[i]=[[cl objectAtIndex:i] floatValue];
+           }
+           
+           hasSpriteEffect=YES;
+       }
+       else
+           hasSpriteEffect=NO;
      if([dic valueForKey:@"Force"]!=nil)
      {
          NSArray * arr=[dic valueForKey:@"Force"];
@@ -528,6 +561,7 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
 {
     if((self=[super init]))
     {
+        abilityID=[[dict valueForKey:@"AbilityID"] retain];
         NSDictionary * inter=[dict valueForKey:@"Interruptions"];
         if([inter valueForKey:@"Crushing"]!=nil)
             interruptedByCrushing=YES;
@@ -584,6 +618,7 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
 }
 - (void) dealloc
 {
+    [abilityID release];
     [abilitySteps release];
     [application release];
     [selectedTarget release];
@@ -596,26 +631,31 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
 - (NSNumber *) getValue:(NSString *)valueName
 {
     if([valueName isEqualToString:@"HP"])
-        return [[NSNumber numberWithDouble:HP] autorelease];
+        return [NSNumber numberWithDouble:HP] ;
     if([valueName isEqualToString:@"HPMax"])
-        return [[NSNumber numberWithDouble:HPMax] autorelease];
+        return [NSNumber numberWithDouble:HPMax];
     if([valueName hasPrefix:@"Mana"])
     {
         NSString * st=[valueName stringByReplacingOccurrencesOfString:@"Mana" withString:@""];
         
-        return [[NSNumber numberWithDouble:[pool getMana:[st intValue]]] autorelease];
+        return [NSNumber numberWithDouble:[pool getMana:[st intValue]]] ;
     }
 
     if([valueName isEqualToString:@"Ghost"])
-        return [[NSNumber numberWithBool:ghostMode] autorelease];
+        return [NSNumber numberWithBool:ghostMode];
     if([valueName isEqualToString:@"Crushed"])
-        return [[NSNumber numberWithBool:wasCrushed] autorelease];
+        return [NSNumber numberWithBool:wasCrushed] ;
     if([valueName isEqualToString:@"Orientation"])
-        return [[NSNumber numberWithInt:orientation] autorelease];
+        return [NSNumber numberWithInt:orientation];
     if([valueName isEqualToString:@"CanFly"])
-        return [[NSNumber numberWithBool:canFly] autorelease];
+        return [NSNumber numberWithBool:canFly] ;
     if([valueName isEqualToString:@"TouchingGround"])
-        return [[NSNumber numberWithBool:isTouchingGround] autorelease];
+        return [NSNumber numberWithBool:isTouchingGround] ;
+    if([valueName isEqualToString:@"VelocityMagnitude"])
+    {
+        float fl= body->GetLinearVelocity().Length()*PTM_RATIO;
+        return [NSNumber numberWithFloat:fl] ;
+    }
     return nil;
 }
 - (void) Draw
@@ -820,6 +860,11 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
     {
        
        dam+=eff.DHPEPS;
+    }
+    if(eff.effect.hasSpriteEffect)
+    {
+        SpriteEffect tm=eff.effect.spriteEffect;
+        [animation setSpriteEffect:&tm];
     }
     if(eff.effect.hasForceComponent)
     {

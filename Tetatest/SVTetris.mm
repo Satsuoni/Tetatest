@@ -565,7 +565,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         
         NSMutableDictionary *mdic=[[NSMutableDictionary alloc] initWithCapacity:8];
         [mdic setValue:[NSNumber numberWithBool:NO] forKey:@"Sensor"];
-         [mdic setValue:[NSNumber numberWithFloat:0.3] forKey:@"Restitution"];
+         [mdic setValue:[NSNumber numberWithFloat:0.2] forKey:@"Restitution"];
         [mdic setValue:[NSNumber numberWithFloat:1] forKey:@"Density"];
         [mdic setValue:[NSNumber numberWithFloat:0.5] forKey:@"Friction"];
         NSArray * arrd=[[NSArray alloc] initWithObjects:[NSNumber numberWithFloat:gridrect.origin.x+21],[NSNumber numberWithFloat:500],[NSNumber numberWithFloat:28],[NSNumber numberWithFloat:30], nil];
@@ -911,7 +911,7 @@ if(isDragging)
             [body.touchingBodies removeAllObjects];
             [body.passingBodies removeAllObjects];
         }
-        world->Step(elapsedTime, 20, 10);
+        world->Step(elapsedTime, 15, 8);
       //  world->ClearForces();
         for(SVTetrisBody * body in movingBodies)
             [body Update:elapsedTime];
