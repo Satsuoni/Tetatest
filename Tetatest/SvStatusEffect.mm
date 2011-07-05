@@ -171,6 +171,7 @@
         if([dic valueForKey:@"Spawned Body"]!=nil)
         {
             bodyID=[[dic valueForKey:@"Spawned Body"] retain];
+            bodyParameters=[[dic valueForKey:@"Spawn Parameters"] retain];
             canSpawnBody=YES;
         }
         else
@@ -217,6 +218,7 @@
 }
 -(void) dealloc
 {
+    [bodyParameters release];
     [effectPrefix release];
     [bodyID release];
     [name release];

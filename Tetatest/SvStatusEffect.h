@@ -61,6 +61,7 @@
     ///////////
     BOOL canSpawnBody;
     NSString * bodyID;
+    NSDictionary *bodyParameters;
     ///////
     BOOL hasFrameChange;
     int toFrame;

@@ -82,6 +82,7 @@
 		C6D0EB7213A847BB008779FD /* b2PulleyJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6D0EB4A13A847BB008779FD /* b2PulleyJoint.cpp */; };
 		C6D0EB7313A847BB008779FD /* b2RevoluteJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6D0EB4C13A847BB008779FD /* b2RevoluteJoint.cpp */; };
 		C6D0EB7413A847BB008779FD /* b2WeldJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C6D0EB4E13A847BB008779FD /* b2WeldJoint.cpp */; };
+		C6FC321413C358FE00BC431B /* SVSpawnedBody.mm in Sources */ = {isa = PBXBuildFile; fileRef = C6FC321313C358FE00BC431B /* SVSpawnedBody.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -213,6 +214,8 @@
 		C6D0EB4D13A847BB008779FD /* b2RevoluteJoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2RevoluteJoint.h; sourceTree = "<group>"; };
 		C6D0EB4E13A847BB008779FD /* b2WeldJoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2WeldJoint.cpp; sourceTree = "<group>"; };
 		C6D0EB4F13A847BB008779FD /* b2WeldJoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2WeldJoint.h; sourceTree = "<group>"; };
+		C6FC321213C358FD00BC431B /* SVSpawnedBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVSpawnedBody.h; sourceTree = "<group>"; };
+		C6FC321313C358FE00BC431B /* SVSpawnedBody.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SVSpawnedBody.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -285,6 +288,8 @@
 				C6B9A40B13B8DF7E004184E8 /* Data.plist */,
 				C6C564C913B4BB3C0061DEC6 /* SvTetrisMonster.h */,
 				C6C564CA13B4BB3D0061DEC6 /* SvTetrisMonster.mm */,
+				C6FC321213C358FD00BC431B /* SVSpawnedBody.h */,
+				C6FC321313C358FE00BC431B /* SVSpawnedBody.mm */,
 				C6B9070F13BB58BA0002E641 /* SvStatusEffect.h */,
 				C6B9071013BB58BB0002E641 /* SvStatusEffect.mm */,
 				C6C235A3139FB090000D2212 /* Svertex.glsl */,
@@ -596,6 +601,7 @@
 				C64DC82513B227C500B29129 /* SvManaPool.mm in Sources */,
 				C6C564CB13B4BB3D0061DEC6 /* SvTetrisMonster.mm in Sources */,
 				C6B9071113BB58BB0002E641 /* SvStatusEffect.mm in Sources */,
+				C6FC321413C358FE00BC431B /* SVSpawnedBody.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
