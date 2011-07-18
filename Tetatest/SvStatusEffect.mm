@@ -17,6 +17,16 @@
 @synthesize orientationApplies;
 @synthesize orientationFrameShift;
 @synthesize orientationApplyTransform;
+
+@synthesize useLDistanceForForce;
+@synthesize useSDistanceForForce;
+@synthesize useLDistanceForDamage;
+@synthesize dDcoef;
+@synthesize useSDistanceForDamage;
+@synthesize dFCoef;
+@synthesize acceptDistance;
+@synthesize acceptDirection;
+@synthesize invertDistance;
 - (id) initWithDictionary:(NSDictionary *)dict
 {
     if((self=[super init]))
@@ -27,6 +37,51 @@
         orientationApplyTransform=[[dict valueForKey:@"Orientation Apply Transform"] boolValue];
         orientationFrameShift=[[dict valueForKey:@"Orientation Frame Shift"] intValue];
         orientationApplies=[[dict valueForKey:@"Orientation"] boolValue];
+        if([dict valueForKey:@"Use direction"]!=nil)
+        {
+            acceptDirection=[[dict valueForKey:@"Use direction"] boolValue];
+        }
+        else
+        {
+            acceptDirection=NO;
+        }
+        dDcoef=0;
+        dFCoef=0;
+        acceptDistance=NO;
+        useSDistanceForDamage=NO;
+        useLDistanceForDamage=NO;
+        useLDistanceForForce=NO;
+        useSDistanceForForce=NO;
+        invertDistance=[[dict valueForKey:@"Invert distance"] boolValue];
+        if([dict valueForKey:@"Distance to Force"]!=nil)
+        {
+            acceptDistance=YES;
+            dFCoef=[[dict valueForKey:@"Distance to Force"] floatValue];
+            NSString * type=[dict valueForKey:@"Force Distance Relationship"];
+            if([type isEqualToString:@"Square"])
+            {
+                useLDistanceForForce=YES; 
+            }
+            else
+            {
+                useSDistanceForForce=YES; 
+            }
+        }
+        if([dict valueForKey:@"Distance to Damage"]!=nil)
+        {
+            acceptDistance=YES;
+            dDcoef=[[dict valueForKey:@"Distance to Damage"] floatValue];
+            NSString * type=[dict valueForKey:@"Damage Distance Relationship"];
+            if([type isEqualToString:@"Square"])
+            {
+                useLDistanceForDamage=YES; 
+            }
+            else
+            {
+                useSDistanceForDamage=YES; 
+            }
+        }
+       
     }
     return self;
 }
@@ -194,27 +249,53 @@
     return self;
 }
 
-- (void) applyForceToBody: (b2Body *) body withOrientation:(int)ori
+- (void) applyForceToBody: (b2Body *) body withOrientation:(int)ori direction:(CGPoint)dir andDistance:(float)dis
 {
     if(!hasForceComponent)return ;
     
     b2Vec2 p=b2Vec2(0.0,0.0);
     float mass=body->GetMass();
-    if(ori==0)
+     double ret=1;
+    if(parameters.acceptDistance)
     {
-        body->ApplyForce(force, p);
-        b2Vec2 ac=b2Vec2(mass*acceleration.x,mass*acceleration.y);
-        body->ApplyForce(ac, p);
+     
+            if(parameters.useSDistanceForForce||parameters.useLDistanceForForce)
+            {
+              
+                if(parameters.invertDistance)
+                    dis=1/(dis+1);
+                if(parameters.useSDistanceForDamage)
+                    dis=dis*dis;
+                ret*=dis*parameters.dFCoef;
+            }
+       
+    }
+    if(parameters.acceptDirection)
+    {
+        
+        b2Vec2 f=b2Vec2((force.x+mass*acceleration.x), (force.y+mass*acceleration.y));
+        ret*=f.Length();
+        float ln=sqrt(dir.x*dir.x+dir.y*dir.y);
+        b2Vec2 nf=b2Vec2(dir.x*ret/ln,dir.y*ret/ln);
+        body->ApplyForce(nf, p);
         body->SetLinearDamping(linearDamping);
     }
     else
     {
-        b2Vec2 fr2=b2Vec2(force.x*ori,force.y*ori); 
-        b2Vec2 ac=b2Vec2(mass*acceleration.x*ori,mass*acceleration.y*ori);
-        body->ApplyForce(fr2, p);
-        body->ApplyForce(ac, p);
+    if(ori==0)
+    {
+        b2Vec2 nf=b2Vec2((force.x+mass*acceleration.x)*ret, (force.y+mass*acceleration.y)*ret);
+        body->ApplyForce(nf, p);
         body->SetLinearDamping(linearDamping);
     }
+    else
+    {
+        b2Vec2 nf=b2Vec2((force.x+mass*acceleration.x)*ret*ori, (force.y+mass*acceleration.y)*ret*ori);
+   
+        body->ApplyForce(nf, p);
+        body->SetLinearDamping(linearDamping);
+    }
+                         }
 }
 -(void) dealloc
 {
@@ -233,7 +314,7 @@
 @implementation SVStatusEffectInTime
 @synthesize effect;
 @synthesize charges;
-- (id) initWithEffect:(SvStatusEffect *)effecta andOrientation:(int)ori andChargedPool:(SvManaPool *)pool
+- (id) initWithEffect:(SvStatusEffect *)effecta andOrientation:(int)ori andChargedPool:(SvManaPool *)pool andAdditionalParameters:(NSDictionary *)dct
 {
     if((self=[super init]))
     {
@@ -250,7 +331,16 @@
     }
     return self;
 }
-- (id) initWithEffect:(SvStatusEffect *)effecta andOrientation:(int)ori andCharges:(int)icharges
+
+- (void) applyForceToBody: (b2Body *) body 
+{
+    if(effect.parameters.orientationApplies)
+    [effect applyForceToBody:body withOrientation:orientation direction:direction andDistance:distance];
+    else
+        [effect applyForceToBody:body withOrientation:0 direction:direction andDistance:distance];
+  }
+
+- (id) initWithEffect:(SvStatusEffect *)effecta andOrientation:(int)ori andCharges:(int)icharges andAdditionalParameters:(NSDictionary *)dct
 {
     if((self=[super init]))
     {
@@ -279,26 +369,41 @@
     else
         return effect.toFrame;
 }
-- (double) DHPEPS
+- (double) getDamageMultiplier
 {
+    double ret=1;
+    
     if(effect.parameters.overchargeAppliesToDamage)
-        return effect.DHPEPS*charges;
-    else
-        return effect.DHPEPS;
+        ret*=charges;
+    if(effect.parameters.acceptDistance)
+    {
+        if(effect.parameters.useSDistanceForDamage||effect.parameters.useLDistanceForDamage)
+        {
+            float dis=distance;
+            if(effect.parameters.invertDistance)
+                dis=1/(dis+1);
+            if(effect.parameters.useSDistanceForDamage)
+                dis=dis*dis;
+            ret*=dis*effect.parameters.dDcoef;
+        }
+        
+    }
+    return ret;
+}
+- (double) DHPEPS
+{ 
+        return [self getDamageMultiplier]*effect.DHPEPS;
 }
 - (SvManaPool *) damage
 {
-    if(effect.parameters.overchargeAppliesToDamage)
-        return [[effect.damage Multiply:  charges] autorelease];
-    else
-        return effect.damage;
+        return [[effect.damage Multiply:  [self getDamageMultiplier]] autorelease];
 }
 - (SvManaPool *) manaDamage
 {
-    if(effect.parameters.overchargeAppliesToDamage)
-        return [[effect.manaDamage Multiply:  charges] autorelease];
-    else
-        return effect.manaDamage;
+
+    
+        return [[effect.manaDamage Multiply:  [self getDamageMultiplier]] autorelease];
+   
 }
 - (void) dealloc
 {

@@ -516,7 +516,7 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
 -(void) applyEffect:(SvStatusEffect *)eff withPool:(SvManaPool *)cpool
 {
     
-    SVStatusEffectInTime * temp=[[SVStatusEffectInTime alloc] initWithEffect:eff andOrientation:orientation andChargedPool:cpool];  
+    SVStatusEffectInTime * temp=[[SVStatusEffectInTime alloc] initWithEffect:eff andOrientation:orientation andChargedPool:cpool andAdditionalParameters:nil];  
     if(eff.oneTime)
     {
         [self applyEffectStep:temp];
@@ -530,7 +530,7 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
 -(void) applyEffect:(SvStatusEffect *)eff withCharges:(int)charges
 {
     
-    SVStatusEffectInTime * temp=[[SVStatusEffectInTime alloc] initWithEffect:eff andOrientation:orientation andCharges:charges];  
+    SVStatusEffectInTime * temp=[[SVStatusEffectInTime alloc] initWithEffect:eff andOrientation:orientation andCharges:charges andAdditionalParameters:nil];  
     if(eff.oneTime)
     {
         [self applyEffectStep:temp];
@@ -564,10 +564,9 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
     }
     if(eff.effect.hasForceComponent)
     {
-        if(eff.effect.parameters.orientationApplies)
-            [eff.effect  applyForceToBody:body withOrientation:orientation];
-         else
-             [eff.effect applyForceToBody:body withOrientation:0];
+        
+            [eff applyForceToBody:body ];
+        
     }
     if(eff.effect.hasSecondaryEffect)
     {

@@ -20,6 +20,22 @@
     BOOL orientationApplies;
     BOOL overchargeAppliesToDamage;
     BOOL overchargeAppliesToDuration;
+    
+    
+    BOOL acceptDirection;
+    BOOL acceptDistance;
+    //BOOL useDirectionForForce; redundant -the only way it can be used
+    BOOL invertDistance;
+    float dFCoef;//distance force coef;
+    BOOL useLDistanceForForce;//linear distance
+    BOOL useSDistanceForForce;// squared distance
+    
+    //used for all damage, including  manaic and mana
+    float dDcoef;//distance damage cfs
+    BOOL useLDistanceForDamage;//linear distance
+    BOOL useSDistanceForDamage;// squared distance
+    
+    
 }
 @property (nonatomic,readonly) int orientationFrameShift;
 @property (nonatomic,readonly) BOOL orientationApplyTransform;
@@ -27,6 +43,15 @@
 @property (nonatomic,readonly) BOOL overchargeAppliesToDamage;
 @property (nonatomic,readonly) BOOL overchargeAppliesToDuration;
 @property (nonatomic,readonly)  SvManaPool * overchargePool;
+@property (nonatomic,readonly) BOOL acceptDirection;
+@property (nonatomic,readonly)  BOOL acceptDistance;
+@property (nonatomic,readonly)BOOL invertDistance;
+@property (nonatomic,readonly) float dFCoef;
+@property (nonatomic,readonly) BOOL useLDistanceForForce;
+@property (nonatomic,readonly)  BOOL useSDistanceForForce;
+@property (nonatomic,readonly)  float dDcoef;
+@property (nonatomic,readonly) BOOL useLDistanceForDamage;
+@property (nonatomic,readonly)BOOL useSDistanceForDamage;
 //@property (nonatomic,readwrite) int orientation;
 - (id) initWithDictionary: (NSDictionary *)dict;
 @end
@@ -103,7 +128,7 @@
 @property (nonatomic, readonly)  NSString * bodyID;
 - (id) initWithDictionary :(NSDictionary *) dic;
 
-- (void) applyForceToBody: (b2Body *) body withOrientation :(int) ori;
+- (void) applyForceToBody: (b2Body *) body withOrientation :(int) ori direction:(CGPoint) dir andDistance: (float) dis;
 @end
 @interface SVStatusEffectInTime : NSObject {
     SvStatusEffect * effect;
@@ -111,6 +136,8 @@
     NSTimeInterval elapsedtime;
     int orientation;
     int charges;
+    CGPoint direction;
+    float distance;
 }
 @property (nonatomic, readonly) SvStatusEffect * effect;
 @property (nonatomic, readonly) int toFrame;
@@ -119,9 +146,10 @@
 @property (nonatomic, readonly) SvManaPool * manaDamage;
 @property (nonatomic, readonly) int charges;
 
-- (id) initWithEffect: (SvStatusEffect *) effect andOrientation: (int) ori andChargedPool: (SvManaPool *) pool;
-- (id) initWithEffect: (SvStatusEffect *) effect andOrientation: (int) ori andCharges: (int ) charges;
-- (int) Update: (double) elapsed;
+- (id) initWithEffect: (SvStatusEffect *) effect andOrientation: (int) ori andChargedPool: (SvManaPool *) pool andAdditionalParameters: (NSDictionary *) dct;
+- (id) initWithEffect: (SvStatusEffect *) effect andOrientation: (int) ori andCharges: (int ) charges andAdditionalParameters: (NSDictionary *) dct;
+- (int) Update: (double) elapsed ;
 - (BOOL) Expired;
+- (void) applyForceToBody: (b2Body *) body ;
 
 @end
