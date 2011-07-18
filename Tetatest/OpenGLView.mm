@@ -15,6 +15,179 @@
 #import "SVScene.h"
 #import "SVTetris.h"
 static VertexManager * _sharedVM=nil;
+static SvSharedSpriteCache * _spriteCache=nil;
+static int _textureID=0;
+@implementation SvSharedSpriteCache
+
++(SvSharedSpriteCache *) SharedCache
+{
+    @synchronized([SvSharedSpriteCache class])
+    {
+        if(_spriteCache==nil)
+            [SvSharedSpriteCache alloc];
+        return _spriteCache;
+    }
+    return nil;
+}
++ (id) alloc
+{
+    @synchronized([SvSharedSpriteCache class])
+    {
+        _spriteCache=[super alloc];
+        [_spriteCache init];
+        return _spriteCache;
+    }
+    return nil;
+}
+- (id) init
+{
+    if((self=[super init]))
+    {
+        sprites=[[NSMutableDictionary alloc]init];  
+    }
+    return self;
+}
+- (void) dealloc
+{
+    [sprites release];
+    [super dealloc];
+}
+- (void) addSprite:(SVSprite *)sprite WithName:(NSString *)name
+{
+    if([sprites valueForKey:name]!=nil)
+    {
+        NSLog(@"Overwriting older sprite!");
+    }
+    [sprites setValue:sprite forKey:name];
+}
+- (void) Clear
+{
+    [sprites removeAllObjects];
+}
+- (SVSprite *) getSpriteWithName:(NSString *)name
+{
+    return [sprites valueForKey:name];
+}
+- (SVAnimatedSprite *) getAnimatedSpriteWithName:(NSString *)name
+{
+    if([[sprites valueForKey:name] isKindOfClass:[SVAnimatedSprite class]])
+        return [sprites valueForKey:name];
+    return nil;
+}
+- (void) removeSpriteWithName:(NSString *)name
+{
+    [sprites removeObjectForKey:name];
+}
+- (CGRect) fitRectangle: (CGRect) rcFit withArray: (NSMutableArray *) rects
+{
+    int ind=0;
+    for(ind=0;ind<[rects count];ind++)
+    {
+        CGRect rc=[[rects objectAtIndex:ind] CGRectValue];
+        if(rc.size.width>=rcFit.size.width&&rc.size.height>=rcFit.size.height)
+        {
+            //found a rectangle large enough
+            [rects removeObjectAtIndex:ind];
+            
+            if(rc.size.height>rcFit.size.height)
+            {
+                [rects insertObject:[NSValue valueWithCGRect:CGRectMake(rc.origin.x, rc.origin.y+rcFit.size.height, rc.size.width, rc.size.height-rcFit.size.height)] atIndex:ind];    
+            }
+            if(rc.size.width>rcFit.size.width)
+            {
+                [rects insertObject:[NSValue valueWithCGRect:CGRectMake(rc.origin.x+rcFit.size.width, rc.origin.y, rc.size.width-rcFit.size.width, rc.size.height)] atIndex:ind];
+            }
+            return CGRectMake(rc.origin.x, rc.origin.y, rcFit.size.width, rcFit.size.height);
+        }
+    }
+    return CGRectZero;
+}
+- (void) createAndLoadSprites:(NSArray *)spritea usingDictionary:(NSDictionary *)dct intoView:(OpenGLView *)view
+{
+    NSMutableArray * remainder=[[NSMutableArray alloc]init];
+    [remainder addObject:[NSValue valueWithCGRect:CGRectMake(0, 0, 1024, 1024)]];
+    SVTexture *tx;
+    NSString * txname=[NSString stringWithFormat:@"_Texture%d",_textureID];
+    tx=[view createTextureNamed:txname];
+     _textureID++;
+    [tx startCreatingTexturewithWidth:1024 andHeight:1024];
+    for(NSString * spriteName in spritea)
+    {
+        NSDictionary * spritedct=[dct valueForKey:spriteName];
+        if(spritedct)
+        {
+           if([[spritedct valueForKey:@"Type"] isEqualToString:@"Normal"])
+           {
+               NSArray * arr=[spritedct valueForKey:@"Rect"];
+            CGRect rct=CGRectMake([[arr objectAtIndex:0]floatValue], [[arr objectAtIndex:1]floatValue], [[arr objectAtIndex:2]floatValue], [[arr objectAtIndex:3]floatValue]) ;
+               CGRect fit=[self fitRectangle:rct withArray:remainder];
+               if(CGRectEqualToRect(fit, CGRectZero))
+               {
+                   [tx finishTextureCreation];
+                   txname=[NSString stringWithFormat:@"_Texture%d",_textureID];
+                   tx=[view createTextureNamed:txname];
+                   _textureID++;
+                   [tx startCreatingTexturewithWidth:1024 andHeight:1024];
+                   [remainder removeAllObjects];
+                   [remainder addObject:[NSValue valueWithCGRect:CGRectMake(0, 0, 1024, 1024)]];
+                   fit=[self fitRectangle:rct withArray:remainder];
+               }
+               [tx drawImageOnTexture:[UIImage imageNamed:[spriteName valueForKey:@"Image"]] fromrect:rct withrect:fit];
+               SVSprite * spr=[view getSpriteWithTexture:txname andFrame:fit];
+               [sprites setValue:spr forKey:spriteName];
+               
+           }
+            else//Animated sprite several rects;
+            {
+              NSArray * frms=[spritedct valueForKey:@"Frames"];  
+                NSMutableArray * rcts=[[NSMutableArray alloc] init];
+                BOOL done=NO;
+                while(!done)
+                {
+                    done=YES;
+                for(NSArray * arr in frms)
+                 {
+                    CGRect rct=CGRectMake([[arr objectAtIndex:0]floatValue], [[arr objectAtIndex:1]floatValue], [[arr objectAtIndex:2]floatValue], [[arr objectAtIndex:3]floatValue]) ;
+                    CGRect fit=[self fitRectangle:rct withArray:remainder];
+                    if(CGRectEqualToRect(fit, CGRectZero))
+                    {
+                        [tx finishTextureCreation];
+                        txname=[NSString stringWithFormat:@"_Texture%d",_textureID];
+                        tx=[view createTextureNamed:txname];
+                        _textureID++;
+                        [tx startCreatingTexturewithWidth:1024 andHeight:1024];
+                        [remainder removeAllObjects];
+                        [remainder addObject:[NSValue valueWithCGRect:CGRectMake(0, 0, 1024, 1024)]];
+                        [rcts removeAllObjects];
+                        done=NO;
+                        break;
+                    }
+                     else
+                     {
+                         [rcts addObject:[NSValue valueWithCGRect:fit]];
+                     }
+                 }
+                }
+                UIImage * image=[UIImage imageNamed:[spritedct valueForKey:@"Image"]];
+                int ind=0;
+                for(NSArray * arr in frms)
+                {
+                    
+                    CGRect rct=CGRectMake([[arr objectAtIndex:0]floatValue], [[arr objectAtIndex:1]floatValue], [[arr objectAtIndex:2]floatValue], [[arr objectAtIndex:3]floatValue]) ;
+                    NSValue* fitRct=[rcts objectAtIndex:ind];
+                    [tx drawImageOnTexture:image fromrect:rct withrect:[fitRct CGRectValue]];
+                    ind++;
+                }
+                SVAnimatedSprite * spr=[view getAnimatedSpriteWithTexture:txname andFrames:rcts];
+                [sprites setValue:spr forKey:spriteName];
+
+            }
+        }
+    }
+    [tx finishTextureCreation];
+    [remainder release];
+}
+@end
 GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
 {
     GL_RGBA_Color ret={r,g,b,a};

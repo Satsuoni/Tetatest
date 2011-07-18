@@ -185,3 +185,19 @@ extern GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a);
 - (void) touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event;
 - (CGPoint) transformPointToInnerResolution: (CGPoint) point;
 @end
+
+@interface SvSharedSpriteCache : NSObject {
+@private
+    NSMutableDictionary * sprites;
+    BOOL _busy;
+}
++ (SvSharedSpriteCache* ) SharedCache;
+- (id) init;
+- (void) addSprite: (SVSprite *) sprite WithName: (NSString *)name;
+- (void) createAndLoadSprites: (NSArray *) sprites usingDictionary: (NSDictionary *) dct intoView: (OpenGLView * ) view;
+- (SVSprite *) getSpriteWithName: (NSString *) name;
+- (SVAnimatedSprite *) getAnimatedSpriteWithName: (NSString *) name;
+- (void) removeSpriteWithName: (NSString *)name;
+- (void) Clear;
+@end
+

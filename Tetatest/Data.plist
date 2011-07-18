@@ -335,6 +335,29 @@
 	</dict>
 	<key>Templates</key>
 	<dict>
+		<key>Sprite</key>
+		<dict>
+			<key>Frames</key>
+			<array>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+			</array>
+			<key>Image</key>
+			<string></string>
+			<key>Rect</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
+			<key>Type</key>
+			<string>Normal  Animated</string>
+		</dict>
 		<key>Ability</key>
 		<dict>
 			<key>Condition</key>
@@ -593,19 +616,19 @@
 		</dict>
 		<key>EffectParameters</key>
 		<dict>
+			<key>Apply Charge To Damage</key>
+			<false/>
+			<key>Apply Charge To Duration</key>
+			<false/>
 			<key>Damage Distance Relationship</key>
-			<string>Square Linear</string>
-			<key>Force Distance Relationship</key>
 			<string>Square Linear</string>
 			<key>Distance to Damage</key>
 			<integer>0</integer>
 			<key>Distance to Force</key>
 			<integer>0</integer>
+			<key>Force Distance Relationship</key>
+			<string>Square Linear</string>
 			<key>Invert distance</key>
-			<false/>
-			<key>Apply Charge To Damage</key>
-			<false/>
-			<key>Apply Charge To Duration</key>
 			<false/>
 			<key>Orientation</key>
 			<false/>

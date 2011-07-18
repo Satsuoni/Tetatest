@@ -129,31 +129,11 @@ typedef enum
 } SVSPMovementType;
 @interface SVSpawnedBody : SVTetrisBody {
     SVTetrisBody * parent;
-    BOOL sensor;
-    BOOL interactFriend;
-    BOOL interactBlock;
-    BOOL interactFoe;
-    BOOL fixedVelocity;
-    BOOL fixedAccel;
-    SVAnimatedSprite * animation;
-    NSArray * delayRates;
-    NSArray * frameNums;
-    SVSPPosType positionType;
-    BOOL isDistanceLimited;
-    BOOL orientationDependent;
-    float distanceLimit;
-    CGPoint fixpoint;
-    CGPoint orientationShift;
-    BOOL gravityON;
-    SVSPMovementType movementType;
-    b2Vec2 initialForce;
-    //status effects on touch
-   // BOOL destroyedOnTouch;
-    SvStatusEffect * onSelf;
-    SvStatusEffect * onParent;
-    SvStatusEffect * onTouchingBody;
-    float FHP;//fake hp
-    SvManaPool * farmor;//fake armor
+    SVPhysicalAspect * physics;
+    SVMovementAspect *movement;
+    SVLifeAspect * life;
+    SVTouchAspect * onTouch;
+    SVAnimationAspect * animation;
 }
 - (void) Update: (double) time;
 - (void) Apply: (NSDictionary *) thing;
