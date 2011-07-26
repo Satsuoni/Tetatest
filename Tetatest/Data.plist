@@ -335,6 +335,141 @@
 	</dict>
 	<key>Templates</key>
 	<dict>
+		<key>Movement Aspect</key>
+		<dict>
+			<key>Use Gravity</key>
+			<false/>
+			<key>Maximum Random Vel</key>
+			<array>
+				<string></string>
+				<string></string>
+			</array>
+			<key>Minimum Random Vel</key>
+			<array>
+				<string></string>
+				<string></string>
+			</array>
+			<key>Maximum Random Force</key>
+			<array>
+				<string></string>
+				<string></string>
+			</array>
+			<key>Minimum Random Force</key>
+			<array>
+				<string></string>
+				<string></string>
+			</array>
+			<key>Velocity</key>
+			<array>
+				<string></string>
+				<string></string>
+			</array>
+			<key>Acceleration</key>
+			<array>
+				<string></string>
+				<string></string>
+			</array>
+			<key>Target Velocity</key>
+			<integer>0</integer>
+			<key>Tangent Force</key>
+			<integer>0</integer>
+			<key>Target Force</key>
+			<integer>0</integer>
+			<key>Target Force Increase</key>
+			<integer>0</integer>
+			<key>Use Target</key>
+			<false/>
+			<key>Use Target Body</key>
+			<false/>
+			<key>Attach To Body</key>
+			<false/>
+			<key>Use Orientation</key>
+			<false/>
+			<key>Shift</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
+			<key>Use Center</key>
+			<false/>
+			<key>Initial position</key>
+			<string>Parent Enemy Position</string>
+		</dict>
+		<key>Physical Aspect</key>
+		<dict>
+			<key>Fixtures</key>
+			<array>
+				<dict>
+					<key>Vertices</key>
+					<array>
+						<array>
+							<integer>0</integer>
+							<integer>0</integer>
+						</array>
+					</array>
+					<key>Width</key>
+					<integer>0</integer>
+					<key>Height</key>
+					<integer>0</integer>
+					<key>Angle</key>
+					<integer>0</integer>
+					<key>Offset</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Radius</key>
+					<integer>0</integer>
+					<key>Friction</key>
+					<integer>0</integer>
+					<key>Restitution</key>
+					<integer>0</integer>
+					<key>Density</key>
+					<integer>0</integer>
+					<key>Shape</key>
+					<string>Box Circle Polygon</string>
+				</dict>
+			</array>
+			<key>Rotate</key>
+			<false/>
+			<key>Collision Mask</key>
+			<integer>0</integer>
+			<key>Sensor</key>
+			<false/>
+			<key>Interact with Passthough</key>
+			<false/>
+		</dict>
+		<key>Fixture</key>
+		<dict>
+			<key>Vertices</key>
+			<array>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+			</array>
+			<key>Width</key>
+			<integer>0</integer>
+			<key>Height</key>
+			<integer>0</integer>
+			<key>Angle</key>
+			<integer>0</integer>
+			<key>Offset</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
+			<key>Radius</key>
+			<integer>0</integer>
+			<key>Friction</key>
+			<integer>0</integer>
+			<key>Restitution</key>
+			<integer>0</integer>
+			<key>Density</key>
+			<integer>0</integer>
+			<key>Shape</key>
+			<string>Box Circle Polygon</string>
+		</dict>
 		<key>Sprite</key>
 		<dict>
 			<key>Frames</key>

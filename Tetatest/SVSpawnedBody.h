@@ -17,12 +17,15 @@
     float restitution;
     float density;
     float friction;
-    int vertices;
-    CGPoint * offset;
-    NSArray * params;
+    float angle;
+    NSMutableArray* vertices;
+    CGPoint  offset;
+    //NSArray * params;
 }
 - (id) initWithDictionary: (NSDictionary *) dct;
-- (b2FixtureDef) getFixtureDef;
+- (b2FixtureDef) getFixtureDefWithOwner: (SVTetrisBody *) owner;
+
+- (void) addToBody: (b2Body *) body asOwner: (SVTetrisBody *) bdy andSensor:(BOOL) sen;
 @end
 
 @interface SVPhysicalAspect : NSObject {
@@ -30,20 +33,28 @@
     int collisionMask;
     BOOL interactWithPassthrough;
     BOOL fixRotation;
-    NSArray * fixtures;//svfixturesdefs
+    NSMutableArray * fixtures;//svfixturesdefs
+    b2Body * body;//a copy don't dealloc
+    SVTetrisBody *owner;
 }
+@property (nonatomic, readonly) BOOL isSensor;
+@property (nonatomic, readonly) int collisionMask;
+@property (nonatomic, readonly) BOOL interactWithPassthrough;
 - (id) initWithDictionary: (NSDictionary * )dict;
-- (b2Body *) createBodyInWorld: (b2World *) world;
+- (b2Body *) createBodyInWorld: (b2World *) world forOwner: (SVTetrisBody* )own atPos: (CGPoint) pos;
 - (void) addFixtureToBody: (SVFixtureDef *)fixture;
 @end
+
 @interface SVMovementAspect :NSObject
 {
     int initialPosition;//0 -body attach ,1 -target attach, 2 -target position 
     BOOL useCenter;
-    CGPoint shiftFromCenter;
-    CGPoint shiftFromUL;
+    BOOL useGravity;
+    //CGPoint shiftFromCenter;
+    CGPoint shift;
     BOOL orientationInverse;
     CGPoint targetPos;
+    CGPoint iniPos;
     SVTetrisBody * targetBody;
     SVTetrisBody * attachedBody;
     SVTetrisBody * spawner;
@@ -52,17 +63,19 @@
     BOOL useTargetBody;
     //BOOL pursueTarget; //pursue target?
     float targetForce;//force in the dir of target
+    float ctf;
     float ttangentForce;//tangential to target
-    float targetFoceIncrease;
-    float targetVelocity;//added velocity in the target direction;
+    float targetForceIncrease;//per second
+    float targetVelocity;//fixed velocity in the target direction;
     CGPoint appliedAccel;// aceleration constantly applied
     CGPoint appliedVelocity;//always applied velocity
     CGPoint minRandomForce, maxRandomForce;//random forces
-    CGPoint minRandomVelOnce, maxRandomVelOnce;//random forces
+    CGPoint minRandomVelOnce, maxRandomVelOnce;//random initial velocities
 }
 - (id) initWithDictionary: (NSDictionary *) dct;
 - (void) setTargetBody: (SVTetrisBody *) bdy;
 - (void) setTargetPos: (CGPoint) pos;
+- (void) setInitPos: (CGPoint) pos;
 - (void) setSpawner: (SVTetrisBody *) bdy;
 - (CGPoint) getInitialPosition: (int) orientation;
 - (void) applyToBody: (b2Body *) body inTime: (double) time;
