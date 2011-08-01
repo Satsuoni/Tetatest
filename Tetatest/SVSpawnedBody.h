@@ -60,16 +60,19 @@
     SVTetrisBody * spawner;
     int moveType;// 0 -move with body, 1- move according to physics, in a way
     BOOL useTarget; //use target body at all
-    BOOL useTargetBody;
+    BOOL useTargetBody; //pursue target body
+    BOOL useTargetVelocity; //use velocity instead of force
     //BOOL pursueTarget; //pursue target?
     float targetForce;//force in the dir of target
     float ctf;
     float ttangentForce;//tangential to target
     float targetForceIncrease;//per second
     float targetVelocity;//fixed velocity in the target direction;
+    BOOL fixedVelocity;
     CGPoint appliedAccel;// aceleration constantly applied
     CGPoint appliedVelocity;//always applied velocity
     CGPoint minRandomForce, maxRandomForce;//random forces
+    BOOL initDone;
     CGPoint minRandomVelOnce, maxRandomVelOnce;//random initial velocities
 }
 - (id) initWithDictionary: (NSDictionary *) dct;
@@ -86,7 +89,7 @@
     double fHPMax;
     double fHP;
     SvManaPool * armor;
-    SvStatusEffect * onDeathSpawner;
+    SvStatusEffect * onDeathSpawner;//effect of body destruction on spawner body
     SVTetrisBody * spawner;
     double timeStep;
     double timeLoss;
@@ -108,6 +111,7 @@
     SvStatusEffect * onSelf;
     SvStatusEffect * onParent;
     SvStatusEffect * onTouchingBody;
+    NSMutableDictionary  *application;
 }
 - (id) initWithDictionary: (NSDictionary *) dct;
 - (void) applyToSelf: (SVTetrisBody *) body;
@@ -115,12 +119,25 @@
 - (void) applyToTouching: (SVTetrisBody *) touching;
 @end
 
+@interface SVATimeline : NSObject {
+    int type; //0 -frame change, 1 -fixture add, 2 -fixture remove (probable)
+    int change; //number of added fixture/next frame
+    double duration;
+}
+@property (nonatomic, readonly) int type;
+@property (nonatomic, readonly) int change;
+@property (nonatomic, readonly) double duration;
+- (id) initWithDictionary: (NSDictionary *) dct;
+
+@end
 @interface SVAnimationAspect : NSObject {
 @private
     SVAnimatedSprite * sprite;
     BOOL usesAddedFixtures;
     NSMutableArray * timeline;
     NSArray * fixtures;
+    double elapsed;
+    int currentTimelinePos;
     
 }
 - (id) initWithDictionary: (NSDictionary *) dict;
