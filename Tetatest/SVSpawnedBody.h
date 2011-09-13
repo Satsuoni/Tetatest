@@ -12,6 +12,17 @@
 #import "SvManaPool.h"
 #import "OpenGLView.h"
 
+@interface SVATimeline : NSObject {
+    int type; //0 -frame change, 1 -fixture add, 2 -fixture remove (probable)
+    int change; //number of added fixture/next frame
+    double duration;
+}
+@property (nonatomic, readonly) int type;
+@property (nonatomic, readonly) int change;
+@property (nonatomic, readonly) double duration;
+- (id) initWithDictionary: (NSDictionary *) dct;
+
+@end
 @interface SVFixtureDef : NSObject {
     int shape;//0 -box, 1 -polygon, 2-circle;
     float restitution;
@@ -20,12 +31,16 @@
     float angle;
     NSMutableArray* vertices;
     CGPoint  offset;
+    SVAnimatedSprite * animation;
+    NSArray * timeline;
     //NSArray * params;
 }
+@property (nonatomic,readonly) SVAnimatedSprite * animation;
 - (id) initWithDictionary: (NSDictionary *) dct;
-- (b2FixtureDef) getFixtureDefWithOwner: (SVTetrisBody *) owner;
+- (b2FixtureDef) getFixtureDefWithOwner;
 
 - (void) addToBody: (b2Body *) body asOwner: (SVTetrisBody *) bdy andSensor:(BOOL) sen;
+- (void) updateTime: (NSTimeInterval) time;
 @end
 
 @interface SVPhysicalAspect : NSObject {
@@ -36,6 +51,8 @@
     NSMutableArray * fixtures;//svfixturesdefs
     b2Body * body;//a copy don't dealloc
     SVTetrisBody *owner;
+    NSTimeInterval elapsed, looptime;
+    NSArray * timeline;//for adding/removing fixtures...
 }
 @property (nonatomic, readonly) BOOL isSensor;
 @property (nonatomic, readonly) int collisionMask;
@@ -43,6 +60,8 @@
 - (id) initWithDictionary: (NSDictionary * )dict;
 - (b2Body *) createBodyInWorld: (b2World *) world forOwner: (SVTetrisBody* )own atPos: (CGPoint) pos;
 - (void) addFixtureToBody: (SVFixtureDef *)fixture;
+- (void) Update :(NSTimeInterval) time;
+- (void) Draw;
 @end
 
 @interface SVMovementAspect :NSObject
@@ -119,17 +138,7 @@
 - (void) applyToTouching: (SVTetrisBody *) touching;
 @end
 
-@interface SVATimeline : NSObject {
-    int type; //0 -frame change, 1 -fixture add, 2 -fixture remove (probable)
-    int change; //number of added fixture/next frame
-    double duration;
-}
-@property (nonatomic, readonly) int type;
-@property (nonatomic, readonly) int change;
-@property (nonatomic, readonly) double duration;
-- (id) initWithDictionary: (NSDictionary *) dct;
 
-@end
 @interface SVAnimationAspect : NSObject {
 @private
     SVAnimatedSprite * sprite;

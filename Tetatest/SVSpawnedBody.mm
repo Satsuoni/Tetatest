@@ -11,7 +11,9 @@
 #import "OpenGLView.h"
 #import "SVTetris.h"
 #import "CC3Math.h"
+
 @implementation SVFixtureDef
+@synthesize animation;
 - (id) init
 {
     return nil;
@@ -20,6 +22,8 @@
 {
     if((self=[super init]))
     {
+        NSString * animName=[dct valueForKey:@"Animation"];
+       animation =[[SvSharedSpriteCache SharedCache] getAnimatedSpriteWithName:animName];
         restitution=[[dct valueForKey:@"Restitution"] floatValue];
         density=[[dct valueForKey:@"Density"]floatValue];
         friction=[[dct valueForKey:@"Friction"] floatValue];
@@ -59,19 +63,21 @@
     return self;
 }
 
-- (b2FixtureDef) getFixtureDefWithOwner:(SVTetrisBody *)owner
+- (b2FixtureDef) getFixtureDefWithOwner
 {
     b2FixtureDef ret=b2FixtureDef();
     ret.restitution=restitution;
     ret.density=density;
     ret.friction=friction;
-    ret.userData=(void *) owner;
+   ret.userData=(void *) self;
     ret.shape=NULL;
     return ret;
 }
 - (void) addToBody:(b2Body *)body asOwner:(SVTetrisBody *)bdy andSensor:(BOOL)sen
 {
-    b2FixtureDef fix=[self getFixtureDefWithOwner:bdy];
+  
+    b2FixtureDef fix=[self getFixtureDefWithOwner];
+    body->SetUserData((void *)bdy);
     switch (shape) {
         case 0://box
         {
@@ -486,10 +492,12 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
         [body Apply:application];  
 }
 @end
+
 @implementation SVAnimationAspect
 
 - (id) initWithDictionary:(NSDictionary *)dict
 {
+
     if((self=[super init]))
     {
         NSString * animName=[dict valueForKey:@"Animation"];
