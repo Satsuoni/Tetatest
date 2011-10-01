@@ -9,6 +9,7 @@
 #import "SvTetrisMonster.h"
 #import "SVTetrisBody.h"
 #import "SVTetris.h"
+#import "SVSpawnedBody.h"
 SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,0.3,1};
 @interface SVCondition (extend)
 - (BOOL) checkWithMonster:(SvTetrisMonster *) mns;
@@ -599,6 +600,13 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
     if(eff.effect.canSpawnBody)
     {
         ///TODO -needs body framework;
+        SVSpawnedBody * bdy;
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Data" ofType:@"plist"];
+        NSDictionary *rd=[NSDictionary dictionaryWithContentsOfFile:path];
+        NSDictionary * bodies=[rd valueForKey:@"Spawned Bodies"];
+        bdy=[[SVSpawnedBody alloc]initWithDictionary:[bodies valueForKey:eff.effect.bodyID]];
+        
+       // [movingBodies addObject:bdy];
     }
     HP-=dam;
     if(dam>0) //check for damage interrupted abilities

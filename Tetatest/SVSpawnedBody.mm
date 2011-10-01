@@ -11,12 +11,30 @@
 #import "OpenGLView.h"
 #import "SVTetris.h"
 #import "CC3Math.h"
-
+#import "SvTetrisMonster.h"
 @implementation SVFixtureDef
 @synthesize animation;
 - (id) init
 {
     return nil;
+}
+- (void) updateTime:(NSTimeInterval)time
+{
+    if(timeline==nil) return;
+    if([timeline count]==0) return;
+    ctime+=time;
+   SVATimeline* cdur=[timeline objectAtIndex:ctml];
+    double dur=cdur.duration;
+    while(ctime>=dur)
+    {
+        ctime-=dur; 
+        ctml++;
+        if(ctml>=[timeline count]) ctml=0;
+        
+        cdur=[timeline objectAtIndex:ctml];
+        [animation setFrame:cdur.change];
+        dur=cdur.duration;
+    }
 }
 - (id) initWithDictionary:(NSDictionary *)dct
 {
@@ -24,6 +42,7 @@
     {
         NSString * animName=[dct valueForKey:@"Animation"];
        animation =[[SvSharedSpriteCache SharedCache] getAnimatedSpriteWithName:animName];
+        [animation setFrame:0];
         restitution=[[dct valueForKey:@"Restitution"] floatValue];
         density=[[dct valueForKey:@"Density"]floatValue];
         friction=[[dct valueForKey:@"Friction"] floatValue];
@@ -59,10 +78,21 @@
                 }
 
             }
+        NSArray* preTime=[dct valueForKey:@"Timeline"];
+        if(preTime==nil) timeline=nil;
+        else
+        {
+            timeline=[[NSMutableArray alloc]initWithCapacity:[preTime count]];
+            for(NSDictionary * tm in preTime)
+            {
+                SVATimeline* tl=[[SVATimeline alloc]initWithDictionary:tm];
+                [timeline addObject:tl];
+                [tl release];
+            }
+        }
     }
     return self;
 }
-
 - (b2FixtureDef) getFixtureDefWithOwner
 {
     b2FixtureDef ret=b2FixtureDef();
@@ -73,6 +103,7 @@
     ret.shape=NULL;
     return ret;
 }
+@synthesize localFixture;
 - (void) addToBody:(b2Body *)body asOwner:(SVTetrisBody *)bdy andSensor:(BOOL)sen
 {
   
@@ -122,7 +153,8 @@
         fix.isSensor=true;
     else
         fix.isSensor=false;
-    body->CreateFixture(&fix);
+    localFixture= body->CreateFixture(&fix);
+    if(localFixture) localFixture->SetUserData((void *) self);
 }
 -(void) dealloc
 {
@@ -145,17 +177,39 @@
         fixRotation=![[dict valueForKey:@"Rotate"]boolValue];
         fixtures=[[NSMutableArray alloc]init];
         NSArray *fa=[dict valueForKey:@"Fixtures"];
+        NSArray* preTime=[dict valueForKey:@"Timeline"];
+        loop=[[dict valueForKey:@"Loop"] boolValue];
+        if(preTime==nil) timeline=nil;
+        else
+        {
+            timeline=[[NSMutableArray alloc]initWithCapacity:[preTime count]];
+            for(NSDictionary * tm in preTime)
+            {
+                SVATimeline* tl=[[SVATimeline alloc]initWithDictionary:tm];
+                [timeline addObject:tl];
+                [tl release];
+            }
+        }
         for(NSDictionary * dct in fa)
         {
             SVFixtureDef * def=[[SVFixtureDef alloc] initWithDictionary:dct];
             [fixtures addObject:def];
             [def release];
         }
+        addedFixtures=[[NSMutableArray alloc]initWithCapacity:1];
+        if([timeline count]==0)
+        [addedFixtures addObject:[fixtures objectAtIndex:0]];
+        else
+        {
+            SVATimeline* tl=[timeline objectAtIndex:0];
+            [addedFixtures addObject:[fixtures objectAtIndex:tl.change]];
+        }
     }
     return self;
 }
 - (void) dealloc
 {
+    [addedFixtures release];
     [fixtures release];
     [super dealloc];
 }
@@ -171,7 +225,7 @@
     def.awake=true;
     def.bullet=true;
     body=world->CreateBody(&def);
-    for(SVFixtureDef * fix in fixtures)
+    for(SVFixtureDef * fix in addedFixtures)
     {
         [fix addToBody:body asOwner:own andSensor:isSensor];
     }
@@ -180,6 +234,65 @@
 - (void) addFixtureToBody:(SVFixtureDef *)fixture
 { 
     [fixture addToBody:body asOwner:owner andSensor:isSensor];
+}
+- (void) Update:(NSTimeInterval)time
+{
+    for( SVFixtureDef * fix in addedFixtures)
+    {
+        [fix updateTime:time];
+    }
+    if(timeline==nil) return;
+    if([timeline count]==0) return;
+    if(!loop&&ctml>=[timeline count]-1) return;
+    ctime+=time;
+    SVATimeline* cdur=[timeline objectAtIndex:ctml];
+    double dur=cdur.duration;
+
+    while(ctime>=dur)
+    {
+        ctime-=dur; 
+        ctml++;
+        if(ctml>=[timeline count]) 
+        {
+            if(loop) ctml=0;
+            else break;
+        }
+        
+        cdur=[timeline objectAtIndex:ctml];
+        if(cdur.type==1)
+        {
+            [self addFixtureToBody:[fixtures objectAtIndex:cdur.change]];
+            [addedFixtures addObject:[fixtures objectAtIndex:cdur.change]];
+            [[fixtures objectAtIndex:cdur.change] updateTime:ctime];
+        }
+        if(cdur.type==-1)
+        {
+            SVFixtureDef * fx= [fixtures objectAtIndex:cdur.change];
+            if(fx!=nil)
+            {
+                [addedFixtures removeObject:fx];
+                body->DestroyFixture(fx.localFixture);
+                fx.localFixture=NULL;
+                
+            }
+        }
+        dur=cdur.duration;
+    } 
+}
+- (void) Draw
+{
+    for(SVFixtureDef *an in addedFixtures)
+    {
+        b2Body *bd= an.localFixture->GetBody();
+        b2Vec2 pos=bd->GetPosition();
+        an.animation.ul_position=CGPointMake(pos.x*PTM_RATIO, pos.y*PTM_RATIO);
+        CC3GLMatrix * tr=an.animation.transform;
+        [tr populateIdentity];
+         [tr rotateBy:CC3VectorMake(180, 0, 0)];
+        [tr rotateBy:CC3VectorMake(0, 0, bd->GetAngle()*180/M_PI)];
+        [an.animation Draw];
+        
+    }
 }
 @end
 
@@ -455,14 +568,24 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
 @end
 
 @implementation SVTouchAspect
-
+@synthesize touchParent;
+@synthesize touchEnemy;
+@synthesize touchBlocks;
+- (void) setTouchCharges:(int)cha
+{
+    ch=cha;
+}
 - (id) initWithDictionary:(NSDictionary *)dct
 {
     if((self = [super init]))
     {
+        touchParent=[[dct valueForKey:@"Affects parent"] boolValue];
+        touchParent=[[dct valueForKey:@"Affects enemy"] boolValue];
+        touchParent=[[dct valueForKey:@"Affects blocks"] boolValue];
         onSelf=[[SvStatusEffect alloc ] initWithDictionary:[dct valueForKey:@"On Self"]];
         onParent=[[SvStatusEffect alloc ] initWithDictionary:[dct valueForKey:@"On Parent"]]; 
         onTouchingBody=[[SvStatusEffect alloc ] initWithDictionary:[dct valueForKey:@"On Touching Body"]]; 
+           onPassingBody=[[SvStatusEffect alloc ] initWithDictionary:[dct valueForKey:@"On Passing Body"]];
         application=[[NSMutableDictionary alloc]initWithCapacity:2];
     }
     return self;
@@ -478,17 +601,49 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
 - (void) applyToParent:(SVTetrisBody *)parent
 {
     [application setValue:onParent forKey:@"Effect"];
+    double mpl[6];
+    memset(mpl, 0, sizeof(double)*6);
+    mpl[0]=ch;
+    SvManaPool * mp=[[SvManaPool alloc]initWithPool:mpl];
+    [application setValue:mp forKey:@"Pool"];
+    [mp release];
     [parent Apply:application];  
+}
+- (void) applyToPassing:(SVTetrisBody *)passing
+{
+    [application setValue:onPassingBody forKey:@"Effect"];
+    double mpl[6];
+    memset(mpl, 0, sizeof(double)*6);
+    mpl[0]=ch;
+    SvManaPool * mp=[[SvManaPool alloc]initWithPool:mpl];
+    [application setValue:mp forKey:@"Pool"];
+    [mp release];
+
+    [passing Apply:application];  
 }
 - (void) applyToTouching:(SVTetrisBody *)touching
 {
     [application setValue:onTouchingBody forKey:@"Effect"];
+    double mpl[6];
+    memset(mpl, 0, sizeof(double)*6);
+    mpl[0]=ch;
+    SvManaPool * mp=[[SvManaPool alloc]initWithPool:mpl];
+    [application setValue:mp forKey:@"Pool"];
+    [mp release];
+
     [touching Apply:application];  
 }
 
 - (void) applyToSelf:(SVTetrisBody *)body
 {
     [application setValue:onSelf forKey:@"Effect"];
+    double mpl[6];
+    memset(mpl, 0, sizeof(double)*6);
+    mpl[0]=ch;
+    SvManaPool * mp=[[SvManaPool alloc]initWithPool:mpl];
+    [application setValue:mp forKey:@"Pool"];
+    [mp release];
+
         [body Apply:application];  
 }
 @end
@@ -546,5 +701,155 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
 }
 @end
 @implementation SVSpawnedBody
-
+@synthesize parent;
+-(void) setParent:(SVTetrisBody *)parentn
+{
+    [parent release];
+    parent=[parentn retain];
+    [life setSpawner:parent];
+    
+}
+- (id) initWithDictionary:(NSDictionary *)dct
+{
+    if((self =[super initWithDictionary:dct]))
+    {
+        physics=[[SVPhysicalAspect alloc]initWithDictionary:[dct valueForKey:@"Physics"]];
+        movement=[[SVMovementAspect alloc]initWithDictionary:[dct valueForKey:@"Movement"]];
+        life=[[SVLifeAspect alloc]initWithDictionary:[dct valueForKey:@"Life"]];
+        onTouch=[[SVTouchAspect alloc]initWithDictionary:[dct valueForKey:@"Touch"]];
+        spawned=NO;
+    }
+    return self;
+}
+- (void)ProcessTouches
+{
+    for(SVTetrisBody * tb in touchingBodies)
+        [onTouch applyToTouching:tb];
+    for(SVTetrisBody * pb in passingBodies)
+    {
+        [onTouch applyToPassing:pb];
+    }
+  if([touchingBodies count]>0)
+  {
+      [onTouch applyToSelf:self];
+      [onTouch applyToParent:parent];
+  }
+   
+}
+- (void) Update:(double)time
+{
+    if(!spawned) return;
+    if([life isDead]) return;
+    [self ProcessTouches];
+    [physics Update:time];
+    [movement applyToBody:body inTime:time];
+    [life updateTime:time];
+    if([life isDead])
+    {
+        NSMutableDictionary * eff=[NSMutableDictionary new];
+        [eff setValue:[life getEffect] forKey:@"Effect"];
+        SvManaPool * mp=[[SvManaPool alloc] init];
+        [eff setValue:mp forKey:@"Pool"];
+        [parent Apply:eff];
+        [eff release];
+        [mp release];
+    }
+}
+- (void) dealloc
+{
+    [parent release];
+    [physics release];
+    [movement release];
+    [life release];
+    [onTouch release];
+    [super dealloc];
+}
+- (BOOL) canContactMode:(unsigned int)mode
+{
+    contactMode=physics.collisionMask;
+    if(contactMode==0||mode==0) return YES;
+    if(contactMode&mode) return YES;
+    return NO;
+  
+}
+- (BOOL) canContact:(SVTetrisBody *)kbody
+{
+    if(!onTouch.touchParent&&kbody==parent) return NO;
+    if(!onTouch.touchEnemy&&kbody!=parent&&[kbody isKindOfClass:[SvTetrisMonster class]]) return NO;
+    return [self canContactMode:[kbody getContactMode]];
+}
+-(void) Draw
+{
+    [physics Draw];
+}
+-(NSDictionary *) getStatus
+{
+    return [[NSDictionary alloc]initWithObjectsAndKeys:[NSNumber numberWithBool:[life isDead]],@"Dead", nil];
+}
+- (BOOL) SpawnWithParameters:(NSDictionary *)parameters
+{
+    parent=[[parameters valueForKey:@"Parent"] retain];
+    [life setSpawner:parent];
+    [movement setSpawner:parent];
+    [movement setTargetBody:[parameters valueForKey:@"Target"]];
+    [movement setTargetPos:[[parameters valueForKey:@"Target Position"] CGPointValue]];
+    [life setCharges:[[parameters valueForKey:@"Charges"] intValue]];
+    [onTouch setTouchCharges:[[parameters valueForKey:@"Touch Charges"] intValue]];
+    CGPoint initPos;
+    if([parameters valueForKey:@"Initial Position"]!=nil)
+        initPos=[[parameters valueForKey:@"Initial Position"] CGPointValue];
+    else
+       initPos=[parent getPosition];
+    [movement setInitPos:initPos];
+    b2World * w=(b2World *) [[parameters valueForKey:@"World"]pointerValue];
+    if(w==NULL) return NO;
+    world=w;
+    body= [physics createBodyInWorld:w forOwner:parent atPos:initPos];
+    
+    spawned=YES;
+    return YES;
+}
+- (void) Apply:(NSDictionary *)thing
+{
+    SvStatusEffect *teff=[thing valueForKey:@"Effect"];
+    if(teff==nil) return;
+    SvManaPool * cpool=[thing valueForKey:@"Pool"];
+    SVStatusEffectInTime * eff=[[SVStatusEffectInTime alloc] initWithEffect:teff andOrientation:1 andChargedPool:cpool andAdditionalParameters:nil];  
+   
+    if(eff.effect.hasDirectHPEffect)
+    {
+        [life applyDirectDamage:eff.DHPEPS];
+    }
+    if(eff.effect.hasSpriteEffect)
+    {
+      //  SpriteEffect tm=eff.effect.spriteEffect;
+       // [physics.animation setSpriteEffect:&tm];
+    }
+    if(eff.effect.hasForceComponent)
+    {
+        
+        [eff applyForceToBody:body ];
+        
+    }
+      
+    if(eff.effect.hasNormalDamage)
+    {
+        [life applyManaic:eff.damage];
+    }
+      if(eff.effect.hasFrameChange)
+    {
+        //currentFrame=eff.toFrame;
+    }
+    if(eff.effect.canSpawnBody)
+    {
+        ///TODO -needs body framework;
+    }
+ 
+     [eff release];
+    
+}
+- (BOOL) isAlive
+{
+    return ![life isDead];
+}
 @end

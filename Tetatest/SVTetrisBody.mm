@@ -12,6 +12,15 @@
 @implementation SVTetrisBody
 @synthesize touchingBodies;
 @synthesize passingBodies;
+- (id) initWithDictionary:(NSDictionary *)dct
+{
+    return [super init];
+}
+- (void) setParentScene:(SVScene *)scn
+{
+    if(parentScene!=nil) [parentScene release];
+    parentScene=[scn retain];
+}
 - (b2AABB) getAABB
 {
     b2AABB ret;
@@ -241,6 +250,7 @@
 }
 -(void) dealloc
 {
+    [parentScene release];
     [name release];
     [type release];
     [passingBodies release];
@@ -274,5 +284,9 @@
     if(body==NULL)  return;
     b2Vec2 b=b2Vec2(vel.x/PTM_RATIO, vel.y/PTM_RATIO);
     body->SetLinearVelocity(b);
+}
+- (BOOL) isAlive
+{
+    return YES;
 }
 @end

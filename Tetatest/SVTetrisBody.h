@@ -23,6 +23,7 @@ typedef struct
 } b2Template;
 @interface SVTetrisBody :NSObject {
 @public
+    SVScene * parentScene;
     unsigned int contactMode;
     NSMutableSet * touchingBodies;
      NSMutableSet * passingBodies;
@@ -39,7 +40,9 @@ typedef struct
 @property (nonatomic, readonly) NSMutableSet *passingBodies;
 - (unsigned int) getContactMode;
 - (b2AABB) getAABB;
+- (void) setParentScene: (SVScene *) scn;
 - (id) initWithRect: (CGRect) rect andTemplate:(b2Template) temp inWorld:(b2World *) world withName:(NSString *) name andType:(NSString * )type;
+- (id) initWithDictionary: (NSDictionary *) dct;
 - (BOOL) canContactMode:(unsigned int) mode;
 - (BOOL) canContact: (SVTetrisBody *) body;
 - (void) setContactMode: (unsigned int) mode;
@@ -63,6 +66,7 @@ typedef struct
 - (void) recordPosition;
 - (BOOL) checkOscillationatLevel:(float) level upToDiff:(float) diff;
 - (void) destroyBody;
+- (BOOL) isAlive;
 ///////For derivative classes;
 - (void) Update: (double) time;
 - (void) Apply: (NSDictionary *) thing;

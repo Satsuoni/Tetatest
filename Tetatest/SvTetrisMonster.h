@@ -125,7 +125,7 @@ SVAbilityTargets;
     SpriteEffect currentEffect;
     BOOL isTouchingGround;
     NSMutableArray * effects;
-      NSMutableArray *rem;
+    NSMutableArray *rem;
 }
 - (id) initWithDictionary: (NSDictionary *) dict;
 - (void) Update: (double) time;

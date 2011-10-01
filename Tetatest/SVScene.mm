@@ -8,8 +8,14 @@
 
 #import "SVScene.h"
 #import "OpenGLView.h"
-
+#import "SVTetrisBody.h"
+NSMutableArray * movingBodies;
 @implementation SVScene
+@synthesize sceneDictionary;
+- (void) spawnBody:(SVTetrisBody *)body
+{
+    [body setParentScene:self];
+}
 - (id) initWithParent: (OpenGLView *) par
 {
     if((self=[super init]))

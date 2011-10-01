@@ -32,10 +32,15 @@
     NSMutableArray* vertices;
     CGPoint  offset;
     SVAnimatedSprite * animation;
-    NSArray * timeline;
+    NSMutableArray * timeline;// loops?
+    
+    double ctime;
+    int ctml;
+    b2Fixture * localFixture;
     //NSArray * params;
 }
 @property (nonatomic,readonly) SVAnimatedSprite * animation;
+@property (nonatomic,readwrite) b2Fixture* localFixture;
 - (id) initWithDictionary: (NSDictionary *) dct;
 - (b2FixtureDef) getFixtureDefWithOwner;
 
@@ -49,10 +54,14 @@
     BOOL interactWithPassthrough;
     BOOL fixRotation;
     NSMutableArray * fixtures;//svfixturesdefs
+    NSMutableArray * addedFixtures;
     b2Body * body;//a copy don't dealloc
     SVTetrisBody *owner;
-    NSTimeInterval elapsed, looptime;
-    NSArray * timeline;//for adding/removing fixtures...
+    BOOL loop;
+    NSTimeInterval elapsed;
+    NSMutableArray * timeline;//for adding/removing fixtures...
+    double ctime;
+    int ctml;
 }
 @property (nonatomic, readonly) BOOL isSensor;
 @property (nonatomic, readonly) int collisionMask;
@@ -130,12 +139,23 @@
     SvStatusEffect * onSelf;
     SvStatusEffect * onParent;
     SvStatusEffect * onTouchingBody;
+    SvStatusEffect * onPassingBody;
+    // SvStatusEffect * onPassingSelf;
     NSMutableDictionary  *application;
+    int ch;
+    BOOL touchParent;
+    BOOL touchEnemy;
+    BOOL touchBlocks;
 }
+@property (nonatomic,readonly) BOOL touchParent;
+@property (nonatomic,readonly) BOOL touchEnemy;
+@property (nonatomic,readonly) BOOL touchBlocks;
 - (id) initWithDictionary: (NSDictionary *) dct;
 - (void) applyToSelf: (SVTetrisBody *) body;
 - (void) applyToParent: (SVTetrisBody *) parent;
 - (void) applyToTouching: (SVTetrisBody *) touching;
+- (void) applyToPassing: (SVTetrisBody *) passing;
+- (void) setTouchCharges: (int) cha;
 @end
 
 
@@ -172,11 +192,16 @@ typedef enum
     SVMovementAspect *movement;
     SVLifeAspect * life;
     SVTouchAspect * onTouch;
-    SVAnimationAspect * animation;
+    BOOL spawned;
+    //SVAnimationAspect * animation;
 }
+@property (nonatomic,retain) SVTetrisBody * parent;
+- (id) initWithDictionary:(NSDictionary *)dct;
 - (void) Update: (double) time;
 - (void) Apply: (NSDictionary *) thing;
 - (NSDictionary *) getStatus;
 - (BOOL) canContactMode:(unsigned int) mode;
 - (BOOL) canContact: (SVTetrisBody *) body;
+- (BOOL) SpawnWithParameters: (NSDictionary *) parameters;
+- (void) Draw;
 @end

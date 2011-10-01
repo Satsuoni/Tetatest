@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		C64DC82113B1E67B00B29129 /* SVTetrisBody.mm in Sources */ = {isa = PBXBuildFile; fileRef = C64DC82013B1E67B00B29129 /* SVTetrisBody.mm */; };
 		C64DC82513B227C500B29129 /* SvManaPool.mm in Sources */ = {isa = PBXBuildFile; fileRef = C64DC82413B227C500B29129 /* SvManaPool.mm */; };
+		C6B3F76F14374956004F6865 /* SVTetrisBlock.mm in Sources */ = {isa = PBXBuildFile; fileRef = C6B3F76E14374955004F6865 /* SVTetrisBlock.mm */; };
 		C6B5F7B713B2534A005F4A3E /* empty256.png in Resources */ = {isa = PBXBuildFile; fileRef = C6B5F7B613B2534A005F4A3E /* empty256.png */; };
 		C6B9071113BB58BB0002E641 /* SvStatusEffect.mm in Sources */ = {isa = PBXBuildFile; fileRef = C6B9071013BB58BB0002E641 /* SvStatusEffect.mm */; };
 		C6B9A40C13B8DF7E004184E8 /* Data.plist in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A40B13B8DF7E004184E8 /* Data.plist */; };
@@ -90,6 +91,8 @@
 		C64DC82013B1E67B00B29129 /* SVTetrisBody.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SVTetrisBody.mm; sourceTree = "<group>"; };
 		C64DC82313B227C400B29129 /* SvManaPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SvManaPool.h; sourceTree = "<group>"; };
 		C64DC82413B227C500B29129 /* SvManaPool.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SvManaPool.mm; sourceTree = "<group>"; };
+		C6B3F76D14374955004F6865 /* SVTetrisBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVTetrisBlock.h; sourceTree = "<group>"; };
+		C6B3F76E14374955004F6865 /* SVTetrisBlock.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SVTetrisBlock.mm; sourceTree = "<group>"; };
 		C6B5F7B613B2534A005F4A3E /* empty256.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = empty256.png; path = Cocos3DMathLib/empty256.png; sourceTree = "<group>"; };
 		C6B9070F13BB58BA0002E641 /* SvStatusEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SvStatusEffect.h; sourceTree = "<group>"; };
 		C6B9071013BB58BB0002E641 /* SvStatusEffect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SvStatusEffect.mm; sourceTree = "<group>"; };
@@ -283,6 +286,8 @@
 				C64DC82413B227C500B29129 /* SvManaPool.mm */,
 				C6BA170C13A792280060ECF9 /* SVTetris.h */,
 				C6BA170D13A792280060ECF9 /* SVTetris.mm */,
+				C6B3F76D14374955004F6865 /* SVTetrisBlock.h */,
+				C6B3F76E14374955004F6865 /* SVTetrisBlock.mm */,
 				C64DC81F13B1E67B00B29129 /* SVTetrisBody.h */,
 				C64DC82013B1E67B00B29129 /* SVTetrisBody.mm */,
 				C6B9A40B13B8DF7E004184E8 /* Data.plist */,
@@ -602,6 +607,7 @@
 				C6C564CB13B4BB3D0061DEC6 /* SvTetrisMonster.mm in Sources */,
 				C6B9071113BB58BB0002E641 /* SvStatusEffect.mm in Sources */,
 				C6FC321413C358FE00BC431B /* SVSpawnedBody.mm in Sources */,
+				C6B3F76F14374956004F6865 /* SVTetrisBlock.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

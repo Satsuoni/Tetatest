@@ -11,6 +11,7 @@
 #import "OpenGLView.h"
 #import "Box2D.h"
 #import "SVTetrisBody.h"
+#import "SVTetrisBlock.h"
 #import "SvManaPool.h"
 #define ARC4RANDOM_MAX      4294967296.0f
 #define PTM_RATIO 16
@@ -117,7 +118,7 @@ public:
     double erasetime[T_HEIGHT];
     double erasectime[T_HEIGHT];
     NSTimeInterval prevtime;
-    SVTetrisBody * bodyGrid[T_ROW][T_HEIGHT];
+    SVTetrisBlock * bodyGrid[T_ROW][T_HEIGHT];
     b2World * world;
     CGRect gridrect;
     double  ERASE_TIME;
@@ -206,4 +207,5 @@ public:
 - (void) step;
 - (void) Render;
 - (id) initWithParent:(OpenGLView *)par andBackdrop:(NSString *) backdr;
+- (void) cleanupBodies;
 @end

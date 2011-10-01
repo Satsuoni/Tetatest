@@ -498,6 +498,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         step=0.8;
         currentTime=0;
         fullTime=0;
+        if(movingBodies!=nil){[movingBodies release]; movingBodies=nil;}
         movingBodies=[[NSMutableArray alloc] init];
       //  CGSize screenSize = parent.bounds.size;
         
@@ -1064,11 +1065,34 @@ if(isDragging)
     text.ul_position=CGPointMake(620, 30);
     [text Draw];
     reduce=NO;
+    [self cleanupBodies];
 }
 - (void) clearDisplacement
 {
     [sDisp removeAllObjects];
     [sDispVals removeAllObjects];
+}
+- (void) spawnBody:(SVTetrisBody *)body
+{
+    [body setParentScene:self];
+    [movingBodies addObject:body];
+}
+- (void) cleanupBodies
+{
+    NSMutableArray * rem=[NSMutableArray new];
+    for(SVTetrisBody * tdb in movingBodies)
+    {
+        if(![tdb isAlive])
+        {
+            [rem addObject:tdb];
+        }
+    }
+    [movingBodies removeObjectsInArray:rem];
+    for(SVTetrisBody * body in rem)
+    {
+        [body release];
+    }
+    [rem release];
 }
 - (void)dealloc
 {
@@ -1080,6 +1104,7 @@ if(isDragging)
     for(int i=0;i<4;i++)
         [walls[i] release];
     [movingBodies release];
+    movingBodies=nil;
     delete world;
     [cFigure release];
     [Grid release];
