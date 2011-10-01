@@ -113,7 +113,7 @@ public:
 
 @interface TGrid : NSObject {
 @private
-    int Grid[T_ROW][T_HEIGHT];
+    //int Grid[T_ROW][T_HEIGHT];
     BOOL erasing[T_HEIGHT];
     double erasetime[T_HEIGHT];
     double erasectime[T_HEIGHT];
@@ -132,11 +132,15 @@ public:
 @property (nonatomic,readonly) SvManaPool * manaPool;
 @property (nonatomic,readwrite) double ERASE_TIME;
 - (BOOL) isGridFilledatX: (int) x andY:(int) y;
-- (void) fixBlockAtX: (int) x Y: (int) y withType: (int) type;
-- (void) Draw: (SVAnimatedSprite *) blocks inRect:(CGRect) inside;
+//- (void) fixBlockAtX: (int) x Y: (int) y withType: (int) type;
+//- (void) Draw: (SVAnimatedSprite *) blocks inRect:(CGRect) inside;
 - (void) Reset;
 //- (void) fixFigureBlockAt:(int) x Y: (int) y withType: (int) type;
-//- (void) unfixFigureBlockAt:(int) x Y: (int) y ;
+- (void) unfixFigureBlock: (SVTetrisBlock *) block;
+- (void) fixBlock: (SVTetrisBlock *)bl AtX:(int)x Y:(int)y;
+- (void) getManaFromBlock: (SVTetrisBlock *) bl;
+- (void) dropDownFromBlock: (SVTetrisBlock *) bl;
+- (void) startRemovingLine: (int) line;
 @end
 
 
@@ -149,9 +153,12 @@ public:
     int cx;
     int cy;
     b2World *world;
-    SVTetrisBody * bodies[4];
+    SVTetrisBlock * bodies[4];
     CGRect gridrect;
     BOOL isMissing;
+    SVAnimatedSprite * blocks;
+     SVScene * parent;
+    TGrid * grid;
 }
 @property (nonatomic,assign) b2World *world;
 @property (nonatomic,assign) CGRect gridrect;
@@ -160,17 +167,20 @@ public:
 - (void) RotateLeft;
 - (void) RotateRight;
 - (BOOL) isFigureMissing;
-- (BOOL) FitsOnGrid: (TGrid* ) grid;
+- (BOOL) FitsOnGrid;
+- (void) setBlocks: (SVAnimatedSprite *) ib;
+- (void) setGrid:(TGrid *) grd;
+- (void) setParent: (SVScene * )parent;
 - (void) Draw: (SVAnimatedSprite *) blocks inRect:(CGRect) inside;
 - (id) initWithProbabilityMatrix: (float *) matr andTypeProbability: (float *) types;
-- (void) fixOnGrid: (TGrid *) grid;
+- (void) fixOnGrid;
 - (void) reInitWithProbabilityMatrix: (float *) matr andTypeProbability: (float *) types;
 - (BOOL) isPresentonX:(int) x Y:(int) y;
 - (void) updateBodies;
 - (void) createBodies;
 - (void) removeBodies;
 - (BOOL) isBodyInFigure: (SVTetrisBody *) body;
-- (NSArray *) reduceToFallingBlocks;
+- (void) reduceToFallingBlocks;
 @end
 
 @interface SVTetris : SVScene {

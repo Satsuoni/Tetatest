@@ -127,7 +127,7 @@
 @property (nonatomic, readonly) SvManaPool * manaDamage;
 @property (nonatomic, readonly)  NSString * bodyID;
 - (id) initWithDictionary :(NSDictionary *) dic;
-
+- (b2Vec2) getAppliedForce: (b2Body *) body withOrientation :(int) ori direction:(CGPoint) dir andDistance: (float) dis;
 - (void) applyForceToBody: (b2Body *) body withOrientation :(int) ori direction:(CGPoint) dir andDistance: (float) dis;
 @end
 @interface SVStatusEffectInTime : NSObject {
@@ -151,5 +151,5 @@
 - (int) Update: (double) elapsed ;
 - (BOOL) Expired;
 - (void) applyForceToBody: (b2Body *) body ;
-
+- (b2Vec2) getForceToBody: (b2Body *) body ;
 @end

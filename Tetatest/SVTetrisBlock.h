@@ -19,27 +19,24 @@
     BOOL isErasing;
     double startTime;
     double elapsed;
+    double tt;
     double eraseTime;
     double eraseStep;
     BOOL isErased;
     BOOL pulldown;// after erasing, pull down blocks in grid above it
     BOOL isinGrid;//fixed in grid;
-    BOOL isInFigure;//part of the figure;
+    BOOL isinFigure;//part of the figure;
 }
 @property (nonatomic,readonly) BOOL isinFigure;
 @property (nonatomic,readonly) BOOL isinGrid;
 @property (nonatomic,readonly) BOOL freeFall;
+@property (nonatomic,readonly) BOOL isErased;
+@property (nonatomic,readonly) int blocktype; 
 - (id) initWithType: (int) itype free: (BOOL) free inWorld:(b2World *) world withBlocks:(SVAnimatedSprite *) blocks onGrid:(TGrid *) grid atPos: (CGPoint)pos;
-- (unsigned int) getContactMode;
-- (void) setParentScene: (SVScene *) scn;
 - (id) initWithDictionary: (NSDictionary *) dct;
-- (void) Reset;
-- (NSString *) getName;
-- (NSString *) getType;
-- (void) setType: (NSString *) str;
-- (void) updatePosition:(CGPoint) pos;
-- (CGPoint) getPosition;
-- (BOOL) sleeps;
+
+- (void) fixAtX:(int) x andY:(int)y;
+
 - (void) Draw;
 - (BOOL) isAlive;
 ///////For derivative classes;
@@ -48,4 +45,6 @@
 - (NSDictionary *) getStatus;
 - (void) startErasing;
 - (void) startErasingWithPulldown;
+- (void) unfix;
+- (void) moveToGridatX:(int) x andY: (int) y;
 @end

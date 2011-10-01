@@ -26,6 +26,10 @@ NSMutableArray * movingBodies;
     }
     return self;
 }
+- (double) getDoubleParameter:(NSString *)pname
+{
+    return 0;
+}
 - (void) Update
 {
     

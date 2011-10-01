@@ -30,5 +30,6 @@
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event;
 - (void) setBackdrop:(SVSprite *) back;
 - (void) spawnBody: (SVTetrisBody *) body;
+- (double) getDoubleParameter: (NSString *) pname;
 //- (void) setBackdropwithFile:(NSString *)file;
 @end

@@ -9,6 +9,7 @@
 #import "SVTetris.h"
 #import "Box2D.h"
 #import "SVTetrisBody.h"
+#import "SVTetrisBlock.h"
 #import "SvTetrisMonster.h"
 void ContactListener::BeginContact(b2Contact * contact)
 {
@@ -85,6 +86,43 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 @synthesize ERASE_TIME;
 @synthesize manaGain;
 @synthesize manaPool;
+- (void) unfixFigureBlock:(SVTetrisBlock *)block
+{
+    for(int x=0;x<T_ROW;x++)
+        for(int y=0;y<T_HEIGHT;y++)
+        {
+            if(bodyGrid[x][y]==block)
+                bodyGrid[x][y]=nil;
+        }
+}
+- (void) fixBlock:(SVTetrisBlock *)bl AtX:(int)x Y:(int)y
+{
+    if(bodyGrid[x][y]!=nil)
+    {
+        NSLog(@"Wrong block position...");
+        [bodyGrid[x][y] release];
+        bodyGrid[x][y]=nil;
+    }
+    bodyGrid[x][y]=bl;
+    BOOL fill=YES;
+    for(int x=0;x<T_ROW;x++)
+        if(bodyGrid[x][y]==nil){fill=NO;break;}
+    if(fill)
+        [self startRemovingLine:y];
+}
+- (void) startRemovingLine:(int)line
+{
+    for(int x=0;x<T_ROW;x++)
+    {
+        [bodyGrid[x][line] startErasingWithPulldown];
+    }
+
+        
+}
+- (void) getManaFromBlock:(SVTetrisBlock *)bl
+{
+     [manaPool addMana:bl.blocktype amount:[manaGain getMana:bl.blocktype]];
+}
 - (id) init
 {
     if((self=[super init]))
@@ -94,7 +132,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         manaPool=[[SvManaPool alloc] init];
         for(int x=0;x<T_ROW;x++)
             for(int y=0;y<T_HEIGHT;y++)
-                Grid[x][y]=-1;
+               bodyGrid[x][y]=nil;
     }
     return self;
 }
@@ -117,7 +155,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 - (BOOL) isGridFilledatX:(int)x andY:(int)y
 {
     if(x<0||x>=T_ROW||y<0||y>=T_HEIGHT) return YES;
-    if(Grid[x][y]!=-1) return YES;
+    if(bodyGrid[x][y]!=nil) return YES;
     return NO;
 }
 - (void) Reset
@@ -131,10 +169,29 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
                 [bodyGrid[x][y] release];
                 bodyGrid[x][y]=nil;
             }
-            Grid[x][y]=-1;
+        
         }
 }
--(void) Draw:(SVAnimatedSprite *)blocks inRect:(CGRect)inside
+- (void) dropDownFromBlock:(SVTetrisBlock *)bl
+{
+    if(![bl isErased]) return;
+    for(int x=0;x<T_ROW;x++)
+        for(int y=0;y<T_HEIGHT;y++)
+        {
+            if(bodyGrid[x][y]==bl)
+            {
+                for(int yy=y;yy>0;yy--)
+                {
+                   
+                      
+                        bodyGrid[x][yy]=bodyGrid[x][yy-1];
+                        [bodyGrid[x][yy] updatePosition:CGPointMake(gridrect.origin.x+x*30, gridrect.origin.y+yy*30)];
+                  
+                }
+            }
+        }
+}
+/*-(void) Draw:(SVAnimatedSprite *)blocks inRect:(CGRect)inside
 {
     blocks.virt_frame=CGSizeMake(30, 30);
     NSTimeInterval now=[NSDate timeIntervalSinceReferenceDate];
@@ -248,7 +305,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
     bodyGrid[x][y]=bd;
     
     
-}
+}*/
 
 @end
 @implementation TFigure
@@ -263,6 +320,8 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
       for(int i=0;i<4;i++)
       {
           CGPoint pos=CGPointMake((cx+xs[i])*30+gridrect.origin.x+1, (cy+ys[i])*30+gridrect.origin.y+1);
+          if(!bodies[i].isinFigure) bodies[i]=nil;
+          if(bodies[i]==nil) continue;
           [bodies[i] updatePosition:pos];
       }
   }
@@ -270,26 +329,30 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 - (void) removeBodies
 {
     for(int i=0;i<4;i++)
-    {   [bodies[i] destroyBody];
-        [bodies[i] release];
+    {   
+        //[bodies[i] destroyBody];
+       // [bodies[i] release];
         bodies[i]=nil;
     }  
+}
+-  (void)setBlocks:(SVAnimatedSprite *)ib
+{
+    blocks=ib;
+}
+- (void) setGrid:(TGrid *)grd
+{
+    grid=grd;
 }
 - (void) createBodies
 {
     for(int i=0;i<4;i++)
     {
-        CGRect pos=CGRectMake((cx+xs[i])*30+gridrect.origin.x+1, (cy+ys[i])*30+gridrect.origin.y+1,28,28);
-        b2Template temp;
-        temp.type=b2_kinematicBody;
-        temp.density=0;
-        temp.friction=0.1;
-        temp.restitution=0.4;
-        temp.isSensor=NO;
-        SVTetrisBody * bd=[[SVTetrisBody alloc] initWithRect:pos andTemplate:temp inWorld:world withName:@"Block" andType:[NSString stringWithFormat: @"Figure Block%d",types[i]]];
+        CGPoint pos=CGPointMake((cx+xs[i])*30+gridrect.origin.x+1, (cy+ys[i])*30+gridrect.origin.y+1);
+     
+        SVTetrisBlock * bd=[[SVTetrisBlock alloc] initWithType:types[i] free:NO inWorld:world withBlocks:blocks onGrid:grid atPos:pos];
         [bd setContactMode:1];
         bodies[i]=bd;
-
+        [parent spawnBody:bodies[i]];
     }   
 }
 - (BOOL) isBodyInFigure:(SVTetrisBody *)body
@@ -300,6 +363,9 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         return NO;
     for(int i=0;i<4;i++)
     {
+        if(!bodies[i].isinFigure) bodies[i]=nil;
+        if(bodies[i]==nil) continue;
+        if(bodies[i]==body)return NO;
         if([body isPresentonX:cx+xs[i] Y:cy+ys[i] withRect:gridrect])
             return YES;
     }
@@ -311,33 +377,29 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
     float cm2[]={1,1,1,1,1};
     return [self initWithProbabilityMatrix: cm1 andTypeProbability: cm2];
 }
-- (NSArray* ) reduceToFallingBlocks
+- (void) reduceToFallingBlocks
 {
-    [self removeBodies];
-    NSMutableArray * arr=[[NSMutableArray alloc] initWithCapacity:4];
+    
+   // NSMutableArray * arr=[[NSMutableArray alloc] initWithCapacity:4];
     for(int i=0;i<4;i++)
     {
-        CGRect pos=CGRectMake((cx+xs[i])*30+gridrect.origin.x+1, (cy+ys[i])*30+gridrect.origin.y+1,28,28);
-        b2Template temp;
-        temp.type=b2_dynamicBody;
-        temp.density=1.0;
-        temp.friction=0.1;
-        temp.restitution=0.3;
-        temp.isSensor=NO;
-        temp.isBullet=YES;
-        SVTetrisBody * bd=[[SVTetrisBody alloc] initWithRect:pos andTemplate:temp inWorld:world withName:@"FreeBlock" andType:[NSString stringWithFormat: @"Falling Block%d",types[i]]];
-        [bd setContactMode:1];
-        [arr addObject:bd];
-        unsigned int fx=(arc4random()%2000);
-        [bd applyDirectImpulse:CGPointMake((float)fx-1000., (float)(arc4random()%3000)-1500.)];           
-        [bd release];
+        if(!bodies[i].isinFigure) bodies[i]=nil;
+        if(bodies[i]==nil) continue;
+        
+        [bodies[i] unfix];
+        [bodies[i] applyDirectImpulse:CGPointMake(arc4random()%2000-1000,arc4random()%2000-1000)];
+        bodies[i]=nil;
     } 
+   
     isMissing=YES;
-    return [arr autorelease];
+   // return [arr autorelease];
 }
 - (BOOL) isFigureMissing
 {
-    return isMissing;
+    if(isMissing) return YES;
+    for(int i=0;i<4;i++)
+        if(bodies[i]!=nil&&bodies[i].isinFigure) return NO;
+    return YES;
 }
 - (void) reInitWithProbabilityMatrix: (float *) matr andTypeProbability: (float *) typef
 {
@@ -430,13 +492,15 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 {
     for(int i=0;i<4;i++)
     {
+        if(!bodies[i].isinFigure) bodies[i]=nil;
+        if(bodies[i]==nil) continue;
         if(cx+xs[i]==x&&cy+ys[i]==y) return YES;
     }
     return NO;
 }
 - (void) Draw:(SVAnimatedSprite *)blocks inRect:(CGRect)inside
 {
-    for(int i=0;i<4;i++)
+  /*  for(int i=0;i<4;i++)
     {
         float tx=inside.origin.x+30*(cx+xs[i]);
         float ty=inside.origin.y+30*(cy+ys[i]);
@@ -444,9 +508,9 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         blocks.ul_position=CGPointMake(tx, ty);
         [blocks setFrame:types[i]];
         [blocks Draw];
-    }
+    }*/
 }
-- (BOOL) FitsOnGrid:(TGrid *)grid
+- (BOOL) FitsOnGrid
 {
     for(int i=0;i<4;i++)
     {
@@ -455,13 +519,21 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
     }
     return YES;
 }
-- (void) fixOnGrid:(TGrid *)grid
+- (void) fixOnGrid
 {
-    if(![self FitsOnGrid:grid]) return;
+    if(![self FitsOnGrid]) return;
     for(int i=0;i<4;i++)
     {
-        [grid  fixBlockAtX:cx+xs[i] Y:cy+ys[i] withType:types[i]];
+        if(!bodies[i].isinFigure) bodies[i]=nil;
+        if(bodies[i]==nil) continue;
+        [bodies[i] moveToGridatX:cx+xs[i] andY:cy+ys[i]];
+        [bodies[i] fixAtX:cx+xs[i] andY:cy+ys[i]];
+      //  [grid  fixBlockAtX:cx+xs[i] Y:cy+ys[i] withType:types[i]];
     }
+}
+- (void) setParent:(SVScene *)iparent
+{
+    parent=iparent;
 }
 @end
 
@@ -492,6 +564,9 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
  
         Grid=[[TGrid alloc] init];
         cFigure=[[TFigure alloc] init];
+        [cFigure setGrid:Grid];
+        [cFigure setParent:self];
+        [cFigure setBlocks:_blocks];
         cFigure.cx=5;
         cFigure.cy=1;
     
@@ -617,9 +692,9 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
     
     if(![self attemptMovingFigureDown])
     {
-        [cFigure removeBodies];
-        [cFigure fixOnGrid:Grid];
-        
+       
+        [cFigure fixOnGrid];
+         [cFigure removeBodies];
     float cm1[]={1,1,1,1,1,1,1};
     float cm2[]={1,1,1,1,1};
         [cFigure reInitWithProbabilityMatrix:cm1 andTypeProbability:cm2];
@@ -639,7 +714,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 }
 - (BOOL) attemptPlacingFigure
 {
-    if(![cFigure FitsOnGrid:Grid])//simplest case
+    if(![cFigure FitsOnGrid])//simplest case
     { return NO;}
     for(SVTetrisBody * body in movingBodies)
     {
@@ -667,7 +742,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 - (BOOL) attemptMovingFigureDown
 {
     cFigure.cy++;
-    if(![cFigure FitsOnGrid:Grid])//simplest case
+    if(![cFigure FitsOnGrid])//simplest case
     {cFigure.cy--; return NO;}
     for(SVTetrisBody * body in movingBodies)
     {
@@ -693,7 +768,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 - (BOOL) attemptMovingFigureRight
 {
     cFigure.cx++;
-    if(![cFigure FitsOnGrid:Grid])//simplest case
+    if(![cFigure FitsOnGrid])//simplest case
     {cFigure.cx--; return NO;}
     for(SVTetrisBody * body in movingBodies)
     {
@@ -719,7 +794,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 - (BOOL) attemptMovingFigureLeft
 {
     cFigure.cx--;
-    if(![cFigure FitsOnGrid:Grid])//simplest case
+    if(![cFigure FitsOnGrid])//simplest case
     {cFigure.cx++; return NO;}
     for(SVTetrisBody * body in movingBodies)
     {
@@ -924,88 +999,23 @@ if(isDragging)
             fullTime-=step;
             [self step];
         }
+            [self cleanupBodies];
         if([movingBodies count]>0)
         {
-        NSMutableArray * tD=[[NSMutableArray alloc] init];
+       // NSMutableArray * tD=[[NSMutableArray alloc] init];
         for(SVTetrisBody * body in movingBodies)
         {
-            if([[body getType] hasPrefix:@"Falling Block"])
-            {
-                [body applyLinearDamping:0.1];
-                NSString *tp=[body getType];
-                tp=[tp stringByReplacingOccurrencesOfString:@"Falling Block" withString:@""];
-                _blocks.effect=1;
-                [_blocks setEffectParameter:0 toValue:0.5];
-            _blocks.virt_frame=[body getBoundingBox].size;
-                _blocks.ul_position=[body getPosition];
-                [_blocks setFrame:[tp intValue]];
-                [_blocks Draw];
-                _blocks.effect=0;
-               CGPoint vel=[body getVelocity];
-               float v2=vel.x*vel.x+vel.y*vel.y;
-                if(v2>50)
-                    [body applyLinearDamping:0.2];
-                [body recordPosition];
-                if([body sleeps]||[body checkOscillationatLevel:0.35 upToDiff:0.1])
-                {
-                    CGPoint pos=[body getPosition];
-                    int px=pos.x-gridrect.origin.x-1;
-                    int py=pos.y-gridrect.origin.y-1;
-                    int dpx=px%30;
-                    int dpy=py%30;
-                    int rx=px/30;
-                    int ry=py/30;
-                    if(dpx>15)
-                    {
-                        rx++;
-                        dpx=30-dpx;
-                    }
-                    if(dpy>15)
-                    {
-                        ry++;
-                        dpy=30-dpy;
-                    }
-                    if(dpx>5||dpy>5)
-                    {
-                        float ix=px%30;
-                        float iy=py%30;
-                        if(ix>=15.0f)
-                        {
-                            ix=ix-30;
-                        }
-                        if(iy>=15.0f)
-                        {
-                            iy=iy-30;
-                        }
-                        [body applyDirectVelocity:CGPointMake(-ix*2, -iy*2)];
-                    }
-                    else
-                    {
-                        NSString *tp=[body getType];
-                        tp=[tp stringByReplacingOccurrencesOfString:@"Falling Block" withString:@""];
-                        [Grid fixBlockAtX:rx Y:ry withType:[tp intValue]];
-                        [body destroyBody];
-                        [tD addObject:body];
-                    }
-                }
-             
-            }
-            else
-            {
-               if([[body getType] isEqualToString:@"Monster"] )
-                   [body Draw];
-            }
-           }
-            [movingBodies removeObjectsInArray:tD];
-            [tD removeAllObjects];
-            [tD release];
+            [body Draw];
+         
+        }
+           
         }
         if(reduce)
         {
             if([self attemptPlacingFigure]&&![cFigure isFigureMissing])
             {
-            NSArray * temp=[cFigure reduceToFallingBlocks];
-            [movingBodies addObjectsFromArray:temp];
+            [cFigure reduceToFallingBlocks];
+           
             }
         }
     }
@@ -1048,8 +1058,8 @@ if(isDragging)
         }
        
     }*/
-   [Grid Draw:_blocks inRect:gridrect];
-  if(![cFigure isFigureMissing]) [cFigure Draw:_blocks inRect:gridrect];
+  // [Grid Draw:_blocks inRect:gridrect];
+ // if(![cFigure isFigureMissing]) [cFigure Draw:_blocks inRect:gridrect];
 
     [text renderText:
      [NSString  stringWithFormat:@"SUN: %d\rMNT: %d\rFRS: %d\rSEA: %d\rSWP: %d\rSPR: %d",
@@ -1065,8 +1075,7 @@ if(isDragging)
     text.ul_position=CGPointMake(620, 30);
     [text Draw];
     reduce=NO;
-    [self cleanupBodies];
-}
+   }
 - (void) clearDisplacement
 {
     [sDisp removeAllObjects];

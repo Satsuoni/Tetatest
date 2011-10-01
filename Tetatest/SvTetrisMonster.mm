@@ -600,11 +600,11 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
     if(eff.effect.canSpawnBody)
     {
         ///TODO -needs body framework;
-        SVSpawnedBody * bdy;
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"Data" ofType:@"plist"];
-        NSDictionary *rd=[NSDictionary dictionaryWithContentsOfFile:path];
-        NSDictionary * bodies=[rd valueForKey:@"Spawned Bodies"];
-        bdy=[[SVSpawnedBody alloc]initWithDictionary:[bodies valueForKey:eff.effect.bodyID]];
+       // SVSpawnedBody * bdy;
+      //  NSString *path = [[NSBundle mainBundle] pathForResource:@"Data" ofType:@"plist"];
+      //  NSDictionary *rd=[NSDictionary dictionaryWithContentsOfFile:path];
+      //  NSDictionary * bodies=[rd valueForKey:@"Spawned Bodies"];
+      //  bdy=[[SVSpawnedBody alloc]initWithDictionary:[bodies valueForKey:eff.effect.bodyID]];
         
        // [movingBodies addObject:bdy];
     }

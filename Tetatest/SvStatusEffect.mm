@@ -248,7 +248,52 @@
     }
     return self;
 }
-
+- (b2Vec2) getAppliedForce: (b2Body *) body withOrientation:(int)ori direction:(CGPoint)dir andDistance:(float)dis
+{
+    if(!hasForceComponent)return b2Vec2(0.0,0.0);
+    
+    b2Vec2 p=b2Vec2(0.0,0.0);
+    float mass=body->GetMass();
+    double ret=1;
+    if(parameters.acceptDistance)
+    {
+        
+        if(parameters.useSDistanceForForce||parameters.useLDistanceForForce)
+        {
+            
+            if(parameters.invertDistance)
+                dis=1/(dis+1);
+            if(parameters.useSDistanceForDamage)
+                dis=dis*dis;
+            ret*=dis*parameters.dFCoef;
+        }
+        
+    }
+    if(parameters.acceptDirection)
+    {
+        
+        b2Vec2 f=b2Vec2((force.x+mass*acceleration.x), (force.y+mass*acceleration.y));
+        ret*=f.Length();
+        float ln=sqrt(dir.x*dir.x+dir.y*dir.y);
+        b2Vec2 nf=b2Vec2(dir.x*ret/ln,dir.y*ret/ln);
+        return nf;
+    }
+    else
+    {
+        if(ori==0)
+        {
+            b2Vec2 nf=b2Vec2((force.x+mass*acceleration.x)*ret, (force.y+mass*acceleration.y)*ret);
+            return nf;
+        }
+        else
+        {
+            b2Vec2 nf=b2Vec2((force.x+mass*acceleration.x)*ret*ori, (force.y+mass*acceleration.y)*ret*ori);
+            
+            return nf;
+        }
+    }
+    return b2Vec2(0.0,0.0);
+}
 - (void) applyForceToBody: (b2Body *) body withOrientation:(int)ori direction:(CGPoint)dir andDistance:(float)dis
 {
     if(!hasForceComponent)return ;
@@ -339,7 +384,13 @@
     else
         [effect applyForceToBody:body withOrientation:0 direction:direction andDistance:distance];
   }
-
+- (b2Vec2) getForceToBody: (b2Body *) body 
+{
+    if(effect.parameters.orientationApplies)
+        return [effect getAppliedForce:body withOrientation:orientation direction:direction andDistance:distance];
+    else
+      return  [effect getAppliedForce:body withOrientation:0 direction:direction andDistance:distance];
+}
 - (id) initWithEffect:(SvStatusEffect *)effecta andOrientation:(int)ori andCharges:(int)icharges andAdditionalParameters:(NSDictionary *)dct
 {
     if((self=[super init]))
