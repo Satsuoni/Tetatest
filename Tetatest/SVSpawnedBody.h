@@ -104,6 +104,7 @@
     CGPoint minRandomVelOnce, maxRandomVelOnce;//random initial velocities
 }
 @property (nonatomic,readonly) BOOL useTarget;
+@property (nonatomic,readonly) BOOL useTargetBody; 
 @property (nonatomic,readonly) int initialPosition;
 - (id) initWithDictionary: (NSDictionary *) dct;
 - (void) setTargetBody: (SVTetrisBody *) bdy;
@@ -148,10 +149,12 @@
     BOOL touchParent;
     BOOL touchEnemy;
     BOOL touchBlocks;
+    BOOL touchSpawns;
 }
 @property (nonatomic,readonly) BOOL touchParent;
 @property (nonatomic,readonly) BOOL touchEnemy;
 @property (nonatomic,readonly) BOOL touchBlocks;
+@property (nonatomic,readonly) BOOL touchSpawns;
 - (id) initWithDictionary: (NSDictionary *) dct;
 - (void) applyToSelf: (SVTetrisBody *) body;
 - (void) applyToParent: (SVTetrisBody *) parent;

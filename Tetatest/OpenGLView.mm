@@ -522,7 +522,7 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
     //offset the rect by the X and Y we want to start the crop
     //from in order to cut off anything before them
     CGRect drawRect = CGRectMake(rect.origin.x * -1,
-                                 rect.origin.y * -1,
+                                 rect.origin.y * 1,
                                  imageToCrop.size.width,
                                  imageToCrop.size.height);
     

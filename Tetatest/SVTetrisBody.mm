@@ -14,7 +14,13 @@
 @synthesize passingBodies;
 - (id) initWithDictionary:(NSDictionary *)dct
 {
-    return [super init];
+   self=[super init];
+    if(self)
+    {
+        passingBodies=[[NSMutableSet alloc]init];
+        touchingBodies=[NSMutableSet new];
+    }
+    return self;
 }
 - (void) setParentScene:(SVScene *)scn
 {
@@ -239,6 +245,7 @@
 }
 - (void) addTouchingBody:(SVTetrisBody *)svbody
 {
+    if(touchingBodies==nil) touchingBodies=[NSMutableSet new];
     if(![touchingBodies containsObject:svbody])
         [touchingBodies addObject:svbody];
 }

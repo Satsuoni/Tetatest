@@ -39,7 +39,8 @@ void ContactListener::PreSolve(b2Contact * contact, const b2Manifold *old )
     const b2Body* bodyB = contact->GetFixtureB()->GetBody();
     SVTetrisBody *bA=(SVTetrisBody*) bodyA->GetUserData();
     SVTetrisBody *bB=(SVTetrisBody*) bodyB->GetUserData();
-    if(![bA canContact:bB])
+   
+    if(![bA canContact:bB]||![bB canContact:bA])
     {
         [bA.passingBodies addObject:bB];
         [bB.passingBodies addObject:bA];
@@ -57,8 +58,8 @@ void ContactListener::PostSolve(b2Contact * contact, const b2ContactImpulse *imp
     const b2Body* bodyB = contact->GetFixtureB()->GetBody();
     SVTetrisBody *bA=(SVTetrisBody*) bodyA->GetUserData();
     SVTetrisBody *bB=(SVTetrisBody*) bodyB->GetUserData();
-    [bA applyImpulse:CGPointMake(impulse->tangentImpulses[0]+impulse->normalImpulses[0], impulse->tangentImpulses[1]+impulse->normalImpulses[1])];
-       [bB applyImpulse:CGPointMake(-(impulse->tangentImpulses[0]+impulse->normalImpulses[0]),-( impulse->tangentImpulses[1]+impulse->normalImpulses[1]))];
+   // [bA applyImpulse:CGPointMake(impulse->tangentImpulses[0]+impulse->normalImpulses[0], impulse->tangentImpulses[1]+impulse->normalImpulses[1])];
+   //    [bB applyImpulse:CGPointMake(-(impulse->tangentImpulses[0]+impulse->normalImpulses[0]),-( impulse->tangentImpulses[1]+impulse->normalImpulses[1]))];
 }
 float rndup(float up)
 {
@@ -92,6 +93,15 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         for(int y=0;y<T_HEIGHT;y++)
         {
             if(bodyGrid[x][y]==block)
+                bodyGrid[x][y]=nil;
+        }
+}
+- (void) cleanGrid
+{
+    for(int x=0;x<T_ROW;x++)
+        for(int y=0;y<T_HEIGHT;y++)
+        {
+            if(!bodyGrid[x][y].isinGrid)
                 bodyGrid[x][y]=nil;
         }
 }
@@ -200,8 +210,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 @synthesize gridrect;
 - (void) updateBodies
 {
-  if(bodies[0]!=nil)
-  {
+  
       for(int i=0;i<4;i++)
       {
           CGPoint pos=CGPointMake((cx+xs[i])*30+gridrect.origin.x+1, (cy+ys[i])*30+gridrect.origin.y+1);
@@ -209,7 +218,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
           if(bodies[i]==nil) continue;
           [bodies[i] updatePosition:pos];
       }
-  }
+ 
 }
 - (void) removeBodies
 {
@@ -247,6 +256,11 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
     for(int i=0;i<4;i++)
     {
         if(!bodies[i].isinFigure) bodies[i]=nil;
+        if(bodies[i]==nil) continue;
+        if(bodies[i]==body)return NO;
+    }
+    for(int i=0;i<4;i++)
+    {
         if(bodies[i]==nil) continue;
         if(bodies[i]==body)return NO;
         if([body isPresentonX:cx+xs[i] Y:cy+ys[i] withRect:gridrect])
@@ -397,6 +411,8 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 {
     for(int i=0;i<4;i++)
     {
+        if(!bodies[i].isinFigure) bodies[i]=nil;
+        if(bodies[i]==nil) continue;
         if([grid isGridFilledatX:cx+xs[i] andY:cy+ys[i]])
             return NO;
     }
@@ -430,7 +446,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         NSDictionary *rd=[NSDictionary dictionaryWithContentsOfFile:path];
         self.sceneDictionary=rd;
         NSDictionary * dsprites=[rd valueForKey:@"Sprites"];
-        NSArray * sprn=[NSArray arrayWithObjects:@"Monster",@"Backdrop1",@"Blocks", nil];
+        NSArray * sprn=[NSArray arrayWithObjects:@"Backdrop1",@"Monster",@"Blocks",@"Ice", nil];
         [[SvSharedSpriteCache SharedCache] createAndLoadSprites:sprn usingDictionary:dsprites intoView:parent];
         
        /* SVTexture* tex=[parent createTextureNamed:@"Tetris"];
@@ -545,9 +561,11 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
      
         NSDictionary *adi=[rd valueForKey:@"Abilities"];
         SvAbility * abil=[[SvAbility alloc]initWithDictionary:[adi valueForKey:@"Walk"]];
-        NSArray * tmpa=[[NSArray alloc ]initWithObjects:abil, nil];//abil,
+         SvAbility * abil1=[[SvAbility alloc]initWithDictionary:[adi valueForKey:@"Icebolt"]];
+        NSArray * tmpa=[[NSArray alloc ]initWithObjects:abil,abil1, nil];//abil,
         [mdic setObject:tmpa forKey:@"Abilities"];
         [abil release];
+        [abil1 release];
         [tmpa release];
        // [rd release];
         SvTetrisMonster * mnst=[[SvTetrisMonster alloc] initWithDictionary:mdic];
@@ -899,6 +917,7 @@ if(isDragging)
             [self step];
         }
             [self cleanupBodies];
+       // [cFigure updateBodies];
           for(SVTetrisBody * body in movingBodies)
         {
             [body Draw];
@@ -946,6 +965,7 @@ if(isDragging)
 }
 - (void) cleanupBodies
 {
+    [Grid cleanGrid];
     NSMutableArray * rem=[NSMutableArray new];
     for(SVTetrisBody * tdb in movingBodies)
     {

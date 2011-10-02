@@ -10,5 +10,13 @@
             </PersistentString>
          </PersistentStrings>
       </ContextState>
+      <ContextState
+         contextName = "-[SVSpawnedBody ProcessTouches]:SVSpawnedBody.mm">
+         <PersistentStrings>
+            <PersistentString
+               value = "life">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
    </ContextStates>
 </VariablesViewState>

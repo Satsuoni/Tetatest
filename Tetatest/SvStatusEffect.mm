@@ -447,7 +447,7 @@
 }
 - (SvManaPool *) damage
 {
-        return [[effect.damage Multiply:  [self getDamageMultiplier]] autorelease];
+        return [effect.damage Multiply:  [self getDamageMultiplier]] ;
 }
 - (SvManaPool *) manaDamage
 {

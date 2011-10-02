@@ -4,6 +4,98 @@
 <dict>
 	<key>Abilities</key>
 	<dict>
+		<key>Icebolt</key>
+		<dict>
+			<key>Interruptions</key>
+			<dict/>
+			<key>Mask</key>
+			<integer>1</integer>
+			<key>Steps</key>
+			<array>
+				<dict>
+					<key>Changes</key>
+					<dict>
+						<key>Constant</key>
+						<false/>
+						<key>Damage</key>
+						<array>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+						</array>
+						<key>Force</key>
+						<array>
+							<integer>0</integer>
+							<integer>0</integer>
+						</array>
+						<key>Name</key>
+						<string>Step0Ice</string>
+						<key>Parameters</key>
+						<dict>
+							<key>Apply Charge To Damage</key>
+							<false/>
+							<key>Apply Charge To Duration</key>
+							<false/>
+							<key>Orientation</key>
+							<false/>
+							<key>Orientation Apply Transform</key>
+							<false/>
+							<key>Orientation Frame Shift</key>
+							<integer>0</integer>
+							<key>Overcharge</key>
+							<array>
+								<string></string>
+								<string></string>
+								<string></string>
+								<string></string>
+								<string></string>
+								<string></string>
+							</array>
+						</dict>
+						<key>Spawned Body</key>
+						<string>Ice</string>
+						<key>Step</key>
+						<integer>0</integer>
+						<key>Type</key>
+						<string>Once</string>
+					</dict>
+					<key>Condition</key>
+					<array>
+						<dict>
+							<key>CompareTo</key>
+							<integer>0</integer>
+							<key>Comparison</key>
+							<string>More, Less, Equal, MoreEqual, LessEqual</string>
+							<key>Value</key>
+							<string></string>
+						</dict>
+					</array>
+					<key>Duration</key>
+					<real>0.1</real>
+					<key>Interrupt</key>
+					<integer>-1</integer>
+					<key>Loop</key>
+					<integer>0</integer>
+					<key>Loopable</key>
+					<false/>
+					<key>Loops</key>
+					<integer>0</integer>
+					<key>Next</key>
+					<integer>-1</integer>
+					<key>Reset</key>
+					<integer>-1</integer>
+					<key>Stoppable</key>
+					<true/>
+					<key>Suspendable</key>
+					<false/>
+				</dict>
+			</array>
+			<key>Target</key>
+			<string>Self</string>
+		</dict>
 		<key>Walk</key>
 		<dict>
 			<key>AbilityID</key>
@@ -335,6 +427,53 @@
 	</dict>
 	<key>Sprites</key>
 	<dict>
+		<key>Ice</key>
+		<dict>
+			<key>Frames</key>
+			<array>
+				<array>
+					<integer>0</integer>
+					<integer>8</integer>
+					<integer>30</integer>
+					<integer>10</integer>
+				</array>
+				<array>
+					<integer>30</integer>
+					<integer>8</integer>
+					<integer>30</integer>
+					<integer>10</integer>
+				</array>
+				<array>
+					<integer>60</integer>
+					<integer>8</integer>
+					<integer>30</integer>
+					<integer>10</integer>
+				</array>
+				<array>
+					<integer>90</integer>
+					<integer>8</integer>
+					<integer>30</integer>
+					<integer>10</integer>
+				</array>
+				<array>
+					<integer>120</integer>
+					<integer>8</integer>
+					<integer>30</integer>
+					<integer>10</integer>
+				</array>
+			</array>
+			<key>Image</key>
+			<string>icebolt.png</string>
+			<key>Rect</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
+			<key>Type</key>
+			<string>Animated</string>
+		</dict>
 		<key>Monster</key>
 		<dict>
 			<key>Frames</key>
@@ -463,6 +602,948 @@
 	</dict>
 	<key>Templates</key>
 	<dict>
+		<key>SpawnedBody</key>
+		<dict>
+			<key>Physics</key>
+			<dict>
+				<key>Timeline</key>
+				<array>
+					<dict>
+						<key>Type</key>
+						<string>Frame Fixture Fixture Removal</string>
+						<key>Duration</key>
+						<integer>0</integer>
+						<key>Change To</key>
+						<integer>0</integer>
+					</dict>
+				</array>
+				<key>Fixtures</key>
+				<array>
+					<dict>
+						<key>Vertices</key>
+						<array>
+							<array>
+								<integer>0</integer>
+								<integer>0</integer>
+							</array>
+						</array>
+						<key>Width</key>
+						<integer>0</integer>
+						<key>Height</key>
+						<integer>0</integer>
+						<key>Angle</key>
+						<integer>0</integer>
+						<key>Offset</key>
+						<array>
+							<integer>0</integer>
+							<integer>0</integer>
+						</array>
+						<key>Radius</key>
+						<integer>0</integer>
+						<key>Friction</key>
+						<integer>0</integer>
+						<key>Restitution</key>
+						<integer>0</integer>
+						<key>Density</key>
+						<integer>0</integer>
+						<key>Shape</key>
+						<string>Box Circle Polygon</string>
+					</dict>
+				</array>
+				<key>Rotate</key>
+				<false/>
+				<key>Collision Mask</key>
+				<integer>0</integer>
+				<key>Sensor</key>
+				<false/>
+				<key>Interact with Passthough</key>
+				<false/>
+			</dict>
+			<key>Movement</key>
+			<dict>
+				<key>Use Gravity</key>
+				<false/>
+				<key>Maximum Random Vel</key>
+				<array>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Minimum Random Vel</key>
+				<array>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Maximum Random Force</key>
+				<array>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Minimum Random Force</key>
+				<array>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Velocity</key>
+				<array>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Acceleration</key>
+				<array>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Target Velocity</key>
+				<integer>0</integer>
+				<key>Tangent Force</key>
+				<integer>0</integer>
+				<key>Target Force</key>
+				<integer>0</integer>
+				<key>Target Force Increase</key>
+				<integer>0</integer>
+				<key>Use Target</key>
+				<false/>
+				<key>Use Target Body</key>
+				<false/>
+				<key>Attach To Body</key>
+				<false/>
+				<key>Use Orientation</key>
+				<false/>
+				<key>Shift</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Use Center</key>
+				<false/>
+				<key>Initial position</key>
+				<string>Parent Enemy Position</string>
+			</dict>
+			<key>Touch</key>
+			<dict>
+				<key>Affects parent</key>
+				<false/>
+				<key>Affects enemy</key>
+				<false/>
+				<key>Affects blocks</key>
+				<false/>
+				<key>On Self</key>
+				<dict>
+					<key>Acceleration</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Constant</key>
+					<false/>
+					<key>Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Direct Damage</key>
+					<integer>0</integer>
+					<key>Duration</key>
+					<integer>0</integer>
+					<key>Force</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Frame</key>
+					<integer>0</integer>
+					<key>Gravity</key>
+					<false/>
+					<key>Linear Damping</key>
+					<integer>0</integer>
+					<key>Mana Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Name</key>
+					<string></string>
+					<key>Parameters</key>
+					<dict>
+						<key>Apply Charge To Damage</key>
+						<false/>
+						<key>Apply Charge To Duration</key>
+						<false/>
+						<key>Orientation</key>
+						<false/>
+						<key>Orientation Apply Transform</key>
+						<false/>
+						<key>Orientation Frame Shift</key>
+						<integer>0</integer>
+						<key>Overcharge</key>
+						<array>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+						</array>
+					</dict>
+					<key>Removed Effect</key>
+					<string>Prefix</string>
+					<key>Secondary Effect</key>
+					<string>Same as effect. don&apos;t make it recursive</string>
+					<key>Spawned Body</key>
+					<string>Does not work yet;</string>
+					<key>Step</key>
+					<integer>0</integer>
+					<key>Type</key>
+					<string>Permanent Once Normal</string>
+				</dict>
+				<key>On Parent</key>
+				<dict>
+					<key>Acceleration</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Constant</key>
+					<false/>
+					<key>Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Direct Damage</key>
+					<integer>0</integer>
+					<key>Duration</key>
+					<integer>0</integer>
+					<key>Force</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Frame</key>
+					<integer>0</integer>
+					<key>Gravity</key>
+					<false/>
+					<key>Linear Damping</key>
+					<integer>0</integer>
+					<key>Mana Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Name</key>
+					<string></string>
+					<key>Parameters</key>
+					<dict>
+						<key>Apply Charge To Damage</key>
+						<false/>
+						<key>Apply Charge To Duration</key>
+						<false/>
+						<key>Orientation</key>
+						<false/>
+						<key>Orientation Apply Transform</key>
+						<false/>
+						<key>Orientation Frame Shift</key>
+						<integer>0</integer>
+						<key>Overcharge</key>
+						<array>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+						</array>
+					</dict>
+					<key>Removed Effect</key>
+					<string>Prefix</string>
+					<key>Secondary Effect</key>
+					<string>Same as effect. don&apos;t make it recursive</string>
+					<key>Spawned Body</key>
+					<string>Does not work yet;</string>
+					<key>Step</key>
+					<integer>0</integer>
+					<key>Type</key>
+					<string>Permanent Once Normal</string>
+				</dict>
+				<key>On Touching Body</key>
+				<dict>
+					<key>Acceleration</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Constant</key>
+					<false/>
+					<key>Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Direct Damage</key>
+					<integer>0</integer>
+					<key>Duration</key>
+					<integer>0</integer>
+					<key>Force</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Frame</key>
+					<integer>0</integer>
+					<key>Gravity</key>
+					<false/>
+					<key>Linear Damping</key>
+					<integer>0</integer>
+					<key>Mana Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Name</key>
+					<string></string>
+					<key>Parameters</key>
+					<dict>
+						<key>Apply Charge To Damage</key>
+						<false/>
+						<key>Apply Charge To Duration</key>
+						<false/>
+						<key>Orientation</key>
+						<false/>
+						<key>Orientation Apply Transform</key>
+						<false/>
+						<key>Orientation Frame Shift</key>
+						<integer>0</integer>
+						<key>Overcharge</key>
+						<array>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+						</array>
+					</dict>
+					<key>Removed Effect</key>
+					<string>Prefix</string>
+					<key>Secondary Effect</key>
+					<string>Same as effect. don&apos;t make it recursive</string>
+					<key>Spawned Body</key>
+					<string>Does not work yet;</string>
+					<key>Step</key>
+					<integer>0</integer>
+					<key>Type</key>
+					<string>Permanent Once Normal</string>
+				</dict>
+				<key>On Passing Body</key>
+				<dict>
+					<key>Acceleration</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Constant</key>
+					<false/>
+					<key>Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Direct Damage</key>
+					<integer>0</integer>
+					<key>Duration</key>
+					<integer>0</integer>
+					<key>Force</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Frame</key>
+					<integer>0</integer>
+					<key>Gravity</key>
+					<false/>
+					<key>Linear Damping</key>
+					<integer>0</integer>
+					<key>Mana Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Name</key>
+					<string></string>
+					<key>Parameters</key>
+					<dict>
+						<key>Apply Charge To Damage</key>
+						<false/>
+						<key>Apply Charge To Duration</key>
+						<false/>
+						<key>Orientation</key>
+						<false/>
+						<key>Orientation Apply Transform</key>
+						<false/>
+						<key>Orientation Frame Shift</key>
+						<integer>0</integer>
+						<key>Overcharge</key>
+						<array>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+						</array>
+					</dict>
+					<key>Removed Effect</key>
+					<string>Prefix</string>
+					<key>Secondary Effect</key>
+					<string>Same as effect. don&apos;t make it recursive</string>
+					<key>Spawned Body</key>
+					<string>Does not work yet;</string>
+					<key>Step</key>
+					<integer>0</integer>
+					<key>Type</key>
+					<string>Permanent Once Normal</string>
+				</dict>
+			</dict>
+			<key>Life</key>
+			<dict>
+				<key>OnDeath</key>
+				<dict>
+					<key>Acceleration</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Constant</key>
+					<false/>
+					<key>Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Direct Damage</key>
+					<integer>0</integer>
+					<key>Duration</key>
+					<integer>0</integer>
+					<key>Force</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Frame</key>
+					<integer>0</integer>
+					<key>Gravity</key>
+					<false/>
+					<key>Linear Damping</key>
+					<integer>0</integer>
+					<key>Mana Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Name</key>
+					<string></string>
+					<key>Parameters</key>
+					<dict>
+						<key>Apply Charge To Damage</key>
+						<false/>
+						<key>Apply Charge To Duration</key>
+						<false/>
+						<key>Orientation</key>
+						<false/>
+						<key>Orientation Apply Transform</key>
+						<false/>
+						<key>Orientation Frame Shift</key>
+						<integer>0</integer>
+						<key>Overcharge</key>
+						<array>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+						</array>
+					</dict>
+					<key>Removed Effect</key>
+					<string>Prefix</string>
+					<key>Secondary Effect</key>
+					<string>Same as effect. don&apos;t make it recursive</string>
+					<key>Spawned Body</key>
+					<string>Does not work yet;</string>
+					<key>Step</key>
+					<integer>0</integer>
+					<key>Type</key>
+					<string>Permanent Once Normal</string>
+				</dict>
+				<key>Time Loss</key>
+				<integer>0</integer>
+				<key>Time Step</key>
+				<integer>1</integer>
+				<key>Armor</key>
+				<array>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+				</array>
+				<key>HPMax</key>
+				<integer>0</integer>
+			</dict>
+		</dict>
+		<key>LifeAspect</key>
+		<dict>
+			<key>OnDeath</key>
+			<dict>
+				<key>Acceleration</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Constant</key>
+				<false/>
+				<key>Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Direct Damage</key>
+				<integer>0</integer>
+				<key>Duration</key>
+				<integer>0</integer>
+				<key>Force</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Frame</key>
+				<integer>0</integer>
+				<key>Gravity</key>
+				<false/>
+				<key>Linear Damping</key>
+				<integer>0</integer>
+				<key>Mana Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Name</key>
+				<string></string>
+				<key>Parameters</key>
+				<dict>
+					<key>Apply Charge To Damage</key>
+					<false/>
+					<key>Apply Charge To Duration</key>
+					<false/>
+					<key>Orientation</key>
+					<false/>
+					<key>Orientation Apply Transform</key>
+					<false/>
+					<key>Orientation Frame Shift</key>
+					<integer>0</integer>
+					<key>Overcharge</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+				</dict>
+				<key>Removed Effect</key>
+				<string>Prefix</string>
+				<key>Secondary Effect</key>
+				<string>Same as effect. don&apos;t make it recursive</string>
+				<key>Spawned Body</key>
+				<string>Does not work yet;</string>
+				<key>Step</key>
+				<integer>0</integer>
+				<key>Type</key>
+				<string>Permanent Once Normal</string>
+			</dict>
+			<key>Time Loss</key>
+			<integer>0</integer>
+			<key>Time Step</key>
+			<integer>1</integer>
+			<key>Armor</key>
+			<array>
+				<integer>1</integer>
+				<integer>1</integer>
+				<integer>1</integer>
+				<integer>1</integer>
+				<integer>1</integer>
+				<integer>1</integer>
+			</array>
+			<key>HPMax</key>
+			<integer>0</integer>
+		</dict>
+		<key>TouchAspect</key>
+		<dict>
+			<key>Affects parent</key>
+			<false/>
+			<key>Affects enemy</key>
+			<false/>
+			<key>Affects blocks</key>
+			<false/>
+			<key>On Self</key>
+			<dict>
+				<key>Acceleration</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Constant</key>
+				<false/>
+				<key>Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Direct Damage</key>
+				<integer>0</integer>
+				<key>Duration</key>
+				<integer>0</integer>
+				<key>Force</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Frame</key>
+				<integer>0</integer>
+				<key>Gravity</key>
+				<false/>
+				<key>Linear Damping</key>
+				<integer>0</integer>
+				<key>Mana Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Name</key>
+				<string></string>
+				<key>Parameters</key>
+				<dict>
+					<key>Apply Charge To Damage</key>
+					<false/>
+					<key>Apply Charge To Duration</key>
+					<false/>
+					<key>Orientation</key>
+					<false/>
+					<key>Orientation Apply Transform</key>
+					<false/>
+					<key>Orientation Frame Shift</key>
+					<integer>0</integer>
+					<key>Overcharge</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+				</dict>
+				<key>Removed Effect</key>
+				<string>Prefix</string>
+				<key>Secondary Effect</key>
+				<string>Same as effect. don&apos;t make it recursive</string>
+				<key>Spawned Body</key>
+				<string>Does not work yet;</string>
+				<key>Step</key>
+				<integer>0</integer>
+				<key>Type</key>
+				<string>Permanent Once Normal</string>
+			</dict>
+			<key>On Parent</key>
+			<dict>
+				<key>Acceleration</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Constant</key>
+				<false/>
+				<key>Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Direct Damage</key>
+				<integer>0</integer>
+				<key>Duration</key>
+				<integer>0</integer>
+				<key>Force</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Frame</key>
+				<integer>0</integer>
+				<key>Gravity</key>
+				<false/>
+				<key>Linear Damping</key>
+				<integer>0</integer>
+				<key>Mana Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Name</key>
+				<string></string>
+				<key>Parameters</key>
+				<dict>
+					<key>Apply Charge To Damage</key>
+					<false/>
+					<key>Apply Charge To Duration</key>
+					<false/>
+					<key>Orientation</key>
+					<false/>
+					<key>Orientation Apply Transform</key>
+					<false/>
+					<key>Orientation Frame Shift</key>
+					<integer>0</integer>
+					<key>Overcharge</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+				</dict>
+				<key>Removed Effect</key>
+				<string>Prefix</string>
+				<key>Secondary Effect</key>
+				<string>Same as effect. don&apos;t make it recursive</string>
+				<key>Spawned Body</key>
+				<string>Does not work yet;</string>
+				<key>Step</key>
+				<integer>0</integer>
+				<key>Type</key>
+				<string>Permanent Once Normal</string>
+			</dict>
+			<key>On Touching Body</key>
+			<dict>
+				<key>Acceleration</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Constant</key>
+				<false/>
+				<key>Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Direct Damage</key>
+				<integer>0</integer>
+				<key>Duration</key>
+				<integer>0</integer>
+				<key>Force</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Frame</key>
+				<integer>0</integer>
+				<key>Gravity</key>
+				<false/>
+				<key>Linear Damping</key>
+				<integer>0</integer>
+				<key>Mana Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Name</key>
+				<string></string>
+				<key>Parameters</key>
+				<dict>
+					<key>Apply Charge To Damage</key>
+					<false/>
+					<key>Apply Charge To Duration</key>
+					<false/>
+					<key>Orientation</key>
+					<false/>
+					<key>Orientation Apply Transform</key>
+					<false/>
+					<key>Orientation Frame Shift</key>
+					<integer>0</integer>
+					<key>Overcharge</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+				</dict>
+				<key>Removed Effect</key>
+				<string>Prefix</string>
+				<key>Secondary Effect</key>
+				<string>Same as effect. don&apos;t make it recursive</string>
+				<key>Spawned Body</key>
+				<string>Does not work yet;</string>
+				<key>Step</key>
+				<integer>0</integer>
+				<key>Type</key>
+				<string>Permanent Once Normal</string>
+			</dict>
+			<key>On Passing Body</key>
+			<dict>
+				<key>Acceleration</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Constant</key>
+				<false/>
+				<key>Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Direct Damage</key>
+				<integer>0</integer>
+				<key>Duration</key>
+				<integer>0</integer>
+				<key>Force</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Frame</key>
+				<integer>0</integer>
+				<key>Gravity</key>
+				<false/>
+				<key>Linear Damping</key>
+				<integer>0</integer>
+				<key>Mana Damage</key>
+				<array>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+					<string></string>
+				</array>
+				<key>Name</key>
+				<string></string>
+				<key>Parameters</key>
+				<dict>
+					<key>Apply Charge To Damage</key>
+					<false/>
+					<key>Apply Charge To Duration</key>
+					<false/>
+					<key>Orientation</key>
+					<false/>
+					<key>Orientation Apply Transform</key>
+					<false/>
+					<key>Orientation Frame Shift</key>
+					<integer>0</integer>
+					<key>Overcharge</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+				</dict>
+				<key>Removed Effect</key>
+				<string>Prefix</string>
+				<key>Secondary Effect</key>
+				<string>Same as effect. don&apos;t make it recursive</string>
+				<key>Spawned Body</key>
+				<string>Does not work yet;</string>
+				<key>Step</key>
+				<integer>0</integer>
+				<key>Type</key>
+				<string>Permanent Once Normal</string>
+			</dict>
+		</dict>
 		<key>Movement Aspect</key>
 		<dict>
 			<key>Use Gravity</key>
@@ -525,9 +1606,33 @@
 		</dict>
 		<key>Physical Aspect</key>
 		<dict>
+			<key>Timeline</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Frame Fixture Fixture Removal</string>
+					<key>Duration</key>
+					<integer>0</integer>
+					<key>Change To</key>
+					<integer>0</integer>
+				</dict>
+			</array>
 			<key>Fixtures</key>
 			<array>
 				<dict>
+					<key>Timeline</key>
+					<array>
+						<dict>
+							<key>Type</key>
+							<string>Frame Fixture Fixture Removal</string>
+							<key>Duration</key>
+							<integer>0</integer>
+							<key>Change To</key>
+							<integer>0</integer>
+						</dict>
+					</array>
+					<key>Animation</key>
+					<string></string>
 					<key>Vertices</key>
 					<array>
 						<array>
@@ -569,6 +1674,19 @@
 		</dict>
 		<key>Fixture</key>
 		<dict>
+			<key>Timeline</key>
+			<array>
+				<dict>
+					<key>Type</key>
+					<string>Frame Fixture Fixture Removal</string>
+					<key>Duration</key>
+					<integer>0</integer>
+					<key>Change To</key>
+					<integer>0</integer>
+				</dict>
+			</array>
+			<key>Animation</key>
+			<string></string>
 			<key>Vertices</key>
 			<array>
 				<array>
@@ -1008,6 +2126,298 @@
 		<false/>
 	</dict>
 	<key>Spawned Bodies</key>
-	<dict/>
+	<dict>
+		<key>Ice</key>
+		<dict>
+			<key>Physics</key>
+			<dict>
+				<key>Fixtures</key>
+				<array>
+					<dict>
+						<key>Timeline</key>
+						<array>
+							<dict>
+								<key>Type</key>
+								<string>Frame</string>
+								<key>Duration</key>
+								<real>0.1</real>
+								<key>Change To</key>
+								<integer>0</integer>
+							</dict>
+							<dict>
+								<key>Type</key>
+								<string>Frame</string>
+								<key>Duration</key>
+								<real>0.1</real>
+								<key>Change To</key>
+								<integer>1</integer>
+							</dict>
+							<dict>
+								<key>Type</key>
+								<string>Frame</string>
+								<key>Duration</key>
+								<real>0.1</real>
+								<key>Change To</key>
+								<integer>2</integer>
+							</dict>
+							<dict>
+								<key>Type</key>
+								<string>Frame</string>
+								<key>Duration</key>
+								<real>0.1</real>
+								<key>Change To</key>
+								<integer>3</integer>
+							</dict>
+							<dict>
+								<key>Type</key>
+								<string>Frame</string>
+								<key>Duration</key>
+								<real>0.1</real>
+								<key>Change To</key>
+								<integer>4</integer>
+							</dict>
+						</array>
+						<key>Animation</key>
+						<string>Ice</string>
+						<key>Vertices</key>
+						<array>
+							<array>
+								<integer>0</integer>
+								<integer>0</integer>
+							</array>
+						</array>
+						<key>Width</key>
+						<integer>30</integer>
+						<key>Height</key>
+						<integer>10</integer>
+						<key>Angle</key>
+						<integer>0</integer>
+						<key>Offset</key>
+						<array>
+							<integer>0</integer>
+							<integer>0</integer>
+						</array>
+						<key>Friction</key>
+						<integer>0</integer>
+						<key>Restitution</key>
+						<integer>0</integer>
+						<key>Density</key>
+						<integer>1</integer>
+						<key>Shape</key>
+						<string>Box</string>
+					</dict>
+				</array>
+				<key>Rotate</key>
+				<false/>
+				<key>Collision Mask</key>
+				<integer>1</integer>
+				<key>Sensor</key>
+				<false/>
+				<key>Interact with Passthough</key>
+				<false/>
+			</dict>
+			<key>Movement</key>
+			<dict>
+				<key>Use Gravity</key>
+				<false/>
+				<key>Maximum Random Vel</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Minimum Random Vel</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Maximum Random Force</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Minimum Random Force</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Acceleration</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Target Velocity</key>
+				<integer>5</integer>
+				<key>Tangent Force</key>
+				<integer>0</integer>
+				<key>Target Force</key>
+				<integer>0</integer>
+				<key>Target Force Increase</key>
+				<integer>0</integer>
+				<key>Use Target</key>
+				<true/>
+				<key>Use Target Body</key>
+				<false/>
+				<key>Attach To Body</key>
+				<false/>
+				<key>Use Orientation</key>
+				<false/>
+				<key>Shift</key>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+				</array>
+				<key>Use Center</key>
+				<true/>
+				<key>Initial position</key>
+				<string>Parent</string>
+			</dict>
+			<key>Touch</key>
+			<dict>
+				<key>Affects parent</key>
+				<false/>
+				<key>Affects enemy</key>
+				<true/>
+				<key>Affects blocks</key>
+				<true/>
+				<key>On Self</key>
+				<dict>
+					<key>Constant</key>
+					<false/>
+					<key>Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Direct Damage</key>
+					<integer>10</integer>
+					<key>Duration</key>
+					<integer>0</integer>
+					<key>Name</key>
+					<string>OTE</string>
+					<key>Parameters</key>
+					<dict>
+						<key>Apply Charge To Damage</key>
+						<false/>
+						<key>Apply Charge To Duration</key>
+						<false/>
+						<key>Orientation</key>
+						<false/>
+						<key>Orientation Apply Transform</key>
+						<false/>
+						<key>Orientation Frame Shift</key>
+						<integer>0</integer>
+						<key>Overcharge</key>
+						<array>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+						</array>
+					</dict>
+					<key>Removed Effect</key>
+					<string>Prefix</string>
+					<key>Step</key>
+					<integer>0</integer>
+					<key>Type</key>
+					<string>Once</string>
+				</dict>
+				<key>On Touching Body</key>
+				<dict>
+					<key>Acceleration</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Constant</key>
+					<false/>
+					<key>Damage</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+						<integer>0</integer>
+						<integer>250</integer>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Direct Damage</key>
+					<integer>10</integer>
+					<key>Duration</key>
+					<integer>0</integer>
+					<key>Force</key>
+					<array>
+						<integer>0</integer>
+						<integer>0</integer>
+					</array>
+					<key>Frame</key>
+					<integer>0</integer>
+					<key>Gravity</key>
+					<false/>
+					<key>Linear Damping</key>
+					<integer>0</integer>
+					<key>Mana Damage</key>
+					<array>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+						<string></string>
+					</array>
+					<key>Name</key>
+					<string></string>
+					<key>Parameters</key>
+					<dict>
+						<key>Apply Charge To Damage</key>
+						<false/>
+						<key>Apply Charge To Duration</key>
+						<false/>
+						<key>Orientation</key>
+						<false/>
+						<key>Orientation Apply Transform</key>
+						<false/>
+						<key>Orientation Frame Shift</key>
+						<integer>0</integer>
+						<key>Overcharge</key>
+						<array>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+							<string></string>
+						</array>
+					</dict>
+					<key>Step</key>
+					<real>0.01</real>
+					<key>Type</key>
+					<string>Once</string>
+				</dict>
+			</dict>
+			<key>Life</key>
+			<dict>
+				<key>Time Loss</key>
+				<integer>0</integer>
+				<key>Time Step</key>
+				<integer>1</integer>
+				<key>Armor</key>
+				<array>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+					<integer>1</integer>
+				</array>
+				<key>HPMax</key>
+				<integer>10</integer>
+			</dict>
+		</dict>
+	</dict>
 </dict>
 </plist>

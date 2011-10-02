@@ -141,6 +141,7 @@ public:
 - (void) getManaFromBlock: (SVTetrisBlock *) bl;
 - (void) dropDownFromBlock: (SVTetrisBlock *) bl;
 - (void) startRemovingLine: (int) line;
+- (void) cleanGrid;
 @end
 
 

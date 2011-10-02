@@ -128,7 +128,7 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
     while (elapsed>=currentStep.duration)
     {
         elapsed-=currentStep.duration;
-    if([currentStep.condition checkWithMonster:owner])
+    if([currentStep.condition checkWithMonster:owner]||currentStep.condition==nil)
     {//condition met ,executing
         if(target==kSVInternal)
         {
@@ -442,12 +442,28 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
     }
     if(currentMask!=1)
     {
+       
         if([abilities count]>0)
         {
-        SvAbility *walk=[abilities objectAtIndex:0];
+            if(arc4random()%100>97)
+            {
+              
+            SvAbility *ice=[abilities objectAtIndex:1];
+            if([ice.initialCondition checkWithMonster:self]||ice.initialCondition==nil)
+            {
+            [ice setOwner:self];
+                [ice setSelectedTarget:self];
+                [ice Update:0];
+                [runningAbilities addObject:ice];
+                currentMask+=ice.mask;
+            }
+            }
+            else
+            {
+       SvAbility *walk=[abilities objectAtIndex:0];
         if(walk!=nil)
         {
-        if([walk.initialCondition checkWithMonster:self])
+        if([walk.initialCondition checkWithMonster:self]||walk.initialCondition==nil)
         {
             orientation=(arc4random()%2)*2-1;
         [walk setOwner:self];
@@ -457,6 +473,7 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
         currentMask+=walk.mask;
         }
         }
+            }
         }
     }
     for(SVStatusEffectInTime * ste in effects)
@@ -550,7 +567,7 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
     if([par isEqualToString:@"Target Body"]) return self;
     if([par isEqualToString:@"Target Position"]) 
     {
-        return [NSValue valueWithCGPoint: CGPointMake(pt.x+arc4random()%100-50, pt.y-arc4random()%100)];
+        return [NSValue valueWithCGPoint: CGPointMake(pt.x+arc4random()%400-200, pt.y-arc4random()%400)];
     }
     if( [par isEqualToString:@"Initial Position"])
         return [NSValue valueWithCGPoint:pt];

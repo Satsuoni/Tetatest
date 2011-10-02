@@ -136,7 +136,13 @@
 }
 - (BOOL) isAlive
 {
-    if(HP<=0) return NO;
+    if(HP<=0)
+    {
+        isinGrid=NO;
+        isinFigure=NO;
+        freeFall=NO;
+     return NO;   
+    }
     if(!isinGrid&&!freeFall&&!isinFigure&&!isErasing) return NO;
     if(isErased) return NO;
     return YES;
@@ -173,6 +179,8 @@
     {
         blocks=[iblocks retain];
         grid=igrid;
+        [self setContactMode:1];
+        body->SetUserData(self);
     }
     return self;
 }
@@ -350,6 +358,11 @@
       
         
         [eff release];   
+    }
+    if(HP<=0)
+    {
+        isinFigure=NO;
+        isinGrid=NO;
     }
 }
 @end

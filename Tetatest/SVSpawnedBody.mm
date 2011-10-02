@@ -12,6 +12,7 @@
 #import "SVTetris.h"
 #import "CC3Math.h"
 #import "SvTetrisMonster.h"
+#import "SVTetrisBlock.h"
 @implementation SVFixtureDef
 @synthesize animation;
 - (id) init
@@ -43,6 +44,7 @@
         NSString * animName=[dct valueForKey:@"Animation"];
        animation =[[SvSharedSpriteCache SharedCache] getAnimatedSpriteWithName:animName];
         [animation setFrame:0];
+        animation.layoutPos=1;
         restitution=[[dct valueForKey:@"Restitution"] floatValue];
         density=[[dct valueForKey:@"Density"]floatValue];
         friction=[[dct valueForKey:@"Friction"] floatValue];
@@ -224,7 +226,10 @@
     def.allowSleep=true;
     def.awake=true;
     def.bullet=true;
+    if(fixRotation)
+        def.fixedRotation=true;
     body=world->CreateBody(&def);
+    body->SetUserData((void *) own);
     for(SVFixtureDef * fix in addedFixtures)
     {
         [fix addToBody:body asOwner:own andSensor:isSensor];
@@ -286,10 +291,12 @@
         b2Body *bd= an.localFixture->GetBody();
         b2Vec2 pos=bd->GetPosition();
         an.animation.ul_position=CGPointMake(pos.x*PTM_RATIO, pos.y*PTM_RATIO);
+      //  NSLog(@"%d %d",(int)pos.x*PTM_RATIO,(int)pos.y*PTM_RATIO);
         CC3GLMatrix * tr=an.animation.transform;
         [tr populateIdentity];
-         [tr rotateBy:CC3VectorMake(180, 0, 0)];
+        // [tr rotateBy:CC3VectorMake(180, 0, 0)];
         [tr rotateBy:CC3VectorMake(0, 0, bd->GetAngle()*180/M_PI)];
+        an.animation.effect=0;
         [an.animation Draw];
         
     }
@@ -299,6 +306,7 @@
 @implementation SVMovementAspect
 @synthesize useTarget;
 @synthesize initialPosition;
+@synthesize useTargetBody;
 - (CGPoint) getPointFromArray: (NSArray *) arr
 {
     return CGPointMake([[arr objectAtIndex:0] floatValue], [[arr objectAtIndex:1]floatValue]);
@@ -489,6 +497,7 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
         fHPMax=[[dct valueForKey:@"HPMax"]doubleValue];
         fHP=fHPMax;
         armor=[[SvManaPool alloc]initWithArray:[dct valueForKey:@"Armor"]];
+        if([dct valueForKey:@"OnDeath"]!=nil)
         onDeathSpawner=[[SvStatusEffect alloc]initWithDictionary:[dct valueForKey:@"OnDeath"]];
         timeStep=[[dct valueForKey:@"Time Step"] doubleValue];
         timeLoss=[[dct valueForKey:@"Time Loss"] doubleValue];
@@ -562,6 +571,8 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
             type=0;
         if([name isEqualToString:@"Fixture"])
             type=1;
+        if([name isEqualToString:@"Fixture Removal"])
+            type=2;
         //type 2 not implemented yet
         
     }
@@ -573,6 +584,7 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
 @synthesize touchParent;
 @synthesize touchEnemy;
 @synthesize touchBlocks;
+@synthesize touchSpawns;
 - (void) setTouchCharges:(int)cha
 {
     ch=cha;
@@ -582,11 +594,16 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
     if((self = [super init]))
     {
         touchParent=[[dct valueForKey:@"Affects parent"] boolValue];
-        touchParent=[[dct valueForKey:@"Affects enemy"] boolValue];
-        touchParent=[[dct valueForKey:@"Affects blocks"] boolValue];
+        touchEnemy=[[dct valueForKey:@"Affects enemy"] boolValue];
+        touchBlocks=[[dct valueForKey:@"Affects blocks"] boolValue];
+         touchSpawns=[[dct valueForKey:@"Affects spawns"] boolValue];
+        if([dct valueForKey:@"On Self"]!=nil)
         onSelf=[[SvStatusEffect alloc ] initWithDictionary:[dct valueForKey:@"On Self"]];
+        if([dct valueForKey:@"On Parent"]!=nil)
         onParent=[[SvStatusEffect alloc ] initWithDictionary:[dct valueForKey:@"On Parent"]]; 
+        if([dct valueForKey:@"On Touching Body"]!=nil)
         onTouchingBody=[[SvStatusEffect alloc ] initWithDictionary:[dct valueForKey:@"On Touching Body"]]; 
+        if([dct valueForKey:@"On Passing Body"]!=nil)
            onPassingBody=[[SvStatusEffect alloc ] initWithDictionary:[dct valueForKey:@"On Passing Body"]];
         application=[[NSMutableDictionary alloc]initWithCapacity:2];
     }
@@ -602,6 +619,7 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
 }
 - (void) applyToParent:(SVTetrisBody *)parent
 {
+    if(onParent==nil) return;
     [application setValue:onParent forKey:@"Effect"];
     double mpl[6];
     memset(mpl, 0, sizeof(double)*6);
@@ -613,6 +631,7 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
 }
 - (void) applyToPassing:(SVTetrisBody *)passing
 {
+    if(onPassingBody==nil) return;
     [application setValue:onPassingBody forKey:@"Effect"];
     double mpl[6];
     memset(mpl, 0, sizeof(double)*6);
@@ -625,6 +644,7 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
 }
 - (void) applyToTouching:(SVTetrisBody *)touching
 {
+    if(onTouchingBody==nil) return;
     [application setValue:onTouchingBody forKey:@"Effect"];
     double mpl[6];
     memset(mpl, 0, sizeof(double)*6);
@@ -638,6 +658,7 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
 
 - (void) applyToSelf:(SVTetrisBody *)body
 {
+    if(onSelf==nil) return;
     [application setValue:onSelf forKey:@"Effect"];
     double mpl[6];
     memset(mpl, 0, sizeof(double)*6);
@@ -734,14 +755,22 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
     if(adct==nil) return nil;
     NSDictionary *bdct=[adct valueForKey:iID];
     if(bdct==nil) return nil;
-    self =[self initWithDictionary:bdct];
+    self =[super initWithDictionary:bdct];
+    physics=[[SVPhysicalAspect alloc]initWithDictionary:[bdct valueForKey:@"Physics"]];
+    movement=[[SVMovementAspect alloc]initWithDictionary:[bdct valueForKey:@"Movement"]];
+    life=[[SVLifeAspect alloc]initWithDictionary:[bdct valueForKey:@"Life"]];
+    onTouch=[[SVTouchAspect alloc]initWithDictionary:[bdct valueForKey:@"Touch"]];
+    
     parent=[ps retain];
     [movement setSpawner:parent];
     [life setSpawner:parent];
     if(movement.useTarget)
+    {
+    if(movement.useTargetBody)
       [movement setTargetBody:  [ps getSpawnParameter:@"Target Body" forID:iID]];
     else
         [movement setTargetPos:  [[ps getSpawnParameter:@"Target Position" forID:iID] CGPointValue]];
+    }
     if(movement.initialPosition==2)
     {
         [movement setInitPos:[[ps getSpawnParameter:@"Initial Position" forID:iID] CGPointValue]];
@@ -757,15 +786,19 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
     [life setCharges:[[ps getSpawnParameter:@"Charges" forID:iID] intValue]];
     [onTouch setTouchCharges:[[ps getSpawnParameter:@"Charges" forID:iID] intValue]];
     world=(b2World *)[scene getPointerParameter:@"World"];
-    body=[physics createBodyInWorld:world forOwner:ps atPos:[[ps getSpawnParameter:@"Initial Position" forID:iID] CGPointValue]];
+    body=[physics createBodyInWorld:world forOwner:self atPos:[[ps getSpawnParameter:@"Initial Position" forID:iID] CGPointValue]];
     [scene spawnBody:self];
     spawned=YES;
+    ID=[iID retain];
     return self;
 }
 - (void)ProcessTouches
 {
     for(SVTetrisBody * tb in touchingBodies)
+    {
         [onTouch applyToTouching:tb];
+        [onTouch applyToSelf:self];
+    }
     for(SVTetrisBody * pb in passingBodies)
     {
         [onTouch applyToPassing:pb];
@@ -785,7 +818,7 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
     [physics Update:time];
     [movement applyToBody:body inTime:time];
     [life updateTime:time];
-    if([life isDead])
+    if([life isDead]&&[life getEffect]!=nil)
     {
         NSMutableDictionary * eff=[NSMutableDictionary new];
         [eff setValue:[life getEffect] forKey:@"Effect"];
@@ -803,6 +836,7 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
     [movement release];
     [life release];
     [onTouch release];
+    [ID release];
     [super dealloc];
 }
 - (BOOL) canContactMode:(unsigned int)mode
@@ -815,8 +849,11 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
 }
 - (BOOL) canContact:(SVTetrisBody *)kbody
 {
+    if(![self isAlive]) return NO;
     if(!onTouch.touchParent&&kbody==parent) return NO;
     if(!onTouch.touchEnemy&&kbody!=parent&&[kbody isKindOfClass:[SvTetrisMonster class]]) return NO;
+    if([kbody isKindOfClass:[SVTetrisBlock class]]&&!onTouch.touchBlocks) return NO;
+    if([kbody isKindOfClass:[SVSpawnedBody class]]&&!onTouch.touchSpawns) return NO;
     return [self canContactMode:[kbody getContactMode]];
 }
 -(void) Draw
