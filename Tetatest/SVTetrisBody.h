@@ -71,4 +71,5 @@ typedef struct
 - (void) Update: (double) time;
 - (void) Apply: (NSDictionary *) thing;
 - (NSDictionary *) getStatus;
+- (id) getSpawnParameter: (NSString *) par forID: (NSString *) ID;
 @end

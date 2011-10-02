@@ -542,7 +542,22 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
     }
     [temp release];
 }
-
+- (id) getSpawnParameter:(NSString *)par forID:(NSString *)ID
+{
+    //Here there should be AI
+    //but for now...
+    CGPoint pt=[self getPosition];
+    if([par isEqualToString:@"Target Body"]) return self;
+    if([par isEqualToString:@"Target Position"]) 
+    {
+        return [NSValue valueWithCGPoint: CGPointMake(pt.x+arc4random()%100-50, pt.y-arc4random()%100)];
+    }
+    if( [par isEqualToString:@"Initial Position"])
+        return [NSValue valueWithCGPoint:pt];
+    if([par isEqualToString:@"Charges"])
+        return [NSNumber numberWithInt:current_Charges];
+    return nil;
+}
 - (void) applyEffectStep:(SVStatusEffectInTime *)eff
 {
      double dam=0;
@@ -599,6 +614,11 @@ SpriteEffect ghostEffect={{{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0},{0,0.3,0,0}},0.3,
     }
     if(eff.effect.canSpawnBody)
     {
+        current_Charges=eff.charges;
+        current_TCharges=eff.charges;
+        
+        [[SVSpawnedBody alloc]initAndSpawnOnScene:parentScene withID:eff.effect.bodyID byBody:self];
+        
         ///TODO -needs body framework;
        // SVSpawnedBody * bdy;
       //  NSString *path = [[NSBundle mainBundle] pathForResource:@"Data" ofType:@"plist"];

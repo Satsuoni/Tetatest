@@ -333,6 +333,134 @@
 			<string>Self</string>
 		</dict>
 	</dict>
+	<key>Sprites</key>
+	<dict>
+		<key>Monster</key>
+		<dict>
+			<key>Frames</key>
+			<array>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>30</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>60</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>90</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>120</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>150</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>180</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>210</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+			</array>
+			<key>Image</key>
+			<string>good.png</string>
+			<key>Rect</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>0</integer>
+			</array>
+			<key>Type</key>
+			<string>Animated</string>
+		</dict>
+		<key>Blocks</key>
+		<dict>
+			<key>Frames</key>
+			<array>
+				<array>
+					<integer>0</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>30</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>60</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>90</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>120</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+				<array>
+					<integer>150</integer>
+					<integer>0</integer>
+					<integer>30</integer>
+					<integer>30</integer>
+				</array>
+			</array>
+			<key>Image</key>
+			<string>blocks.bmp</string>
+			<key>Type</key>
+			<string>Animated</string>
+		</dict>
+		<key>Backdrop1</key>
+		<dict>
+			<key>Image</key>
+			<string>tetr_FOREST.bmp</string>
+			<key>Rect</key>
+			<array>
+				<integer>0</integer>
+				<integer>0</integer>
+				<integer>800</integer>
+				<integer>600</integer>
+			</array>
+			<key>Type</key>
+			<string>Normal</string>
+		</dict>
+	</dict>
 	<key>Templates</key>
 	<dict>
 		<key>Movement Aspect</key>
@@ -475,10 +603,10 @@
 			<key>Frames</key>
 			<array>
 				<array>
-					<string></string>
-					<string></string>
-					<string></string>
-					<string></string>
+					<integer>0</integer>
+					<integer>0</integer>
+					<integer>0</integer>
+					<integer>0</integer>
 				</array>
 			</array>
 			<key>Image</key>
@@ -879,5 +1007,7 @@
 		<key>Sensor</key>
 		<false/>
 	</dict>
+	<key>Spawned Bodies</key>
+	<dict/>
 </dict>
 </plist>

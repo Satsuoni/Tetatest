@@ -297,6 +297,8 @@
 @end
 
 @implementation SVMovementAspect
+@synthesize useTarget;
+@synthesize initialPosition;
 - (CGPoint) getPointFromArray: (NSArray *) arr
 {
     return CGPointMake([[arr objectAtIndex:0] floatValue], [[arr objectAtIndex:1]floatValue]);
@@ -719,6 +721,45 @@ useTarget=[[dct valueForKey:@"Use Target"] boolValue];
         onTouch=[[SVTouchAspect alloc]initWithDictionary:[dct valueForKey:@"Touch"]];
         spawned=NO;
     }
+    return self;
+}
+- (id) initAndSpawnOnScene:(SVScene *)scene withID:(NSString *)iID byBody:(SVTetrisBody *)ps
+{
+ 
+    if(scene==nil) return nil;
+    if(iID==nil) return nil;
+    if(scene.sceneDictionary==nil) return nil;
+    if(ps==nil) return nil;
+    NSDictionary * adct=[scene.sceneDictionary valueForKey:@"Spawned Bodies"];
+    if(adct==nil) return nil;
+    NSDictionary *bdct=[adct valueForKey:iID];
+    if(bdct==nil) return nil;
+    self =[self initWithDictionary:bdct];
+    parent=[ps retain];
+    [movement setSpawner:parent];
+    [life setSpawner:parent];
+    if(movement.useTarget)
+      [movement setTargetBody:  [ps getSpawnParameter:@"Target Body" forID:iID]];
+    else
+        [movement setTargetPos:  [[ps getSpawnParameter:@"Target Position" forID:iID] CGPointValue]];
+    if(movement.initialPosition==2)
+    {
+        [movement setInitPos:[[ps getSpawnParameter:@"Initial Position" forID:iID] CGPointValue]];
+    }
+    if(movement.initialPosition==1)
+    {
+        [movement setInitPos:   [[ps getSpawnParameter:@"Target Body" forID:iID] getPosition]];
+    }
+    if(movement.initialPosition==0)
+    {
+        [movement setInitPos:[ps getPosition]];
+    }
+    [life setCharges:[[ps getSpawnParameter:@"Charges" forID:iID] intValue]];
+    [onTouch setTouchCharges:[[ps getSpawnParameter:@"Charges" forID:iID] intValue]];
+    world=(b2World *)[scene getPointerParameter:@"World"];
+    body=[physics createBodyInWorld:world forOwner:ps atPos:[[ps getSpawnParameter:@"Initial Position" forID:iID] CGPointValue]];
+    [scene spawnBody:self];
+    spawned=YES;
     return self;
 }
 - (void)ProcessTouches

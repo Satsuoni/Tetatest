@@ -191,121 +191,6 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
             }
         }
 }
-/*-(void) Draw:(SVAnimatedSprite *)blocks inRect:(CGRect)inside
-{
-    blocks.virt_frame=CGSizeMake(30, 30);
-    NSTimeInterval now=[NSDate timeIntervalSinceReferenceDate];
-        for(int y=0;y<T_HEIGHT;y++)
-        {
-            if(erasing[y])
-            {
-                double tm=now-erasetime[y];
-                double rtm=now-erasectime[y];
-                
-                if(tm>ERASE_TIME)
-                    rtm-=(tm-ERASE_TIME);
-               while(rtm>ERASE_INTERVAL)
-               {
-                   erasectime[y]+=ERASE_INTERVAL;
-                   rtm-=ERASE_INTERVAL;
-                   for(int xx=0;xx<T_ROW;xx++)
-                       if(Grid[xx][y]!=-1)
-                           [manaPool addMana:Grid[xx][y] amount:[manaGain getMana:Grid[xx][y]]];
-               }
-                    
-                if(tm>ERASE_TIME)//erase complete...
-                {
-                    for(int xx=0;xx<T_ROW;xx++)
-                    {
-                        [bodyGrid[xx][y] destroyBody];
-                        [bodyGrid[xx][y] release];
-                        bodyGrid[xx][y]=nil;
-                    }
-                    for(int yy=y;yy>0;yy--)
-                    {
-                        for(int xx=0;xx<T_ROW;xx++)
-                        {
-                            Grid[xx][yy]=Grid[xx][yy-1];
-                            bodyGrid[xx][yy]=bodyGrid[xx][yy-1];
-                            [bodyGrid[xx][yy] updatePosition:CGPointMake(gridrect.origin.x+xx*30, gridrect.origin.y+yy*30)];
-                        }
-                        erasing[yy]=erasing[yy-1];
-                        erasetime[yy]=erasetime[yy-1];
-                    }
-                    for(int xx=0;xx<T_ROW;xx++)
-                    {
-                        Grid[xx][0]=-1;
-                        bodyGrid[xx][0]=nil;
-                    }
-                    erasing[0]=NO;
-                    y--;
-                    continue;
-                }
-                else
-                {
-                    blocks.effect=2;
-                    double cf=tm/ERASE_TIME;
-                    [blocks setEffectParameter:0 toValue:0.5f];
-                    [blocks setEffectParameter:1 toValue:5];
-                    
-                    [blocks  setEColorR:1 G:1 B:cf A:cf+0.2 N:0];
-                    [blocks  setEColorR:1 G:0 B:0 A:1 N:1]; 
-                }
-            }
-               for(int x=0;x<T_ROW;x++)
-               {
-            if(Grid[x][y]!=-1)
-                {
-            float tx=inside.origin.x+x*30;
-            float ty=inside.origin.y+y*30;
-            blocks.ul_position=CGPointMake(tx, ty);
-                 [blocks setFrame:Grid[x][y]];
-                [blocks Draw];
-                 }
-          
-              }
-              blocks.effect=0;
-        }
-}
--(void) fixBlockAtX:(int)x Y:(int)y withType:(int)type
-{
-    Grid[x][y]=type;
-    BOOL filled_row=YES;
-    for(int xx=0;xx<T_ROW;xx++)
-    {
-       if(Grid[xx][y]==-1)
-       {
-           filled_row=NO;
-           break;
-       }
-    }
-    if(filled_row)
-    {
-        erasing[y]=YES;
-        erasetime[y]=[NSDate timeIntervalSinceReferenceDate];
-        erasectime[y]=[NSDate timeIntervalSinceReferenceDate];
-    }
-//////////Body install
-    if(bodyGrid[x][y]!=nil)
-    {
-        SVTetrisBody * bd=bodyGrid[x][y];
-        [bd destroyBody];
-        [bd release];
-        bodyGrid[x][y]=nil;
-    }
-    CGRect nb=CGRectMake(gridrect.origin.x+x*30+1, gridrect.origin.y+y*30+1, 28, 28);
-    b2Template temp;
-    temp.type=b2_staticBody;
-    temp.density=0;
-    temp.friction=0.1;
-    temp.restitution=0.2;
-    temp.isSensor=NO;
-    SVTetrisBody * bd=[[SVTetrisBody alloc] initWithRect:nb andTemplate:temp inWorld:world withName:@"Block" andType:[NSString stringWithFormat: @"Tetris Block%d",Grid[x][y]]];
-    [bd setContactMode:1];
-    bodyGrid[x][y]=bd;
-    
-    
-}*/
 
 @end
 @implementation TFigure
@@ -330,8 +215,6 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 {
     for(int i=0;i<4;i++)
     {   
-        //[bodies[i] destroyBody];
-       // [bodies[i] release];
         bodies[i]=nil;
     }  
 }
@@ -542,7 +425,15 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
 {
     if((self=[super initWithParent:par]))
     {
-        SVTexture* tex=[parent createTextureNamed:@"Tetris"];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Data" ofType:@"plist"];
+        
+        NSDictionary *rd=[NSDictionary dictionaryWithContentsOfFile:path];
+        self.sceneDictionary=rd;
+        NSDictionary * dsprites=[rd valueForKey:@"Sprites"];
+        NSArray * sprn=[NSArray arrayWithObjects:@"Monster",@"Backdrop1",@"Blocks", nil];
+        [[SvSharedSpriteCache SharedCache] createAndLoadSprites:sprn usingDictionary:dsprites intoView:parent];
+        
+       /* SVTexture* tex=[parent createTextureNamed:@"Tetris"];
         [tex startCreatingTexturewithWidth:1024 andHeight:1024];
         UIImage *im=[UIImage imageNamed:backdr];
         [tex drawImageOnTexture:im fromrect:CGRectMake(0,0,im.size.width,im.size.height) withrect:CGRectMake(0,0,im.size.width,im.size.height)];
@@ -551,16 +442,17 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         UIImage * mns=[UIImage imageNamed:@"good.png"];
         [tex drawImageOnTexture:mns fromrect:CGRectMake(0,0,mns.size.width,mns.size.height) withrect:CGRectMake(0,im.size.height+blocks.size.height,mns.size.width,mns.size.height)];
         
-        [tex finishTextureCreation];
-        backdrop=[[parent getSpriteWithTexture:@"Tetris" andFrame:CGRectMake(0,0,im.size.width,im.size.height)] retain];
+        [tex finishTextureCreation];*/
+        backdrop=[[SvSharedSpriteCache SharedCache]getSpriteWithName:@"Backdrop1"];//[[parent getSpriteWithTexture:@"Tetris" andFrame:CGRectMake(0,0,im.size.width,im.size.height)] retain];
         backdrop.layoutPos=-1;
         backdrop.center_position=CGPointMake(400, 300);
-        _blocks=[[parent getAnimatedSpriteWithTexture:@"Tetris" andFrames:[NSArray arrayWithObjects:[NSValue valueWithCGRect:CGRectMake(0, im.size.height, 30, 30)], 
+        _blocks=[[SvSharedSpriteCache SharedCache] getAnimatedSpriteWithName:@"Blocks"];
+        /*[[parent getAnimatedSpriteWithTexture:@"Tetris" andFrames:[NSArray arrayWithObjects:[NSValue valueWithCGRect:CGRectMake(0, im.size.height, 30, 30)], 
             [NSValue valueWithCGRect:CGRectMake(30, im.size.height, 30, 30)],
             [NSValue valueWithCGRect:CGRectMake(60, im.size.height, 30, 30)],
             [NSValue valueWithCGRect:CGRectMake(90, im.size.height, 30, 30)],
             [NSValue valueWithCGRect:CGRectMake(120, im.size.height, 30, 30)],
-            [NSValue valueWithCGRect:CGRectMake(150, im.size.height, 30, 30)], nil]] retain];
+            [NSValue valueWithCGRect:CGRectMake(150, im.size.height, 30, 30)], nil]] retain];*/
  
         Grid=[[TGrid alloc] init];
         cFigure=[[TFigure alloc] init];
@@ -632,12 +524,13 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
          Sprite"]
          
          */
-        float gh=im.size.height+blocks.size.height;
-        SVAnimatedSprite *msprite=[parent getAnimatedSpriteWithTexture:@"Tetris" andFrames:[NSArray arrayWithObjects:[NSValue valueWithCGRect:CGRectMake(0, gh, 30, 30)],                                                                                              [NSValue valueWithCGRect:CGRectMake(30,gh, 30, 30)],                                                                                             [NSValue valueWithCGRect:CGRectMake(60, gh, 30, 30)],                                                                                             [NSValue valueWithCGRect:CGRectMake(90, gh, 30, 30)], 
+       // float gh=im.size.height+blocks.size.height;
+        SVAnimatedSprite *msprite=[[SvSharedSpriteCache SharedCache] getAnimatedSpriteWithName:@"Monster"];
+        /*[parent getAnimatedSpriteWithTexture:@"Tetris" andFrames:[NSArray arrayWithObjects:[NSValue valueWithCGRect:CGRectMake(0, gh, 30, 30)],                                                                                              [NSValue valueWithCGRect:CGRectMake(30,gh, 30, 30)],                                                                                             [NSValue valueWithCGRect:CGRectMake(60, gh, 30, 30)],                                                                                             [NSValue valueWithCGRect:CGRectMake(90, gh, 30, 30)],
             [NSValue valueWithCGRect:CGRectMake(120, gh, 30, 30)], 
             [NSValue valueWithCGRect:CGRectMake(150, gh, 30, 30)], 
             [NSValue valueWithCGRect:CGRectMake(180, gh, 30, 30)],
-            [NSValue valueWithCGRect:CGRectMake(210, gh, 30, 30)], nil]] ;
+            [NSValue valueWithCGRect:CGRectMake(210, gh, 30, 30)], nil]] ;*/
         
         NSMutableDictionary *mdic=[[NSMutableDictionary alloc] initWithCapacity:8];
         [mdic setValue:[NSNumber numberWithBool:NO] forKey:@"Sensor"];
@@ -649,8 +542,7 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         [mdic setObject:[NSValue valueWithPointer:world] forKey:@"World"];
         [mdic setValue:@"Test" forKey:@"Name"];
         [mdic setObject:msprite forKey:@"Sprite"];
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"Data" ofType:@"plist"];
-        NSDictionary *rd=[NSDictionary dictionaryWithContentsOfFile:path];
+     
         NSDictionary *adi=[rd valueForKey:@"Abilities"];
         SvAbility * abil=[[SvAbility alloc]initWithDictionary:[adi valueForKey:@"Walk"]];
         NSArray * tmpa=[[NSArray alloc ]initWithObjects:abil, nil];//abil,
@@ -659,7 +551,8 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
         [tmpa release];
        // [rd release];
         SvTetrisMonster * mnst=[[SvTetrisMonster alloc] initWithDictionary:mdic];
-        [movingBodies addObject:mnst];
+        [self spawnBody:mnst];
+        
         [mnst release];
       
         [arrd release];
@@ -668,6 +561,12 @@ NSString * dirNames[4]={@"Right",@"Down",@"Left",@"Up"};
     }
     
     return self;
+}
+- (void *) getPointerParameter:(NSString *)pname
+{
+    if([pname isEqualToString:@"World"])
+        return world;
+    return NULL;
 }
 - (void) step
 {
@@ -1000,16 +899,12 @@ if(isDragging)
             [self step];
         }
             [self cleanupBodies];
-        if([movingBodies count]>0)
-        {
-       // NSMutableArray * tD=[[NSMutableArray alloc] init];
-        for(SVTetrisBody * body in movingBodies)
+          for(SVTetrisBody * body in movingBodies)
         {
             [body Draw];
          
         }
            
-        }
         if(reduce)
         {
             if([self attemptPlacingFigure]&&![cFigure isFigureMissing])
@@ -1022,44 +917,6 @@ if(isDragging)
     else
        currentTime=[NSDate timeIntervalSinceReferenceDate]; 
     
- /*  for(b2Body * b=world->GetBodyList();b;b=b->GetNext())
-    {
-        SVTetrisBody * bd=( SVTetrisBody *)b->GetUserData();
-        if([[bd getType] hasPrefix:@"Tetris Block"])
-        {
-            NSString *tp=[bd getType];
-            tp=[tp stringByReplacingOccurrencesOfString:@"Tetris Block" withString:@""];
-                _blocks.virt_frame=[bd getBoundingBox].size;
-            _blocks.ul_position=[bd getPosition];
-        
-            [_blocks setFrame:[tp intValue]];
-            [_blocks Draw];
-            
-        }else
-        if([[bd getType] hasPrefix:@"Figure Block"])
-        {
-            NSString *tp=[bd getType];
-            tp=[tp stringByReplacingOccurrencesOfString:@"Figure Block" withString:@""];
-            _blocks.virt_frame=[bd getBoundingBox].size;
-            _blocks.ul_position=[bd getPosition];
-            
-            [_blocks setFrame:[tp intValue]];
-            [_blocks Draw];
-            
-        }else
-        {
-            _blocks.virt_frame=[bd getBoundingBox].size;
-            _blocks.ul_position=[bd getPosition];
-            _blocks.effect=1;
-            [_blocks setEffectParameter:0 toValue:0.5];
-            [_blocks setFrame:0];
-            [_blocks Draw];  
-            _blocks.effect=0;
-        }
-       
-    }*/
-  // [Grid Draw:_blocks inRect:gridrect];
- // if(![cFigure isFigureMissing]) [cFigure Draw:_blocks inRect:gridrect];
 
     [text renderText:
      [NSString  stringWithFormat:@"SUN: %d\rMNT: %d\rFRS: %d\rSEA: %d\rSWP: %d\rSPR: %d",
@@ -1084,6 +941,7 @@ if(isDragging)
 - (void) spawnBody:(SVTetrisBody *)body
 {
     [body setParentScene:self];
+    if([movingBodies containsObject:body]) return;
     [movingBodies addObject:body];
 }
 - (void) cleanupBodies

@@ -31,5 +31,6 @@
 - (void) setBackdrop:(SVSprite *) back;
 - (void) spawnBody: (SVTetrisBody *) body;
 - (double) getDoubleParameter: (NSString *) pname;
+- (void *) getPointerParameter: (NSString *) pname;
 //- (void) setBackdropwithFile:(NSString *)file;
 @end

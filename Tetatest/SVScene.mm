@@ -30,6 +30,10 @@ NSMutableArray * movingBodies;
 {
     return 0;
 }
+- (void *) getPointerParameter:(NSString *)pname
+{
+    return NULL;
+}
 - (void) Update
 {
     

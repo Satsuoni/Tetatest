@@ -35,6 +35,10 @@
     }
     return ret;
 }
+- (id) getSpawnParameter:(NSString *)par forID:(NSString *)ID
+{
+    return nil;
+}
 - (void) destroyBody
 {
     if(body!=NULL)

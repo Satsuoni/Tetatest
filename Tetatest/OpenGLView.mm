@@ -81,6 +81,46 @@ static int _textureID=0;
 - (CGRect) fitRectangle: (CGRect) rcFit withArray: (NSMutableArray *) rects
 {
     int ind=0;
+    BOOL unmergable=NO;
+    while(!unmergable)
+    {
+        int i,j;
+        unmergable=YES;
+    for( i=0;i<[rects count];i++)
+    {
+        CGRect cmp1=[[rects objectAtIndex:i] CGRectValue];
+        for( j=0;j<[rects count];j++)
+        {
+            if(i!=j)
+            {
+                CGRect cmp2=[[rects objectAtIndex:j] CGRectValue];
+                if(cmp1.size.width==cmp2.size.width&&cmp1.origin.x==cmp2.origin.x&& 
+                    (cmp1.origin.y==cmp2.origin.y+cmp2.size.height||cmp2.origin.y==cmp1.origin.y+cmp1.size.height))
+                {unmergable=NO; break;}
+                if(cmp1.size.height==cmp2.size.height&&cmp1.origin.y==cmp2.origin.y&& 
+                   (cmp1.origin.x==cmp2.origin.x+cmp2.size.width||cmp2.origin.x==cmp1.origin.x+cmp1.size.width))
+                {unmergable=NO; break;}
+            }
+        }
+        if(!unmergable) break;
+    }
+        if(!unmergable)
+        {
+            CGRect cmp1=[[rects objectAtIndex:i] CGRectValue];
+            CGRect cmp2=[[rects objectAtIndex:j] CGRectValue];
+            CGRect mrect;
+            NSObject * o1=[rects objectAtIndex:i];
+            NSObject * o2=[rects objectAtIndex:j];
+            [rects removeObject: o1];
+            [rects removeObject:o2];
+            if(cmp1.size.width==cmp2.size.width&&cmp1.origin.x==cmp2.origin.x&& 
+               (cmp1.origin.y==cmp2.origin.y+cmp2.size.height||cmp2.origin.y==cmp1.origin.y+cmp1.size.height))
+                mrect=CGRectMake( cmp1.origin.x,MIN(cmp1.origin.y,cmp2.origin.y), cmp1.size.width, cmp1.size.height+cmp2.size.height);
+            else
+                mrect=CGRectMake(MIN(cmp1.origin.x, cmp2.origin.x), cmp1.origin.y, cmp1.size.width+cmp2.size.width, cmp1.size.height);
+            [rects addObject:[NSValue valueWithCGRect:mrect]];
+        }
+    }
     for(ind=0;ind<[rects count];ind++)
     {
         CGRect rc=[[rects objectAtIndex:ind] CGRectValue];
@@ -91,7 +131,7 @@ static int _textureID=0;
             
             if(rc.size.height>rcFit.size.height)
             {
-                [rects insertObject:[NSValue valueWithCGRect:CGRectMake(rc.origin.x, rc.origin.y+rcFit.size.height, rc.size.width, rc.size.height-rcFit.size.height)] atIndex:ind];    
+                [rects insertObject:[NSValue valueWithCGRect:CGRectMake(rc.origin.x, rc.origin.y+rcFit.size.height, rcFit.size.width, rc.size.height-rcFit.size.height)] atIndex:ind];    
             }
             if(rc.size.width>rcFit.size.width)
             {
@@ -132,7 +172,7 @@ static int _textureID=0;
                    [remainder addObject:[NSValue valueWithCGRect:CGRectMake(0, 0, 1024, 1024)]];
                    fit=[self fitRectangle:rct withArray:remainder];
                }
-               [tx drawImageOnTexture:[UIImage imageNamed:[spriteName valueForKey:@"Image"]] fromrect:rct withrect:fit];
+               [tx drawImageOnTexture:[UIImage imageNamed:[spritedct valueForKey:@"Image"]] fromrect:rct withrect:fit];
                SVSprite * spr=[view getSpriteWithTexture:txname andFrame:fit];
                [sprites setValue:spr forKey:spriteName];
                
@@ -476,7 +516,8 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
     //newly created context
     CGRect clippedRect = CGRectMake(0, 0, rect.size.width, rect.size.height);
     CGContextClipToRect( currentContext, clippedRect);
-    
+    CGContextTranslateCTM(currentContext, 0, imageToCrop.size.height);
+    CGContextScaleCTM(currentContext, 1, -1);
     //create a rect equivalent to the full size of the image
     //offset the rect by the X and Y we want to start the crop
     //from in order to cut off anything before them
@@ -487,7 +528,7 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
     
     //draw the image to our clipped context using our offset rect
     CGContextDrawImage(currentContext, drawRect, imageToCrop.CGImage);
-    
+   
     //pull the image from our cropped context
     UIImage *cropped = UIGraphicsGetImageFromCurrentImageContext();
     
@@ -613,8 +654,8 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
                                                  CGColorSpaceCreateDeviceRGB(), kCGImageAlphaPremultipliedLast);
   
     CGContextSetFillColor(context, color.clr);
-// CGContextTranslateCTM(context, 0.0, texturebox.size.height);
-//  CGContextScaleCTM(context, 1.0, -1.0);
+ CGContextTranslateCTM(context, 0.0, texturebox.size.height);
+  CGContextScaleCTM(context, 1.0, -1.0);
     UIGraphicsPushContext(context);
     [text drawInRect:CGRectMake(0, 0, texturebox.size.width, texturebox.size.height) withFont:font
        lineBreakMode:lineBreakMode alignment:alignment];
@@ -638,7 +679,7 @@ GL_RGBA_Color RGBAColorMake(float r, float g, float b, float a)
      wrap=[[[SVSquareWrapper alloc] init] retain];
      transform=[[CC3GLMatrix matrix] retain];
      [transform populateIdentity];
-     [transform rotateBy:CC3VectorMake(180, 0, 0)];
+    // [transform rotateBy:CC3VectorMake(180, 0, 0)];
  }
     return self;
 }

@@ -126,6 +126,7 @@ SVAbilityTargets;
     BOOL isTouchingGround;
     NSMutableArray * effects;
     NSMutableArray *rem;
+    int current_Charges,current_TCharges;
 }
 - (id) initWithDictionary: (NSDictionary *) dict;
 - (void) Update: (double) time;

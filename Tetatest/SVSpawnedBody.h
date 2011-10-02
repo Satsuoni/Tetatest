@@ -103,6 +103,8 @@
     BOOL initDone;
     CGPoint minRandomVelOnce, maxRandomVelOnce;//random initial velocities
 }
+@property (nonatomic,readonly) BOOL useTarget;
+@property (nonatomic,readonly) int initialPosition;
 - (id) initWithDictionary: (NSDictionary *) dct;
 - (void) setTargetBody: (SVTetrisBody *) bdy;
 - (void) setTargetPos: (CGPoint) pos;
@@ -193,10 +195,12 @@ typedef enum
     SVLifeAspect * life;
     SVTouchAspect * onTouch;
     BOOL spawned;
+    NSString * ID;
     //SVAnimationAspect * animation;
 }
 @property (nonatomic,retain) SVTetrisBody * parent;
 - (id) initWithDictionary:(NSDictionary *)dct;
+- (id) initAndSpawnOnScene: (SVScene *) scene withID: (NSString *) iID byBody: (SVTetrisBody *) ps;
 - (void) Update: (double) time;
 - (void) Apply: (NSDictionary *) thing;
 - (NSDictionary *) getStatus;
